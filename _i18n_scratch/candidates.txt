@@ -1,0 +1,384 @@
+Approve Annual Audit Report
+Reporting Year
+Compliance Verification Summary:
+Passed Items
+Pending
+Failed
+Note:
+checklist item(s) are flagged as failed. Ensure corrections were verified.
+Approving Officer / Authority *
+Final Compliance & Approval Commentary
+Add final compliance notes for the resident's official registry record...
+Cancel
+Approving...
+Confirm & Approve Audit
+Escalate Compliance Case
+Audit Cycle
+Please provide the justification for escalation.
+Executive & Legal Review Trigger
+Escalation flags this resident as
+HIGH RISK
+and directs the case file to senior leadership for formal regulatory or sanction determination.
+Escalation Level *
+Department Head
+Branch Director (Kashkadarya)
+Central IT Park Directorate (Tashkent)
+Legal & Compliance Committee
+Target Resolution Date *
+Assigned Executive Authority *
+Escalation Reason & Regulatory Justification *
+State the serious non-compliance grounds, repeated failure to remediate, or unpermitted revenue activities...
+Escalating...
+Confirm Escalation
+Upload Resubmission & Corrected Report
+New Version:
+Version History Preservation Guarantee
+Previous version(s)
+document records
+will be preserved in historical archive for reviewer version comparison.
+Document Type to Resubmit
+Audit Report (Revised Full Package)
+Auditor's Opinion Letter
+Financial Statements (Balance Sheet & P&L)
+Export Documentation & Banking Certificates
+Supporting Clarifications / License Appendix
+Revised File Name *
+Submitted By (Representative) *
+Correction Summary & Explanation *
+Explain what specific corrections were made in response to the reviewer's identified deficiencies...
+Submitting Version
+Submit Version
+Please provide the file name and corrective explanation.
+Return Audit for Correction
+Current Returns:
+Please provide the Reason, Problems Identified, and Required Corrective Action.
+Returning this audit report puts the workflow on hold.
+The resident will receive an immediate formal notice with your identified deficiencies and corrective instructions. Previous submissions and document versions are strictly preserved in the audit history.
+Reason for Return *
+e.g. Export revenue documentation missing or inconsistent
+Problems Identified (Deficiencies) *
+Detail specific discrepancies found during compliance and financial check (e.g. Foreign client bank payment receipts do not match registered contract sum)...
+Required Corrective Action *
+Instruct the resident on exact remedial documents or revised audit tables required for resubmission...
+Resubmission Deadline *
+Priority
+Low
+Medium
+High (Default)
+Critical
+Reviewing Officer
+Issuing Notice...
+Return to Resident
+Dispatch Compliance Reminder
+Due:
+Status:
+Email
+Telegram Bot
+Portal Alert
+Notice Template
+30-Day Standard Deadline Reminder
+14-Day Urgent Reminder
+Statutory Overdue Sanction Warning
+Correction & Deficiencies Follow-up
+Custom Notification
+Recipient Destination *
+Subject Line *
+Message Body *
+Sending...
+Dispatch Notice
+January
+February
+March
+April
+May
+June
+July (Standard Statutory Month)
+August
+September
+October
+November
+December
+Audit Compliance Regulatory Settings
+Configure Statutory Deadlines & Risk Monitoring Rules
+Dynamic Statutory Deadline Formula:
+Due Date = (Reporting Year + 1) + Month (
+) + Day (
+Example:
+→ Due Date
+Statutory Due Month *
+Statutory Due Day *
+Threshold Configuration (Days Before Deadline)
+Attention Threshold (Days)
+Default: 30 days remaining
+Urgent Threshold (Days)
+Default: 14 days remaining
+Regulatory Basis Reference
+Apply & Recalculate
+Search historical audit actions, resident, reviewer...
+All Event Types
+Created
+Assigned
+Returned for Correction
+Resubmitted
+Escalated
+Reminders / Notices
+All Cycles
+Cycle
+Statutory Audit & Compliance Audit Log
+recorded events
+Complete immutable audit trail
+No audit events match the specified filters.
+INN:
+Actor / Officer:
+Open Audit Record →
+Search resident company, INN/STIR, auditor, audit firm, reviewer...
+Reset Filters
+Export CSV Register
+Cycle Year
+Audit Status
+Risk Level
+Reviewer
+Audit Firm
+District
+Pending Submission
+Submitted
+Under Review
+Approved
+Overdue
+Escalated
+All Statuses
+All Risks
+High Risk
+Medium Risk
+Low Risk
+All Reviewers
+All Audit Firms
+All Districts
+Resident Enterprise
+Statutory Due
+Submission
+Assigned Reviewer
+Compliance Risk
+Showing
+annual audit records
+Page
+of
+No annual audit records match the current filter criteria.
+d overdue
+return(s)
+Not submitted
+OVERDUE
+Unassigned
+N/A
+View Audit
+to
+entries
+Total Residents
+Certified active
+Required
+Statutory cycle
+rate
+In verification
+Returned
+Action required
+compliance
+Past deadline
+High Risk
+Escalated / Delinquent
+Executive Compliance Overview
+Compliance Rate
+Avg Review Time
+4.2 Days
+Audit Compliance Status Distribution
+Total:
+Returned for Correction
+Pending Initial Submission
+Escalated Cases
+Dynamic Compliance Risk Matrix
+Overdue / Escalated
+Returned / Close Due
+Approved / Compliant
+Priority Compliance Attention Cases
+No urgent high-risk cases currently detected.
+Escalated to Legal
+Overdue (Due:
+Returns:
+Inspect
+Upcoming Annual Audit Deadlines & Urgency Monitor
+View Full Register
+Resident Company
+Year
+Days Remaining
+Current Status
+Risk
+Responsible Reviewer
+Action
+All residents are fully approved or up to date.
+d Overdue
+days left
+Send Notice
+Audit Submission Rate
+of
+required submitted
+Approval Rate
+approved of
+submissions
+Return for Correction Rate
+returned cases
+Overdue Delinquency Rate
+overdue delinquent residents
+Average Review Turnaround
+4.2 Calendar Days
+From submission upload to initial reviewer decision
+Average Resident Correction Time
+6.8 Calendar Days
+From return issuance to revised package resubmission
+Compliance Officer Workload & Output
+assigned
+Active
+Accredited Audit Firms Engagement Share
+Firms
+reports
+Year-over-Year Statutory Compliance Cycle Comparison
+Historical audit compliance performance
+Compliance
+Required Reports:
+Submitted Reports:
+Approved Compliant:
+Overview & Entity Info
+Submitted Documents
+Compliance Checklist
+Corrections & Returns
+Audit Timeline
+Communications
+Close
+Print / Export PDF
+Reviewer:
+Audit Firm:
+Not attached
+Reminder
+Return for Correction
+Upload Submission
+Approve Audit
+Escalate
+Section A • Resident Enterprise Profile
+Section B • Audit Certification & Auditor Record
+ID:
+Company Legal Name
+INN (STIR) Code
+Regional District
+General Director / CEO
+Primary Business Activity
+Official Contact
+Annual Export
+Domestic Revenue
+Risk Rating
+RISK
+Reporting Cycle:
+Statutory Due Date
+Submission Date
+Audit Report Number
+Independent Audit Firm
+Certified Auditor Name
+Assigned IT Park Reviewer
+Pending Initial Upload
+Not Attached
+Not Provided
+Final Approval Commentary (Approved by
+on
+Review Checklist Progress
+View Full Checklist
+Activity Compliance
+Financial Review
+Export Review
+Document Review
+Failed
+All Passed
+In Progress
+ALL
+Audit Report
+Auditor's Opinion
+Financial Statements
+Export Documentation
+Supporting Documents
+Upload Document / Version
+No documents uploaded under this category yet.
+Click "Upload Document" to attach official PDF packages.
+Uploaded by
+Preview
+Simulated secure download for
+Download
+Version
+Official IT Park Electronic Digital Signature (EDS) Verified
+Document Hash: SHA256:
+Signer:
+Independent Auditor
+Certified Audit Firm
+Close Preview
+Official Statutory Compliance Checklist
+Review each criterion across Activity, Financial, Export, and Document integrity. Mark Pass, Fail, or Not Applicable (NA) and provide notes for any flagged discrepancies.
+Passed
+Pass
+Fail
+N/A
+Reviewer comment / findings on this item...
+Reviewed by
+Correction & Return History (Total:
+Issue New Return
+No correction returns issued.
+This resident's submission has not been returned for deficiencies.
+Return #
+Priority:
+Problems Identified
+Required Corrective Action
+Returned by
+Resubmission Deadline:
+Resolved on
+Corrected documents reviewed and accepted.
+Chronological Compliance & Audit Timeline
+Actor:
+Event:
+Communication & Notification Dispatch History
+Send Notice / Reminder
+No communication logs recorded yet.
+Automated deadline triggers and manual notices will appear here.
+EMAIL
+TELEGRAM
+PORTAL
+Recipient:
+SENT
+DELIVERED
+FAILED
+Resident Audit & Compliance Management
+Statutory annual independent audit submissions, reviewer checklists, return workflows, and regulatory compliance monitoring.
+2026 Cycle (Due 2027-07-01)
+2025 Cycle (Due 2026-07-01)
+2024 Cycle (Due 2025-07-01)
+2023 Cycle (Historical)
+Configure Regulatory Deadline Rules
+Dashboard
+Audit Register
+Pending Submission
+Compliance History
+Deep Analytics
+Actual activities correspond strictly to approved IT Park activity types
+Business activity is consistent with the resident's approved business plan
+Activities are within applicable permitted software/BPO categories
+Revenue generated from core tech activities is verified and documented
+Complete financial statement package (Balance Sheet, P&L, Cash Flow) provided
+Revenue and tax exemption calculations are internally consistent
+Independent audit firm licensed and registered in the Ministry of Economy register
+Financial/economic audit opinion is unqualified or issues clearly addressed
+Export revenue declaration and currency inflow certificates provided
+Export contracts, foreign client invoices, and customs/bank acts verified
+Export revenue structure documented by country and service vertical
+Mandatory minimum export quota thresholds fulfilled as required
+Official independent audit report signed with electronic digital signature (EDS)
+Certified auditor opinion letter attached with auditor license stamp
+Required supporting financial and tax breakdown notes attached
+Documents are legible, high resolution, and complete with no missing pages
+Documents correspond strictly to the specified reporting calendar year
+HIGH
+MEDIUM
+LOW
+CRITICAL

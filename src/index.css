@@ -1,0 +1,505 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   1. GLOBAL SEMANTIC DESIGN TOKENS
+   ========================================================================== */
+
+:root {
+  /* BACKGROUND TOKENS (Light Mode) */
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --surface-muted: #f1f5f9;
+  --sidebar-background: #0f172a;
+  --sidebar-surface: #1e293b;
+  --header-background: #ffffff;
+
+  /* TEXT TOKENS */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-disabled: #94a3b8;
+
+  /* BORDER TOKENS */
+  --border: #e2e8f0;
+  --border-subtle: #f1f5f9;
+  --border-strong: #cbd5e1;
+
+  /* BRAND TOKENS (Official IT Park Uzbekistan Brand) */
+  --brand-green: #74bd22;
+  --brand-green-hover: #65a81c;
+  --brand-green-dark: #568f18;
+  --brand-green-soft: rgba(116, 189, 34, 0.12);
+  --brand-green-soft-text: #437312;
+  --brand-pattern-opacity: 0.035;
+  --brand-glow-opacity: 0.04;
+  --brand-pattern-color: #74bd22;
+
+  /* Executive accent — electric cyan. --sidebar-accent stays the bright hue
+     in both themes since the sidebar/header chrome is always a dark surface;
+     --accent-cyan is a contrast-safe (darker) variant for use on light
+     content backgrounds. */
+  --sidebar-accent: #00E5FF;
+  --accent-cyan: #00b8cc;
+  --accent-gold: #b37a00;
+  --accent-red: #e0114f;
+
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-active: #047857;
+  --primary-soft: #ecfdf5;
+  --primary-soft-text: #065f46;
+
+  /* STATUS TOKENS */
+  --success: #10b981;
+  --success-soft: #ecfdf5;
+  --success-text: #065f46;
+
+  --warning: #f59e0b;
+  --warning-soft: #fffbeb;
+  --warning-text: #92400e;
+
+  --danger: #ef4444;
+  --danger-soft: #fef2f2;
+  --danger-text: #991b1b;
+
+  --info: #0284c7;
+  --info-soft: #f0f9ff;
+  --info-text: #075985;
+
+  /* DATA VISUALIZATION TOKENS */
+  --chart-primary: #10b981;
+  --chart-secondary: #3b82f6;
+  --chart-success: #10b981;
+  --chart-warning: #f59e0b;
+  --chart-danger: #ef4444;
+  --chart-grid: #e2e8f0;
+  --chart-axis: #64748b;
+  --chart-tooltip-bg: #ffffff;
+  --chart-tooltip-border: #e2e8f0;
+  --chart-tooltip-text: #0f172a;
+
+  /* INTERACTION TOKENS */
+  --focus-ring: rgba(16, 185, 129, 0.4);
+  --hover-background: #f8fafc;
+  --selected-background: #f1f5f9;
+  --modal-backdrop: rgba(15, 23, 42, 0.5);
+}
+
+.dark, [data-theme="dark"] {
+  /* BACKGROUND TOKENS (Dark Mode — Executive Glass, matching the redesigned
+     Executive Dashboard: near-black navy ground, translucent frosted-glass
+     surfaces, cyan/gold/red accents) */
+  --background: #0A0E17;
+  --surface: #0F1420;
+  --surface-elevated: #141B2E;
+  --surface-muted: #0D1220;
+  --sidebar-background: #0A0E17;
+  --sidebar-surface: #0F1420;
+  --header-background: #0A0E17;
+
+  /* TEXT TOKENS */
+  --text-primary: #EEF1F7;
+  --text-secondary: #B4BACC;
+  --text-muted: #8890A6;
+  --text-disabled: #545C74;
+
+  /* BORDER TOKENS */
+  --border: rgba(255, 255, 255, 0.09);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-strong: rgba(255, 255, 255, 0.18);
+
+  /* BRAND TOKENS (Official IT Park Uzbekistan Brand — reserved for the logo mark) */
+  --brand-green: #74bd22;
+  --brand-green-hover: #8be028;
+  --brand-green-dark: #62a31b;
+  --brand-green-soft: rgba(116, 189, 34, 0.18);
+  --brand-green-soft-text: #a0f048;
+  --brand-pattern-opacity: 0.055;
+  --brand-glow-opacity: 0.07;
+  --brand-pattern-color: #74bd22;
+
+  /* Executive accent — electric cyan, the interactive/brand accent used across
+     the redesigned chrome (sidebar, header, primary actions) */
+  --sidebar-accent: #00E5FF;
+  --accent-cyan: #00E5FF;
+  --accent-gold: #FFB800;
+  --accent-red: #FF3366;
+
+  --primary: #00E5FF;
+  --primary-hover: #33ecff;
+  --primary-active: #00c4dd;
+  --primary-soft: rgba(0, 229, 255, 0.14);
+  --primary-soft-text: #7df3ff;
+
+  /* STATUS TOKENS */
+  --success: #00E5FF;
+  --success-soft: rgba(0, 229, 255, 0.14);
+  --success-text: #7df3ff;
+
+  --warning: #FFB800;
+  --warning-soft: rgba(255, 184, 0, 0.14);
+  --warning-text: #ffd166;
+
+  --danger: #FF3366;
+  --danger-soft: rgba(255, 51, 102, 0.14);
+  --danger-text: #ff96ae;
+
+  --info: #38bdf8;
+  --info-soft: rgba(56, 189, 248, 0.16);
+  --info-text: #7dd3fc;
+
+  /* DATA VISUALIZATION TOKENS */
+  --chart-primary: #00E5FF;
+  --chart-secondary: #60a5fa;
+  --chart-success: #00E5FF;
+  --chart-warning: #FFB800;
+  --chart-danger: #FF3366;
+  --chart-grid: rgba(255, 255, 255, 0.08);
+  --chart-axis: #8890A6;
+  --chart-tooltip-bg: #141B2E;
+  --chart-tooltip-border: rgba(255, 255, 255, 0.12);
+  --chart-tooltip-text: #EEF1F7;
+
+  /* INTERACTION TOKENS */
+  --focus-ring: rgba(0, 229, 255, 0.4);
+  --hover-background: #141B2E;
+  --selected-background: #182235;
+  --modal-backdrop: rgba(3, 7, 18, 0.8);
+}
+
+/* ==========================================================================
+   2. BASE SYSTEM ADAPTATIONS & TRANSITIONS
+   ========================================================================== */
+
+html, body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  min-height: 100%;
+  transition: background-color 150ms ease, color 150ms ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Executive Dashboard dark theme: an ambient cyan/green glow + vignette
+   behind the whole app, echoing the redesigned Executive Dashboard canvas. */
+.dark body {
+  background-image:
+    radial-gradient(1100px 520px at 14% -8%, rgba(0, 229, 255, 0.08), transparent 60%),
+    radial-gradient(900px 460px at 96% 6%, rgba(116, 189, 34, 0.05), transparent 55%),
+    radial-gradient(1400px 900px at 50% 130%, rgba(0, 229, 255, 0.04), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* Base Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ==========================================================================
+   3. AUTOMATED UTILITY-MAPPING FOR ENTERPRISE DARK MODE
+
+   Selectors below pair an exact-class match ([class~="..."], matching a
+   bare utility like `bg-white`) with a prefix wildcard
+   ([class*="...\/"], matching ANY opacity-modifier variant of that same
+   utility — `bg-white/90`, `bg-white/40`, `bg-white/5`, etc.). Tailwind
+   generates a distinct literal class per opacity value, so a plain
+   `.dark .bg-white` rule only ever matched the one bare class and silently
+   let every `/NN` variant fall through to its light-mode color — the cause
+   of the white/washed-out cards and borders seen in dark mode. The
+   wildcard half future-proofs this: a new `/NN` opacity value used later
+   is covered automatically, with no CSS edit required.
+   ========================================================================== */
+
+/* Surfaces and Cards — frosted glass, matching the Executive Dashboard canvas */
+.dark [class~="bg-white"],
+.dark [class*="bg-white/"] {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  background-clip: padding-box;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 20px 40px -24px rgba(0, 0, 0, 0.6);
+  color: #EEF1F7;
+}
+
+.dark [class~="bg-slate-50"],
+.dark [class*="bg-slate-50/"],
+.dark [class~="bg-gray-50"],
+.dark [class*="bg-gray-50/"] {
+  background-color: rgba(255, 255, 255, 0.035) !important;
+  color: #EEF1F7;
+}
+
+.dark [class~="bg-slate-100"],
+.dark [class*="bg-slate-100/"],
+.dark [class~="bg-gray-100"],
+.dark [class*="bg-gray-100/"] {
+  background-color: rgba(255, 255, 255, 0.07) !important;
+  color: #EEF1F7;
+}
+
+.dark [class~="bg-slate-200"],
+.dark [class*="bg-slate-200/"],
+.dark [class~="bg-gray-200"],
+.dark [class*="bg-gray-200/"] {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #EEF1F7;
+}
+
+.dark [class~="bg-slate-300"],
+.dark [class*="bg-slate-300/"] {
+  background-color: rgba(255, 255, 255, 0.16) !important;
+  color: #EEF1F7;
+}
+
+/* Text Hierarchy */
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-gray-950,
+.dark .text-gray-900,
+.dark .text-gray-800 {
+  color: #f8fafc !important;
+}
+
+.dark .text-slate-700,
+.dark .text-slate-600,
+.dark .text-gray-700,
+.dark .text-gray-600 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-500,
+.dark .text-slate-400,
+.dark .text-gray-500,
+.dark .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+/* Border Hierarchy */
+.dark [class~="border-slate-100"],
+.dark [class*="border-slate-100/"],
+.dark [class~="border-slate-200"],
+.dark [class*="border-slate-200/"],
+.dark [class~="border-slate-300"],
+.dark [class*="border-slate-300/"],
+.dark [class~="border-gray-150"],
+.dark [class~="border-gray-200"],
+.dark [class*="border-gray-200/"],
+.dark [class~="border-gray-300"],
+.dark [class*="border-gray-300/"] {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .divide-slate-100 > * + *,
+.dark .divide-slate-200 > * + * {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark [class~="border-slate-700"],
+.dark [class*="border-slate-700/"] {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+/* Hover States */
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-slate-100:hover,
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-gray-100:hover {
+  background-color: #1e293b !important;
+}
+
+.dark .hover\:text-slate-900:hover,
+.dark .hover\:text-slate-800:hover {
+  color: #ffffff !important;
+}
+
+/* Status Soft Badges in Dark Mode */
+.dark [class~="bg-emerald-50"],
+.dark [class*="bg-emerald-50/"] {
+  background-color: rgba(16, 185, 129, 0.16) !important;
+}
+.dark .text-emerald-700,
+.dark .text-emerald-800,
+.dark .text-emerald-900 {
+  color: #6ee7b7 !important;
+}
+.dark [class~="border-emerald-200"],
+.dark [class*="border-emerald-200/"],
+.dark [class~="border-emerald-300"],
+.dark [class*="border-emerald-300/"] {
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.dark [class~="bg-blue-50"],
+.dark [class*="bg-blue-50/"] {
+  background-color: rgba(59, 130, 246, 0.16) !important;
+}
+.dark .text-blue-700,
+.dark .text-blue-800,
+.dark .text-blue-900 {
+  color: #93c5fd !important;
+}
+.dark [class~="border-blue-200"],
+.dark [class*="border-blue-200/"] {
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.dark [class~="bg-sky-50"],
+.dark [class*="bg-sky-50/"],
+.dark [class~="bg-sky-100"],
+.dark [class*="bg-sky-100/"] {
+  background-color: rgba(56, 189, 248, 0.16) !important;
+}
+.dark .text-sky-600,
+.dark .text-sky-700,
+.dark .text-sky-800,
+.dark .text-sky-900 {
+  color: #7dd3fc !important;
+}
+.dark [class~="border-sky-200"],
+.dark [class*="border-sky-200/"] {
+  border-color: rgba(56, 189, 248, 0.3) !important;
+}
+.dark .bg-sky-600 {
+  background-color: #0ea5c7 !important;
+}
+.dark .bg-sky-600:hover,
+.dark .hover\:bg-sky-700:hover {
+  background-color: #0891b2 !important;
+}
+
+.dark [class~="bg-amber-50"],
+.dark [class*="bg-amber-50/"] {
+  background-color: rgba(245, 158, 11, 0.16) !important;
+}
+.dark .text-amber-700,
+.dark .text-amber-800,
+.dark .text-amber-900 {
+  color: #fcd34d !important;
+}
+.dark [class~="border-amber-200"],
+.dark [class*="border-amber-200/"] {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.dark [class~="bg-rose-50"],
+.dark [class*="bg-rose-50/"],
+.dark [class~="bg-red-50"],
+.dark [class*="bg-red-50/"] {
+  background-color: rgba(244, 63, 94, 0.16) !important;
+}
+.dark .text-rose-700,
+.dark .text-rose-800,
+.dark .text-rose-900,
+.dark .text-red-700,
+.dark .text-red-800,
+.dark .text-red-900 {
+  color: #fda4af !important;
+}
+.dark [class~="border-rose-200"],
+.dark [class*="border-rose-200/"],
+.dark [class~="border-red-200"],
+.dark [class*="border-red-200/"] {
+  border-color: rgba(244, 63, 94, 0.3) !important;
+}
+
+.dark [class~="bg-purple-50"],
+.dark [class*="bg-purple-50/"],
+.dark [class~="bg-indigo-50"],
+.dark [class*="bg-indigo-50/"] {
+  background-color: rgba(139, 92, 246, 0.16) !important;
+}
+.dark .text-purple-700,
+.dark .text-purple-800,
+.dark .text-indigo-700,
+.dark .text-indigo-800 {
+  color: #c4b5fd !important;
+}
+.dark [class~="border-purple-200"],
+.dark [class*="border-purple-200/"],
+.dark [class~="border-indigo-200"],
+.dark [class*="border-indigo-200/"] {
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+/* Form Controls & Inputs */
+.dark input[type="text"],
+.dark input[type="search"],
+.dark input[type="number"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="date"],
+.dark select,
+.dark textarea {
+  background-color: #182235 !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748b !important;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  border-color: #10b981 !important;
+  outline: none;
+}
+
+/* Modals & Dialogs */
+.dark .modal-backdrop {
+  background-color: rgba(3, 7, 18, 0.75) !important;
+}
+
+/* Tables */
+.dark table th {
+  background-color: #182235 !important;
+  color: #cbd5e1 !important;
+  border-color: #1e293b !important;
+}
+
+.dark table tr {
+  border-color: #1e293b !important;
+}
+
+.dark table tr:hover {
+  background-color: #182235 !important;
+}
+
+/* Shadows in dark mode */
+.dark .shadow-xs,
+.dark .shadow-2xs,
+.dark .shadow-sm,
+.dark .shadow-md,
+.dark .shadow-lg,
+.dark .shadow-xl {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5) !important;
+}

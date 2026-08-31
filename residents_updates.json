@@ -1,0 +1,1770 @@
+[
+  {
+    "id": "res-0083",
+    "inn": "310571210",
+    "name": "\"ZMT INTEGRITY KARSHI\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 99 868-36-11"
+    }
+  },
+  {
+    "id": "res-0084",
+    "inn": "310710210",
+    "name": "\"Venasoft\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 95 103-34-71"
+    }
+  },
+  {
+    "id": "res-0019",
+    "inn": "309656704",
+    "name": "\"IT PARK KUKDALA\" MCHJ",
+    "patch": {
+      "district": "Koʻkdala",
+      "industry": "IT ta'lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 94 242-71-11"
+    }
+  },
+  {
+    "id": "res-0085",
+    "inn": "205989224",
+    "name": "«UNIVERSAL MAX SERVISE» MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Engil avtomobillarga texnik xizmat ko'rsatish va ta'mirlash",
+      "phone": "+998 98 505-01-00"
+    }
+  },
+  {
+    "id": "res-0086",
+    "inn": "308426301",
+    "name": "\"SHERLOCK DEDUCTION\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter uskunalarini boshqarish bo'yicha faoliyat",
+      "phone": "+998 97 384-21-21"
+    }
+  },
+  {
+    "id": "res-0080",
+    "inn": "307771254",
+    "name": "\"PERFECT LIFE EDU\" MCHJ",
+    "patch": {
+      "district": "Chiroqchi",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 99 446-05-50",
+      "status": "REMOVED"
+    }
+  },
+  {
+    "id": "res-0087",
+    "inn": "310222991",
+    "name": "«EPRO ZERONE» MCHJ",
+    "patch": {
+      "district": "Muborak",
+      "industry": "Ta`lim",
+      "activityType": "Axborot texnologiyalari va kompyuter tizimlari sohasidagi boshqa faoliyat turlari",
+      "phone": "+998 99 426-78-39"
+    }
+  },
+  {
+    "id": "res-0088",
+    "inn": "309942886",
+    "name": "\"KESH YOUNG SCHOOL\" XK",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Ta`lim",
+      "activityType": "Boshqa toifalarga kiritilmagan ta'limning boshqa turlari",
+      "phone": "+998 97 631-47-47"
+    }
+  },
+  {
+    "id": "res-0089",
+    "inn": "308938978",
+    "name": "\"CHAMANGUL EDU SCHOOL\" NTM",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Ta'lim sohasidagi yordamchi faoliyat",
+      "phone": "+998 91 955-82-82"
+    }
+  },
+  {
+    "id": "res-0090",
+    "inn": "309434244",
+    "name": "\"MUSTOFA O`QUV IT CENTER\" MCHJ",
+    "patch": {
+      "district": "Chiroqchi",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 33 009-00-97"
+    }
+  },
+  {
+    "id": "res-0091",
+    "inn": "311165034",
+    "name": "\"XAYRULLAYEV WEB\" MCHJ",
+    "patch": {
+      "district": "Kasbi",
+      "industry": "Ta`lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 90 878-03-57"
+    }
+  },
+  {
+    "id": "res-0092",
+    "inn": "309934262",
+    "name": "\"NNT SCHOOL ACADEMY 007\" NTM",
+    "patch": {
+      "district": "Dehqonobod",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 90 342-56-56",
+      "status": "PENDING"
+    }
+  },
+  {
+    "id": "res-0093",
+    "inn": "310548729",
+    "name": "SMART ACADEMY MCHJ",
+    "patch": {
+      "district": "Nishon",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 99 957-46-62"
+    }
+  },
+  {
+    "id": "res-0094",
+    "inn": "310947556",
+    "name": "\"Elite Groups\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 90 666-30-69"
+    }
+  },
+  {
+    "id": "res-0095",
+    "inn": "302954472",
+    "name": "\"DESIGN MASTER GROUP\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Me'morchilik sohаsidаgi fаoliyat",
+      "phone": "+998 91 321-75-77"
+    }
+  },
+  {
+    "id": "res-0096",
+    "inn": "311345427",
+    "name": "\"QIZIL NATIJA\"",
+    "patch": {
+      "district": "Yakkabogʻ",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 97 049-73-33"
+    }
+  },
+  {
+    "id": "res-0097",
+    "inn": "311153341",
+    "name": "\"SHOHJAKHON TEAM\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Ta`lim/Xizmat ko'rsatish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 91 787-03-87"
+    }
+  },
+  {
+    "id": "res-0098",
+    "inn": "310771397",
+    "name": "\"ZNT Karshi\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 99 276-22-05"
+    }
+  },
+  {
+    "id": "res-0099",
+    "inn": "311062717",
+    "name": "\"UNIFAR GROUP\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Non, xаmirdаn yangi tаyyorlаngаn qаndolаt mаhsulotlаri, tort vа pirojnoe ishlаb chiqаrish",
+      "phone": "+998 99 021-47-41"
+    }
+  },
+  {
+    "id": "res-0100",
+    "inn": "309094486",
+    "name": "\"HYBRID EDUTECH GROUP\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 90 679-00-08"
+    }
+  },
+  {
+    "id": "res-0101",
+    "inn": "311146516",
+    "name": "\"SAYFULLO HOJAMATXON\" MCHJ",
+    "patch": {
+      "district": "Kitob",
+      "industry": "Ta`lim/Xizmat ko'rsatish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 91 810-32-46"
+    }
+  },
+  {
+    "id": "res-0102",
+    "inn": "309641382",
+    "name": "\"SCHOOL OF IDEA\" NTM",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Umumiy o'rta ta'lim",
+      "phone": "+998 94 648-75-52"
+    }
+  },
+  {
+    "id": "res-0103",
+    "inn": "309716501",
+    "name": "\"RISESOFT\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 90 716-51-49"
+    }
+  },
+  {
+    "id": "res-0104",
+    "inn": "310292581",
+    "name": "\"Space Software Hub\" MCHJ",
+    "patch": {
+      "district": "Qarshi District",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 97 914-64-79"
+    }
+  },
+  {
+    "id": "res-0105",
+    "inn": "311094029",
+    "name": "\"IT TECH EDU\" MCHJ",
+    "patch": {
+      "district": "Muborak",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 90 672-61-61"
+    }
+  },
+  {
+    "id": "res-0106",
+    "inn": "311199743",
+    "name": "\"IT EDU KOSON\"MCHJ",
+    "patch": {
+      "district": "Koson",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 77 877-18-00"
+    }
+  },
+  {
+    "id": "res-0107",
+    "inn": "309707425",
+    "name": "\"AIRVOICE\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter dasturlashtirish sohasidagi faoliyat",
+      "phone": "+998 90 615-00-83"
+    }
+  },
+  {
+    "id": "res-0108",
+    "inn": "311699785",
+    "name": "\"COMFIDO\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 33 892-07-70"
+    }
+  },
+  {
+    "id": "res-0109",
+    "inn": "311889604",
+    "name": "\"CODEFY GROUP\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "-",
+      "phone": "+998 77 219-46-46"
+    }
+  },
+  {
+    "id": "res-0110",
+    "inn": "311779614",
+    "name": "\"ZERO TEAM\" MCHJ",
+    "patch": {
+      "district": "Chiroqchi",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 50 078-04-42"
+    }
+  },
+  {
+    "id": "res-0111",
+    "inn": "305365831",
+    "name": "\"DILXIROJXON\" NTM",
+    "patch": {
+      "district": "Chiroqchi",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 97 638-77-44"
+    }
+  },
+  {
+    "id": "res-0112",
+    "inn": "310176678",
+    "name": "\"JEYNOV SITI SIFATLI TA'LIM \" MCHJ",
+    "patch": {
+      "district": "Mirishkor",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 97 313-20-71"
+    }
+  },
+  {
+    "id": "res-0113",
+    "inn": "311622153",
+    "name": "\"UNIVERSAL SABOQ AKADEMIYASI\" MCHJ",
+    "patch": {
+      "district": "Koson",
+      "industry": "Ta`lim",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 91 814-06-43"
+    }
+  },
+  {
+    "id": "res-0114",
+    "inn": "308447853",
+    "name": "\"MMAX DIZAYN STUDIO 24\" MCHJ",
+    "patch": {
+      "district": "Yakkabogʻ",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 97 318-17-67"
+    }
+  },
+  {
+    "id": "res-0115",
+    "inn": "311567474",
+    "name": "\"QARSHI VOICE\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Boshqа telekommunikаtsiya xizmаtlаri ko'rsаtish",
+      "phone": "+998 91 963-73-77"
+    }
+  },
+  {
+    "id": "res-0116",
+    "inn": "310698202",
+    "name": "\"CODE TECH ACADEMY\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 90 609-42-00"
+    }
+  },
+  {
+    "id": "res-0117",
+    "inn": "310821974",
+    "name": "\"Kukdala study center\" MCHJ",
+    "patch": {
+      "district": "Koʻkdala",
+      "industry": "Ta`lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 97 639-10-40"
+    }
+  },
+  {
+    "id": "res-0118",
+    "inn": "311149495",
+    "name": "\"PYRAMID EDUCATION\" MCHJ",
+    "patch": {
+      "district": "Qamashi",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 99 060-06-59"
+    }
+  },
+  {
+    "id": "res-0119",
+    "inn": "311179965",
+    "name": "\"AKT TIZIMLARINI RIVOJLANTIRISH\" xususiy korxonasi",
+    "patch": {
+      "district": "Qarshi District",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 97 200-60-48"
+    }
+  },
+  {
+    "id": "res-0120",
+    "inn": "311539294",
+    "name": "\"JP LAND EDUCATION\" NTM",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "93312575"
+    }
+  },
+  {
+    "id": "res-0121",
+    "inn": "311135695",
+    "name": "\"Prime Hub Center\"",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 99 668-09-78"
+    }
+  },
+  {
+    "id": "res-0122",
+    "inn": "308100264",
+    "name": "\"IQ\" nodavlat ta`lim muassasasi",
+    "patch": {
+      "district": "Kitob",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 90 788-48-80"
+    }
+  },
+  {
+    "id": "res-0123",
+    "inn": "305211667",
+    "name": "\"AL-Beruniy ziyo\" NTM",
+    "patch": {
+      "district": "Nishon",
+      "industry": "Ta`lim",
+      "activityType": "Umumiy o'rta ta'lim",
+      "phone": "+998 94 648-75-52"
+    }
+  },
+  {
+    "id": "res-0124",
+    "inn": "312109156",
+    "name": "\"DASTURCHI AVLOD AKADEMIYASI\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Shahrisabz tumani",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 90 639-06-34"
+    }
+  },
+  {
+    "id": "res-0125",
+    "inn": "308895352",
+    "name": "\"FREELANCERS ACADEMY\"MCHJ",
+    "patch": {
+      "district": "Nishon",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа dаsturiy tа'minotlаrni chiqаrish",
+      "phone": "+998 99 540-76-38"
+    }
+  },
+  {
+    "id": "res-0126",
+    "inn": "312076792",
+    "name": "\"COUT\" MCHJ",
+    "patch": {
+      "district": "Nishon",
+      "industry": "Litsenziyalarni sotish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 97 097-90-23"
+    }
+  },
+  {
+    "id": "res-0127",
+    "inn": "312167687",
+    "name": "\"Infinite IT Park\" MCHJ",
+    "patch": {
+      "district": "Yakkabogʻ",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 90 136-36-37"
+    }
+  },
+  {
+    "id": "res-0078",
+    "inn": "310573549",
+    "name": "\"GULISTAN EST NOVA\" MCHJ",
+    "patch": {
+      "district": "Mirishkor",
+      "industry": "Eksport",
+      "activityType": "Ovqаtlаnishni tаshkil qilishning boshqа turlаri",
+      "phone": "+998 99 016-66-40",
+      "status": "REMOVED"
+    }
+  },
+  {
+    "id": "res-0128",
+    "inn": "310022591",
+    "name": "\"SFERA EDUCATIONAL CENTER\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Boshqa toifalarga kiritilmagan ta'limning boshqa turlari",
+      "phone": "+998 90 326-93-90"
+    }
+  },
+  {
+    "id": "res-0129",
+    "inn": "308375549",
+    "name": "\"F-ZONE\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Ta`lim",
+      "activityType": "Boshqа pochtа vа kurerlik fаoliyati",
+      "phone": "+998 93 288-72-27"
+    }
+  },
+  {
+    "id": "res-0130",
+    "inn": "311839998",
+    "name": "\"DISPECH ZONE\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Ta`lim",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 95 893-03-01"
+    }
+  },
+  {
+    "id": "res-0131",
+    "inn": "311659519",
+    "name": "\"SMARTKIDS\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 90 956-11-01"
+    }
+  },
+  {
+    "id": "res-0132",
+    "inn": "311938241",
+    "name": "\"KHABEER IT-HUB\" MAS'ULIYATI CHEKLANGAN JAMIYAT",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 90 110-01-13"
+    }
+  },
+  {
+    "id": "res-0133",
+    "inn": "310892420",
+    "name": "\"SHAHRISABZ GLOBAL BIZNES INKUBATOR\"",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Iqtisodiy fаoliyatni sаmаrаli olib borishgа ko'mаklаshish vа boshqаrish",
+      "phone": "+998 99 000-67-90"
+    }
+  },
+  {
+    "id": "res-0134",
+    "inn": "311027283",
+    "name": "\"IT PARK EDUCATION KARSHI\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter texnologiyalаri sohаsidаgi mаslаhаt xizmаtlаri",
+      "phone": "+998 97 435-85-37"
+    }
+  },
+  {
+    "id": "res-0135",
+    "inn": "311134174",
+    "name": "\"INNOTEXPROGRAMS\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Mа'lumotlаrni joylаshtirish vа ishlov berish bo'yichа xizmаtlаr",
+      "phone": "+998 98 520-33-09",
+      "status": "PENDING"
+    }
+  },
+  {
+    "id": "res-0136",
+    "inn": "310563394",
+    "name": "«ILMLARCOM» MCHJ",
+    "patch": {
+      "district": "Yakkabogʻ",
+      "industry": "Ta`lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 94 335-05-31"
+    }
+  },
+  {
+    "id": "res-0137",
+    "inn": "308209293",
+    "name": "\"HARDWARE AND SOFTWARE SERVISES\"",
+    "patch": {
+      "district": "Kitob",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 99 526-50-97"
+    }
+  },
+  {
+    "id": "res-0079",
+    "inn": "312333425",
+    "name": "\"PRIMETRUST LOGISTICS\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn shаxsiy xizmаtlаr",
+      "phone": "+998 95 077-07-20",
+      "status": "REMOVED"
+    }
+  },
+  {
+    "id": "res-0138",
+    "inn": "307209484",
+    "name": "\"ELEGANT JASMIN ZIYO NUR\" NTM",
+    "patch": {
+      "district": "Mirishkor",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 77 006-85-88"
+    }
+  },
+  {
+    "id": "res-0139",
+    "inn": "311159412",
+    "name": "\"US HIGH QUALITY INTERNATIONAL LOGISTICS SERVICE\" MCHJ",
+    "patch": {
+      "district": "Qarshi District",
+      "industry": "Eksport",
+      "activityType": "Temir yo'l, аvtotrаnsport, dengiz yoki hаvo orqаli trаnsportdа tаshishni tаshkil qilish",
+      "phone": "+998 88 700-00-00"
+    }
+  },
+  {
+    "id": "res-0142",
+    "inn": "312660827",
+    "name": "\"DREAM UNION\" mas`uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "DTni ishlab chiqarish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 99 000-71-59"
+    }
+  },
+  {
+    "id": "res-0143",
+    "inn": "312468526",
+    "name": "\"DIGITAL MAGIC\" MCHJ",
+    "patch": {
+      "district": "Qarshi District",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 99 668-04-42"
+    }
+  },
+  {
+    "id": "res-0144",
+    "inn": "312840855",
+    "name": "\"VERO TECH\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "DTni ishlab chiqarish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 88 047-05-03"
+    }
+  },
+  {
+    "id": "res-0145",
+    "inn": "312319084",
+    "name": "\"MULTIMOCK\" mas`uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Koson",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 91 217-97-96"
+    }
+  },
+  {
+    "id": "res-0146",
+    "inn": "312218194",
+    "name": "\"AMIN CRM\" XUSUSIY KORXONA",
+    "patch": {
+      "district": "Koson",
+      "industry": "DTni ishlab chiqarish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 94 422-33-32"
+    }
+  },
+  {
+    "id": "res-0152",
+    "inn": "312622270",
+    "name": "\"NAG GLOBAL INTERNATIONAL MARKETING AND INVESTMENT COMPANY\" MCHJ",
+    "patch": {
+      "district": "Toshkent shahar",
+      "industry": "Eksport",
+      "activityType": "Turаr joy binolаrini qurish",
+      "phone": "+998 93 380-80-05"
+    }
+  },
+  {
+    "id": "res-0153",
+    "inn": "311612459",
+    "name": "\"THE AZIMOVS LEGACY\" MCHJ",
+    "patch": {
+      "district": "Toshkent shahar",
+      "industry": "Eksport",
+      "activityType": "Компьютер дастурлаштириш, маслаҳат бериш ва бошқа ёрдамчи хизматлар",
+      "phone": "+998 93 295-96-00"
+    }
+  },
+  {
+    "id": "res-0156",
+    "inn": "308888258",
+    "name": "\"GARNET TEAM\" MCHJ",
+    "patch": {
+      "industry": "Eksport",
+      "phone": "Telegrami bor"
+    }
+  },
+  {
+    "id": "res-0161",
+    "inn": "313237210",
+    "name": "\"TECHBOR\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport,Norvegiya",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 77 660-50-01"
+    }
+  },
+  {
+    "id": "res-0001",
+    "inn": "311494187",
+    "name": "\"AI FREELANCING\" NTM",
+    "patch": {
+      "district": "Qarshi District",
+      "industry": "IT ta'lim",
+      "activityType": "Kompyuter texnologiyalаri sohаsidаgi mаslаhаt xizmаtlаri",
+      "phone": "+998 97 881-00-93"
+    }
+  },
+  {
+    "id": "res-0002",
+    "inn": "310143663",
+    "name": "\"ALTERA KTS\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Litsenziyalarni sotish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 97 380-08-20"
+    }
+  },
+  {
+    "id": "res-0003",
+    "inn": "309058394",
+    "name": "\"AMIR TECH GLOB\" XK",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Qo'llab-quvvatlash",
+      "activityType": "Axborot texnologiyalari va kompyuter tizimlari sohasidagi boshqa faoliyat turlari",
+      "phone": "+998 91 641-14-14"
+    }
+  },
+  {
+    "id": "res-0004",
+    "inn": "312256315",
+    "name": "\"ASADBEK BURIYEV WS\" NTM",
+    "patch": {
+      "district": "Qarshi District",
+      "industry": "IT ta'lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 90 443-55-67"
+    }
+  },
+  {
+    "id": "res-0005",
+    "inn": "312220874",
+    "name": "\"AVANGARD CALL SOLUTIONS\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Boshqа telekommunikаtsiya xizmаtlаri ko'rsаtish",
+      "phone": "+998 91 963-73-77"
+    }
+  },
+  {
+    "id": "res-0006",
+    "inn": "311030108",
+    "name": "\"AXBOROT TEXNOLOGIYALARI KLASTERI\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 97 313-00-55"
+    }
+  },
+  {
+    "id": "res-0007",
+    "inn": "310829987",
+    "name": "\"CHECKER\"MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Mа'lumotlаrni joylаshtirish vа ishlov berish bo'yichа xizmаtlаr",
+      "phone": "+998 91 641-14-14"
+    }
+  },
+  {
+    "id": "res-0008",
+    "inn": "312850788",
+    "name": "\"CUBO\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 97 317-34-97"
+    }
+  },
+  {
+    "id": "res-0009",
+    "inn": "312151454",
+    "name": "\"Data Drive Qarshi\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Web-portаllаr",
+      "phone": "8330710717"
+    }
+  },
+  {
+    "id": "res-0010",
+    "inn": "307336350",
+    "name": "\"ELWEB\" MCHJ",
+    "patch": {
+      "district": "Qarshi District",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "To'lovlаrni yig`ish bo'yichа аgentliklаr vа kredit byurolаri fаoliyati",
+      "phone": "+998 99 660-77-04"
+    }
+  },
+  {
+    "id": "res-0011",
+    "inn": "311114904",
+    "name": "\"ENTER MARKETING AGENCY\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Kreativ iqtisodiyot",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 99 335-37-36"
+    }
+  },
+  {
+    "id": "res-0012",
+    "inn": "311021577",
+    "name": "\"FATHTIME\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 88 678-00-11"
+    }
+  },
+  {
+    "id": "res-0013",
+    "inn": "311092237",
+    "name": "FOREACH EDUCATION",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Qo'llab-quvvatlash",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 91 452-55-65"
+    }
+  },
+  {
+    "id": "res-0014",
+    "inn": "304288699",
+    "name": "\"GLOBAL EDUCATION IN KARSHI\" NTM",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 91 958-52-32"
+    }
+  },
+  {
+    "id": "res-0015",
+    "inn": "308478729",
+    "name": "\"GLOBAL EDU IN KARSHI\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 93 070-00-71"
+    }
+  },
+  {
+    "id": "res-0016",
+    "inn": "310754401",
+    "name": "\"ILMGA YO`L\" MCHJ",
+    "patch": {
+      "district": "Nishon",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 91 950-05-84"
+    }
+  },
+  {
+    "id": "res-0017",
+    "inn": "311131622",
+    "name": "IT CALL KARSHI MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Simsiz аloqа xizmаtlаri ko'rsаtish",
+      "phone": "+998 91 774-12-09"
+    }
+  },
+  {
+    "id": "res-0018",
+    "inn": "311444905",
+    "name": "\"IT KLASTER SCHOOL\" NODAVLAT TA'LIM MUASSASASI",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "IT ta'lim",
+      "activityType": "Texnik vа professionаl o'rtа tа'lim",
+      "phone": "+998 97 313-00-55"
+    }
+  },
+  {
+    "id": "res-0020",
+    "inn": "312264274",
+    "name": "\"IT RBR\" MCHJ",
+    "patch": {
+      "district": "Koson",
+      "industry": "Qo'llab-quvvatlash",
+      "activityType": "Boshqа dаsturiy tа'minotlаrni chiqаrish",
+      "phone": "+998 99 668-56-99"
+    }
+  },
+  {
+    "id": "res-0021",
+    "inn": "302568138",
+    "name": "«MARS ELEKTRON TEXNIKA» MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Litsenziyalarni sotish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 97 385-00-27"
+    }
+  },
+  {
+    "id": "res-0022",
+    "inn": "311173855",
+    "name": "\"NAVIGO\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 97 799-24-56"
+    }
+  },
+  {
+    "id": "res-0023",
+    "inn": "312246525",
+    "name": "\"NFM KOSON IT CAPITAL\" MCHJ",
+    "patch": {
+      "district": "Koson",
+      "industry": "IT ta'lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 90 616-55-72"
+    }
+  },
+  {
+    "id": "res-0024",
+    "inn": "309294103",
+    "name": "\"OPEN WEB ACADEMY\" MCHJ",
+    "patch": {
+      "district": "Qarshi District",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqa toifalarga kiritilmagan ta'limning boshqa turlari",
+      "phone": "+998 94 330-13-13"
+    }
+  },
+  {
+    "id": "res-0025",
+    "inn": "312723819",
+    "name": "\"OQ SAROY TRUCK SOLUTION\" MCHJ",
+    "patch": {
+      "district": "Koʻkdala",
+      "industry": "Eksport",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 97 389-86-80"
+    }
+  },
+  {
+    "id": "res-0026",
+    "inn": "311906771",
+    "name": "\"OYBEK YOUTUBER\" MCHJ",
+    "patch": {
+      "district": "Nishon",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 99 344-22-44"
+    }
+  },
+  {
+    "id": "res-0027",
+    "inn": "311146563",
+    "name": "\"QAMASHI EDUCATION 777\" MCHJ",
+    "patch": {
+      "district": "Qamashi",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 99 665-51-61"
+    }
+  },
+  {
+    "id": "res-0028",
+    "inn": "312277494",
+    "name": "\"QAMASHI IT PARK GRANT\" MCHJ",
+    "patch": {
+      "district": "Qamashi",
+      "industry": "Ta`lim",
+      "activityType": "Kompyuter texnologiyalаri sohаsidаgi mаslаhаt xizmаtlаri",
+      "phone": "+998 94 656-20-25"
+    }
+  },
+  {
+    "id": "res-0029",
+    "inn": "311278312",
+    "name": "\"QARSHI TECHNOPARK DASTURIY MAHSULOTLAR VA AXBOROT TEXNOLOGIYALARI TEXNOLOGIK PARKI DIREKSIYASI\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "Kompyuter texnologiyalаri sohаsidаgi mаslаhаt xizmаtlаri",
+      "phone": "+998 91 964-06-19"
+    }
+  },
+  {
+    "id": "res-0030",
+    "inn": "312651426",
+    "name": "\"RAQAMLI TEXNOLOGIYALARNI INTELEKTUALLASHTIRISH DIREKSIYASI\" MCHJ",
+    "patch": {
+      "district": "Koson",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 99 666-88-66"
+    }
+  },
+  {
+    "id": "res-0031",
+    "inn": "308393954",
+    "name": "\"RISUMA\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Qo'llab-quvvatlash",
+      "activityType": "Boshqa dasturiy ta'minotlarni chiqarish",
+      "phone": "+998 90 616-34-21"
+    }
+  },
+  {
+    "id": "res-0032",
+    "inn": "304274068",
+    "name": "«RUSLAN MEDIA» MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter texnologiyalаri sohаsidаgi mаslаhаt xizmаtlаri",
+      "phone": "+998 94 330-13-13"
+    }
+  },
+  {
+    "id": "res-0033",
+    "inn": "311688198",
+    "name": "\"SHAHRISABZ VOICE\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Eksport",
+      "activityType": "Internet jahon axborot tarmog‘i orqali axborot xizmatlarini eksport qilish",
+      "phone": "+998 91 632-77-07"
+    }
+  },
+  {
+    "id": "res-0034",
+    "inn": "312684890",
+    "name": "\"SILKBRIDGE STUDIO\" MCHJ",
+    "patch": {
+      "district": "Koʻkdala",
+      "industry": "Eksport",
+      "activityType": "Tijorаt fаoliyati vа boshqаruv mаsаlаlаri bo'yichа mаslаhаt berish",
+      "phone": "+998 77 033-33-92"
+    }
+  },
+  {
+    "id": "res-0035",
+    "inn": "311071982",
+    "name": "\"SSOFT\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Litsenziyalarni sotish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 97 106-33-53"
+    }
+  },
+  {
+    "id": "res-0036",
+    "inn": "310348043",
+    "name": "\"TIMII ITC\" MCHJ",
+    "patch": {
+      "district": "Gʻuzor",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 93 697-28-12"
+    }
+  },
+  {
+    "id": "res-0037",
+    "inn": "310348526",
+    "name": "\"TIMII SD\" MCHJ",
+    "patch": {
+      "district": "Gʻuzor",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "Boshqа dаsturiy tа'minotlаrni chiqаrish",
+      "phone": "+998 93 697-28-12"
+    }
+  },
+  {
+    "id": "res-0038",
+    "inn": "310958241",
+    "name": "\"UNITED CODERS TEAM\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 90 000-17-30"
+    }
+  },
+  {
+    "id": "res-0039",
+    "inn": "312741084",
+    "name": "\"VISION DIGITAL GROUPS\" MCHJ",
+    "patch": {
+      "district": "Kasbi",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 88 161-18-08"
+    }
+  },
+  {
+    "id": "res-0040",
+    "inn": "311276694",
+    "name": "\"VOHASOFT\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "Mа'lumotlаrni joylаshtirish vа ishlov berish bo'yichа xizmаtlаr",
+      "phone": "+998 90 189-49-13"
+    }
+  },
+  {
+    "id": "res-0041",
+    "inn": "311573895",
+    "name": "\"XIU QOSHIDAGI RAQAMLI TEXNOLOGIYALAR CENTER\" MCHJ",
+    "patch": {
+      "district": "Qarshi District",
+      "industry": "IT ta'lim",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 90 882-40-16"
+    }
+  },
+  {
+    "id": "res-0042",
+    "inn": "311038333",
+    "name": "\"YEMAK\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Malumotlarni qayta ishlash",
+      "activityType": "Mа'lumotlаrni joylаshtirish vа ishlov berish bo'yichа xizmаtlаr",
+      "phone": "+998 94 330-13-13"
+    }
+  },
+  {
+    "id": "res-0043",
+    "inn": "312110441",
+    "name": "\"Zukko Group\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Kreativ iqtisodiyot",
+      "activityType": "Web-portаllаr",
+      "phone": "+998 95 325-88-88"
+    }
+  },
+  {
+    "id": "res-0044",
+    "inn": "307332870",
+    "name": "«AXBOROT KOMMUNIKATSIYA TEXNOLOGIYALARI MARKAZI» MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "Kompyuter dasturlashtirish sohasidagi faoliyat",
+      "phone": "+998 90 442-75-95"
+    }
+  },
+  {
+    "id": "res-0045",
+    "inn": "309049270",
+    "name": "\"Global System Information\" MCHJ",
+    "patch": {
+      "district": "Gʻuzor",
+      "industry": "Qo'llab-quvvatlash",
+      "activityType": "Boshqa dasturiy ta'minotlarni chiqarish",
+      "phone": "+998 90 972-06-65"
+    }
+  },
+  {
+    "id": "res-0046",
+    "inn": "307701110",
+    "name": "«NNT EXPRESS INC» MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Kompyuter dasturlashtirish sohasidagi faoliyat",
+      "phone": "+998 90 972-06-65"
+    }
+  },
+  {
+    "id": "res-0047",
+    "inn": "305192304",
+    "name": "\"CODELAB\" xususiy korxonasi",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "IT ta'lim",
+      "activityType": "Mа'lumotlаrni joylаshtirish vа ishlov berish bo'yichа xizmаtlаr",
+      "phone": "+998 90 120-78-65"
+    }
+  },
+  {
+    "id": "res-0048",
+    "inn": "305469266",
+    "name": "\"FET INFO GROUP\" xususiy korxonasi",
+    "patch": {
+      "district": "Mirishkor",
+      "industry": "Litsenziyalarni sotish",
+      "activityType": "Boshqа dаsturiy tа'minotlаrni chiqаrish",
+      "phone": "+998 90 318-68-77"
+    }
+  },
+  {
+    "id": "res-0049",
+    "inn": "312633621",
+    "name": "\"IT YAKKABOG CODE HUB\" MCHJ",
+    "patch": {
+      "district": "Yakkabogʻ",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 99 126-32-07"
+    }
+  },
+  {
+    "id": "res-0050",
+    "inn": "310548174",
+    "name": "\"ART-MATBAA-DESIGN\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Kreativ iqtisodiyot",
+      "activityType": "Jurnаllаr vа dаvriy nаshrlаr nаshr qilish",
+      "phone": "+998 97 382-84-89"
+    }
+  },
+  {
+    "id": "res-0051",
+    "inn": "312906043",
+    "name": "\"Edits Group\" MCHJ",
+    "patch": {
+      "district": "Kasbi",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 90 892-23-03"
+    }
+  },
+  {
+    "id": "res-0052",
+    "inn": "3164659",
+    "name": "\"IT Centr Nishon\" MCHJ",
+    "patch": {
+      "district": "Nishon",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 88 318-09-09"
+    }
+  },
+  {
+    "id": "res-0053",
+    "inn": "312886172",
+    "name": "\"IT PARK SHAHRISABZ\" NTM",
+    "patch": {
+      "district": "Kitob",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqa toifalarga kiritilmagan ta’limning boshqa turlari",
+      "phone": "+998 88 644-44-04"
+    }
+  },
+  {
+    "id": "res-0054",
+    "inn": "312914310",
+    "name": "\"TECHBRIDGE ACADEMY\" MCHJ",
+    "patch": {
+      "district": "Yakkabogʻ",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "Boshqa toifalarga kiritilmagan ta’limning boshqa turlari",
+      "phone": "+998 95 299-12-64"
+    }
+  },
+  {
+    "id": "res-0055",
+    "inn": "311713016",
+    "name": "\"SLUJBA PATRIOT SECURITY\"MCHJ",
+    "patch": {
+      "district": "Yakkabogʻ",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 90 969-01-07"
+    }
+  },
+  {
+    "id": "res-0056",
+    "inn": "312785171",
+    "name": "\"MOBILE PROGRAM GROUP\" MCHJ",
+    "patch": {
+      "district": "Nishon",
+      "industry": "DTni ishlab chiqarish",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 99 061-62-07"
+    }
+  },
+  {
+    "id": "res-0057",
+    "inn": "312980555",
+    "name": "\"AVTEN\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Boshqа аvtomobillаrgа texnik xizmаt ko'rsаtish vа tа'mirlаsh",
+      "phone": "+998 97 143-20-01"
+    }
+  },
+  {
+    "id": "res-0058",
+    "inn": "309515428",
+    "name": "\"ELDORBEK VA IMONAXON\"MCHJ",
+    "patch": {
+      "district": "Qamashi",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 97 801-27-67"
+    }
+  },
+  {
+    "id": "res-0059",
+    "inn": "312868804",
+    "name": "\"UMAR ASLIDDINOVICH\" XS",
+    "patch": {
+      "district": "Dehqonobod",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 90 678-95-00"
+    }
+  },
+  {
+    "id": "res-0060",
+    "inn": "313012784",
+    "name": "\"STF SCHOOL\" MCHJ",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "DTni ishlab chiqarish",
+      "activityType": "T ashkil etish ( qay ta tashkil etish, boshqa ro' yxatga olish, axborotni o' zgartirish)",
+      "phone": "+998 99 063-20-00"
+    }
+  },
+  {
+    "id": "res-0061",
+    "inn": "313049072",
+    "name": "\"KASHFIYOTCHILAR 777\" MCHJ",
+    "patch": {
+      "district": "Yakkabogʻ",
+      "industry": "IT ta'lim,Robotatexnika",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 91 262-09-70"
+    }
+  },
+  {
+    "id": "res-0062",
+    "inn": "312914674",
+    "name": "\"IT VISION CENTER\" NTM",
+    "patch": {
+      "district": "Muborak",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 90 444-83-00"
+    }
+  },
+  {
+    "id": "res-0063",
+    "inn": "312308454",
+    "name": "\"PANJI AAT\" MCHJ",
+    "patch": {
+      "district": "Dehqonobod",
+      "industry": "Xizmat ko'rsatish",
+      "activityType": "Kompyuter texnologiyalаri sohаsidаgi mаslаhаt xizmаtlаri",
+      "phone": "+998 94 294-50-05"
+    }
+  },
+  {
+    "id": "res-0064",
+    "inn": "307036724",
+    "name": "\"CREATESOFT\" MCHJ",
+    "patch": {
+      "district": "Chiroqchi",
+      "industry": "DTni ishlab chiqish",
+      "activityType": "Kompyuter dasturlashtirish soxasidagi faoliyat",
+      "phone": "+998 91 641-14-14"
+    }
+  },
+  {
+    "id": "res-0065",
+    "inn": "313076870",
+    "name": "\"SHON-ACADEMY\" MCHJ",
+    "patch": {
+      "district": "Dehqonobod",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 77 735-25-80"
+    }
+  },
+  {
+    "id": "res-0066",
+    "inn": "312664393",
+    "name": "\"ZROK GAMES\" MCHJ",
+    "patch": {
+      "industry": "Eksport",
+      "activityType": "Kompyuter o'yinlаrini chiqаrish",
+      "phone": "+998 90 024-56-39"
+    }
+  },
+  {
+    "id": "res-0067",
+    "inn": "311439965",
+    "name": "\"Automatic technologies solutions\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Qo'llab-quvvatlash",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 90 721-70-66"
+    }
+  },
+  {
+    "id": "res-0068",
+    "inn": "312564709",
+    "name": "\"KO'KDALA NEWS\" mas`uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Koʻkdala",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа telekommunikаtsiya xizmаtlаri ko'rsаtish",
+      "phone": "+998 91 465-18-99"
+    }
+  },
+  {
+    "id": "res-0069",
+    "inn": "313068825",
+    "name": "\"DATAI SERVICES\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Аxborot texnologiyalаri vа kompyuter tizimlаri sohаsidаgi boshqа fаoliyat turlаri",
+      "phone": "+998 77 002-06-60"
+    }
+  },
+  {
+    "id": "res-0070",
+    "inn": "311523252",
+    "name": "\"SFERA IT SOLUTIONS 24\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа dаsturiy tа'minotlаrni chiqаrish",
+      "phone": "+998 90 326-93-90"
+    }
+  },
+  {
+    "id": "res-0071",
+    "inn": "311524117",
+    "name": "\"GREAT GOAL ACADEMY\" MCHJ",
+    "patch": {
+      "district": "Koson",
+      "industry": "IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 94 334-00-81"
+    }
+  },
+  {
+    "id": "res-0072",
+    "inn": "313156099",
+    "name": "\"PLASMA AI SOLUTIONS\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Litsenziya sotish",
+      "activityType": "Boshqа dаsturiy tа'minotlаrni chiqаrish",
+      "phone": "+998 94 877-87-83"
+    }
+  },
+  {
+    "id": "res-0073",
+    "inn": "309686216",
+    "name": "\"REVOLUTION ACADEMY\" NTM",
+    "patch": {
+      "district": "Shahrisabz",
+      "industry": "Ta`lim",
+      "activityType": "Tа'lim sohаsidаgi yordаmchi fаoliyat",
+      "phone": "+998 91 322-55-44"
+    }
+  },
+  {
+    "id": "res-0074",
+    "inn": "312329373",
+    "name": "\"HEALIX\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Qo'llab quvvatlash",
+      "activityType": "Mа'lumotlаrni joylаshtirish vа ishlov berish bo'yichа xizmаtlаr",
+      "phone": "+998 94 649-30-00"
+    }
+  },
+  {
+    "id": "res-0075",
+    "inn": "311662420",
+    "name": "\"CATE\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport",
+      "activityType": "Kompyuter dаsturlаshtirish sohаsidаgi fаoliyat",
+      "phone": "+998 90 716-22-81"
+    }
+  },
+  {
+    "id": "res-0076",
+    "inn": "311889596",
+    "name": "\"CALIFORNIUM IT ACADEMY\" MCHJ",
+    "patch": {
+      "district": "Qarshi",
+      "industry": "Eksport,IT ta'lim",
+      "activityType": "Boshqа toifаlаrgа kiritilmаgаn tа'limning boshqа turlаri",
+      "phone": "+998 90 037-02-05"
+    }
+  },
+  {
+    "id": "res-0077",
+    "inn": "313112059",
+    "name": "\"ZEROTRACE\" MCHJ",
+    "patch": {
+      "district": "Chiroqchi",
+      "industry": "Litsenziyalarni sotish",
+      "activityType": "Kompyuter texnologiyalаri sohаsidаgi mаslаhаt xizmаtlаri",
+      "phone": "+998 97 011-37-56"
+    }
+  },
+  {
+    "id": "res-0082",
+    "inn": null,
+    "name": "\"BEKZOD MADATOV ACADEMY\"MCHJ",
+    "patch": {
+      "district": "Muborak"
+    }
+  },
+  {
+    "id": "res-0081",
+    "inn": null,
+    "name": "\"Edits Group\" MCHJ",
+    "patch": {
+      "district": "Kasbi"
+    }
+  },
+  {
+    "id": "res-0218",
+    "inn": null,
+    "name": "\"SHAHZODA-ZILOLA-OMAD\" xususiy korxonasi",
+    "patch": {
+      "district": "Dehqonobod"
+    }
+  },
+  {
+    "id": "res-0220",
+    "inn": null,
+    "name": "\"LEGACY\" mas'uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Shahrisabz"
+    }
+  },
+  {
+    "id": "res-0223",
+    "inn": null,
+    "name": "\"SHUXRAT OTA 1964\" xususiy korxonasi",
+    "patch": {
+      "district": "Yakkabogʻ"
+    }
+  },
+  {
+    "id": "res-0297",
+    "inn": null,
+    "name": "\"EMIR-EDU GOLD\" mas`uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Mirishkor"
+    }
+  },
+  {
+    "id": "res-0307",
+    "inn": null,
+    "name": "MIRISHKOR TUMAN 1-SONLI OILAVIY BOLALAR UYI",
+    "patch": {
+      "district": "Mirishkor"
+    }
+  },
+  {
+    "id": "res-0310",
+    "inn": null,
+    "name": "\"SHAMSHOD ABITURIYENT TAYYORLASH MAKTABI\" nodavlat ta'lim muassasasi",
+    "patch": {
+      "district": "Chiroqchi"
+    }
+  },
+  {
+    "id": "res-0334",
+    "inn": null,
+    "name": "KASBI TUMAN 2-SON TEXNIKUMI",
+    "patch": {
+      "district": "Kasbi"
+    }
+  },
+  {
+    "id": "res-0358",
+    "inn": null,
+    "name": "CHIROQCHI TUMAN KELAJAK MARKAZI",
+    "patch": {
+      "district": "Chiroqchi"
+    }
+  },
+  {
+    "id": "res-0390",
+    "inn": null,
+    "name": "\"ALFA  - STAR\" nodavlat ta`lim muassasasi",
+    "patch": {
+      "district": "Qarshi"
+    }
+  },
+  {
+    "id": "res-0395",
+    "inn": null,
+    "name": "\"KO`HINUR ACADEMY\" xususiy korxonasi",
+    "patch": {
+      "district": "Nishon"
+    }
+  },
+  {
+    "id": "res-0430",
+    "inn": null,
+    "name": "\"YUKSAK AVLOD\" mas`uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Chiroqchi"
+    }
+  },
+  {
+    "id": "res-0439",
+    "inn": null,
+    "name": "\"KUXI SAMOI NUR\" хусусий фирмаси",
+    "patch": {
+      "district": "Qamashi"
+    }
+  },
+  {
+    "id": "res-0450",
+    "inn": null,
+    "name": "\"MMM SEVEN MAIN SERVICE\" mas`uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Chiroqchi"
+    }
+  },
+  {
+    "id": "res-0515",
+    "inn": null,
+    "name": "\"NURBEK GROW MEDIA\" mas`uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Chiroqchi"
+    }
+  },
+  {
+    "id": "res-0519",
+    "inn": null,
+    "name": "\"YO'LDOSHOV-DILMUROD\" xususiy korxonasi",
+    "patch": {
+      "district": "Koʻkdala"
+    }
+  },
+  {
+    "id": "res-0578",
+    "inn": null,
+    "name": "\"CHIROQCHI  ALOQA  XIZMATI\" mas`uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Chiroqchi"
+    }
+  },
+  {
+    "id": "res-0599",
+    "inn": null,
+    "name": "\"STUDIO MIRISHKOR\" mas`uliyati cheklangan jamiyati",
+    "patch": {
+      "district": "Mirishkor"
+    }
+  },
+  {
+    "id": "res-0140",
+    "inn": null,
+    "name": "\"YAKKABOG' FAYZI\" MCHJ",
+    "patch": {
+      "district": "Yakkabogʻ"
+    }
+  }
+]
