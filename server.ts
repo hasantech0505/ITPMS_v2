@@ -24,7 +24,7 @@ import { errorHandler } from "./server/middleware/errorHandler";
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Seed RBAC roles and permissions
   RbacRepository.seedRbacData().catch((err) => console.warn("RBAC seed error:", err));
