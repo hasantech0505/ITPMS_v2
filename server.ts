@@ -14,7 +14,7 @@ import rbacRoutes from "./server/routes/rbac.routes";
 import userRoutes from "./server/routes/user.routes";
 import residentRoutes from "./server/routes/resident.routes";
 import entityRoutes from "./server/routes/entity.routes";
-import uploadRoutes from "./server/routes/upload.routes";
+import uploadRoutes, { UPLOAD_ROOT } from "./server/routes/upload.routes";
 import aiRoutes from "./server/routes/ai.routes";
 import healthRoutes from "./server/routes/health.routes";
 import { EntityService } from "./server/services/entity.service";
@@ -69,6 +69,13 @@ async function startServer() {
   // build -- a file uploaded afterwards would 404 without this. Placed before
   // the dev/prod branch below so it takes precedence for matching paths.
   app.use(express.static(path.join(process.cwd(), "public")));
+
+  // When UPLOAD_DIR points somewhere else (a mounted volume on a host with an
+  // ephemeral filesystem), serve that too -- runtime uploads live there, not in
+  // the repo's public/ folder.
+  if (UPLOAD_ROOT !== path.join(process.cwd(), "public")) {
+    app.use(express.static(UPLOAD_ROOT));
+  }
 
   // --- VITE MIDDLEWARE (DEV) & STATIC SERVING (PROD) ---
   if (config.nodeEnv !== "production") {

@@ -33,8 +33,11 @@ export default function PhotoUploader({ category, folder, multiple = false, onUp
     setIsUploading(true);
     try {
       const formData = new FormData();
-      (multiple ? files : [files[0]]).forEach((f) => formData.append("file", f));
+      // "folder" MUST be appended before the file(s): multipart fields reach the
+      // server in stream order, and multer's destination callback only sees the
+      // text fields that arrived ahead of the file it is about to write.
       formData.append("folder", folder || "misc");
+      (multiple ? files : [files[0]]).forEach((f) => formData.append("file", f));
 
       const token = localStorage.getItem("itpms_access_token");
       const headers: Record<string, string> = {};

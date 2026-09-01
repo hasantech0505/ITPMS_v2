@@ -1,11 +1,43 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import fs from 'fs';
 import path from 'path';
-import {defineConfig} from 'vite';
+import {defineConfig, Plugin} from 'vite';
+
+/**
+ * maplibre-gl v6 resolves its web worker at RUNTIME:
+ *   new URL(`./maplibre-gl-worker.mjs`, import.meta.url)
+ * Because that URL is built from a variable, Vite cannot see it statically and
+ * never emits the worker into dist/. In dev it resolves inside node_modules and
+ * works; in a production build the request hits /assets/maplibre-gl-worker.mjs,
+ * falls through to the SPA catch-all, receives index.html, and the browser
+ * refuses it ("non-JavaScript MIME type of text/html"). The map then paints its
+ * background but no tiles, because the worker that parses them never starts.
+ * Copy the worker (and the shared chunk it imports) next to the built assets.
+ */
+function copyMaplibreWorker(): Plugin {
+  return {
+    name: 'copy-maplibre-worker',
+    apply: 'build',
+    closeBundle() {
+      const src = path.resolve(__dirname, 'node_modules/maplibre-gl/dist');
+      const dest = path.resolve(__dirname, 'dist/assets');
+      fs.mkdirSync(dest, {recursive: true});
+      for (const file of ['maplibre-gl-worker.mjs', 'maplibre-gl-shared.mjs']) {
+        const from = path.join(src, file);
+        if (fs.existsSync(from)) {
+          fs.copyFileSync(from, path.join(dest, file));
+        } else {
+          this.warn(`maplibre worker asset missing: ${from}`);
+        }
+      }
+    },
+  };
+}
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), copyMaplibreWorker()],
     optimizeDeps: {
       exclude: ['maplibre-gl'],
     },
