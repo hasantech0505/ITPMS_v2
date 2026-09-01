@@ -1347,17 +1347,17 @@ Exadel qualifies fully for flat 7.5% personal income tax benefit and 0% customs 
               {aiSettings ? (
                 <div className="space-y-4">
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700 block">Gemini Model</label>
+                    <label className="font-bold text-slate-700 block">Groq Model</label>
                     <select
                       value={aiSettings.model}
                       onChange={(e) => handleSaveSettings({ model: e.target.value })}
                       className="w-full p-2 border border-slate-300 rounded bg-white font-semibold text-slate-800"
                     >
-                      <option value="gemini-3.7-flash">Gemini 3.7 Flash (recommended, best balance)</option>
-                      <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro (highest intelligence)</option>
-                      <option value="gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite (fastest)</option>
+                      <option value="openai/gpt-oss-20b">GPT-OSS 20B (recommended, fast + free-tier friendly)</option>
+                      <option value="openai/gpt-oss-120b">GPT-OSS 120B (best quality, slower)</option>
+                      <option value="qwen/qwen3.6-27b">Qwen3.6 27B (lightweight alternative)</option>
                     </select>
-                    <span className="text-[10px] text-slate-400 block mt-1">Powered by the Google Gemini API. Requires a GEMINI_API_KEY configured on the server.</span>
+                    <span className="text-[10px] text-slate-400 block mt-1">Powered by the free Groq API. Requires a GROQ_API_KEY configured on the server.</span>
                   </div>
 
                   <div className="space-y-1">

@@ -3,69 +3,94 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { GoogleGenAI } from "@google/genai";
 import { config } from "../config/env";
 import { EntityRepository } from "../repositories/entity.repository";
 
-export const GEMINI_MODEL = "gemini-3.7-flash";
+// Groq (https://console.groq.com) issues genuinely free API keys - no
+// credit card required - and speaks an OpenAI-compatible chat completions
+// API, so this talks to it directly over fetch rather than pulling in a
+// dedicated SDK for one endpoint.
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+// llama-3.3-70b-versatile and llama-3.1-8b-instant were both shut down
+// by Groq on 2026-08-16 (see console.groq.com/docs/deprecations) - calls
+// to them now 404 with "model_not_found". openai/gpt-oss-20b is Groq's
+// current recommended fast/free-tier default.
+export const GROQ_MODEL = "openai/gpt-oss-20b";
 
-let aiClient: GoogleGenAI | null = null;
-let aiClientInitAttempted = false;
-
-export function getAiClient(): GoogleGenAI | null {
-  if (aiClientInitAttempted) {
-    return aiClient;
-  }
-
-  const apiKey = process.env.GEMINI_API_KEY || config.geminiApiKey;
+function getGroqApiKey(): string | null {
+  const apiKey = process.env.GROQ_API_KEY || config.groqApiKey;
   if (apiKey && typeof apiKey === "string" && apiKey.trim().length > 5) {
-    try {
-      aiClient = new GoogleGenAI({
-        apiKey: apiKey.trim(),
-      });
-    } catch (err) {
-      console.warn("Notice: Gemini API initialization failed, using internal offline intelligence engine.");
-      aiClient = null;
-    }
+    return apiKey.trim();
   }
-
-  aiClientInitAttempted = true;
-  return aiClient;
+  return null;
 }
 
+// One-time startup diagnostic: prints whether GROQ_API_KEY was actually
+// picked up from .env at boot, without ever printing the real secret.
+// If this logs "NOT FOUND" the AI will always fall back to templates,
+// no matter how correct the rest of the integration is - check that
+// GROQ_API_KEY is set in .env at the repo root and that the dev server
+// was fully restarted (not just the browser refreshed) after editing it.
+(() => {
+  const key = getGroqApiKey();
+  if (key) {
+    const masked = `${key.slice(0, 6)}...${key.slice(-4)} (${key.length} chars)`;
+    console.log(`[AI] GROQ_API_KEY detected: ${masked}. Using model: ${GROQ_MODEL}.`);
+  } else {
+    console.warn("[AI] GROQ_API_KEY NOT FOUND. All AI features will use offline template fallbacks. Set GROQ_API_KEY in .env and fully restart the server.");
+  }
+})();
+
 async function callGemini(params: { system?: string; prompt: string; maxTokens?: number }): Promise<string | null> {
-  const client = getAiClient();
-  if (!client) return null;
-  let model: string = GEMINI_MODEL;
+  const apiKey = getGroqApiKey();
+  if (!apiKey) return null;
+
+  let model: string = GROQ_MODEL;
   let temperature: number | undefined;
   try {
     const settings = await AIService.getSettings();
     if (settings?.model) model = settings.model;
     if (typeof settings?.temperature === "number") temperature = settings.temperature;
   } catch {
-    // fall back to GEMINI_MODEL if settings can't be loaded
+    // fall back to GROQ_MODEL if settings can't be loaded
   }
-  const response = await client.models.generateContent({
-    model,
-    contents: params.prompt,
-    config: {
-      systemInstruction: params.system,
-      temperature,
-      maxOutputTokens: params.maxTokens || 2048,
+
+  const messages: { role: string; content: string }[] = [];
+  if (params.system) messages.push({ role: "system", content: params.system });
+  messages.push({ role: "user", content: params.prompt });
+
+  const res = await fetch(GROQ_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`,
     },
+    body: JSON.stringify({
+      model,
+      messages,
+      temperature,
+      max_tokens: params.maxTokens || 2048,
+    }),
   });
-  return response.text || null;
+
+  if (!res.ok) {
+    const errText = await res.text().catch(() => "");
+    throw new Error(`Groq API error ${res.status}: ${errText.slice(0, 300)}`);
+  }
+
+  const data = await res.json();
+  return data?.choices?.[0]?.message?.content || null;
 }
 
 export class AIService {
   static async getSettings() {
     const db = await EntityRepository.getFullState();
     return db.aiSettings || {
-      model: GEMINI_MODEL,
+      model: GROQ_MODEL,
       temperature: 0.2,
       maxTokens: 2048,
       ragEnabled: true,
-      systemInstruction: "You are the central executive Google Studio AI for IT Park Uzbekistan (ITPMS - Kashkadarya & Regional Tech Centers). You provide data-driven strategic insights, tax regime analysis (0% Corporate/VAT, 7.5% PIT), export forecasting, startup acceleration metrics, and automated administrative operations.",
+      systemInstruction: "You are the central executive AI assistant for IT Park Uzbekistan (ITPMS - Kashkadarya & Regional Tech Centers). You provide data-driven strategic insights, tax regime analysis (0% Corporate/VAT, 7.5% PIT), export forecasting, startup acceleration metrics, and automated administrative operations.",
     };
   }
 
@@ -74,7 +99,7 @@ export class AIService {
     db.aiSettings = {
       ...(db.aiSettings || {}),
       ...settings,
-      model: settings.model || db.aiSettings?.model || GEMINI_MODEL
+      model: settings.model || db.aiSettings?.model || GROQ_MODEL
     };
 
     await EntityRepository.saveFullState(db);
@@ -194,6 +219,7 @@ export class AIService {
       aiResponseText = text || this.generateIntelligentFallback(userMessageText, db, activeResidents, totalExport, totalStartups, totalTalent);
     } catch (err: any) {
       console.warn("Notice: Switching to local domain intelligence copilot engine for response.");
+      console.error("AI call failed:", err?.message || err);
       aiResponseText = this.generateIntelligentFallback(userMessageText, db, activeResidents, totalExport, totalStartups, totalTalent);
     }
 
@@ -346,6 +372,7 @@ export class AIService {
     const totalExport = (db.residents || []).reduce((acc: number, r: any) => acc + (Number(r.exportVolume) || 0), 0);
     const pendingTasks = (db.tasks || []).filter((t: any) => t.status !== "DONE").length;
     const startupsCount = (db.startups || []).length;
+    const uncontactedLeads = (db.companies || []).filter((c: any) => c.status === "LEAD" && !c.lastContactedDate).length;
 
     const headline = `Good Morning, Director Hasan! ${activeResidents} Active Residents, $${(totalExport / 1000000).toFixed(1)}M USD Export YTD, ${pendingTasks} Action Tasks Pending`;
     
@@ -353,7 +380,7 @@ export class AIService {
       `Qashqadaryo Regional Hub achieved $${(totalExport / 1000000).toFixed(2)}M in IT export volume across ${activeResidents} resident companies.`,
       `${startupsCount} registered startups are progressing in the incubation sandbox pipeline.`,
       `${pendingTasks} administrative compliance tasks and review audits are scheduled for action today.`,
-      `Kashkadarya Tech Complex coworking space has 4 new workstation lease requests.`
+      `${uncontactedLeads} CRM leads have never been contacted and are at risk of going stale.`
     ];
 
     const aiSuggestions = [
@@ -362,7 +389,12 @@ export class AIService {
       `Approve startup grant allocations for Q3 Cohort finalists.`
     ];
 
-    const briefing = `### ☀️ Executive Morning Briefing - IT Park Kashkadarya\n\n` +
+    // The headline/highlights/suggestions above are already real numbers
+    // pulled straight from the live dataset. This asks the AI to turn that
+    // same real data into an actual analyst-written narrative instead of
+    // always assembling the identical fixed template - falling back to that
+    // template verbatim if the AI is unavailable or fails.
+    const fallbackBriefing = `### ☀️ Executive Morning Briefing - IT Park Kashkadarya\n\n` +
       `**Key Operational Snapshot:**\n` +
       `• **Active Residents:** ${activeResidents} companies actively operating under the tax exemption regime.\n` +
       `• **Export Progress:** $${(totalExport / 1000000).toFixed(2)}M USD achieved against 2026 annual targets.\n` +
@@ -371,6 +403,26 @@ export class AIService {
       highlights.map(h => `• ${h}`).join("\n") + `\n\n` +
       `**Recommended Next Steps:**\n` +
       aiSuggestions.map(s => `1. ${s}`).join("\n");
+
+    let briefing = fallbackBriefing;
+    try {
+      const prompt =
+        `Write a concise executive morning briefing in markdown for the Regional Director of IT Park Kashkadarya, ` +
+        `Hasan Abdukarimov. Use ONLY the real figures below - do not invent any numbers. Structure it with a ` +
+        `"Key Operational Snapshot" section, a "Strategic Priorities Today" section, and a "Recommended Next Steps" section.\n\n` +
+        `Real data:\n` +
+        `- Active residents: ${activeResidents}\n` +
+        `- IT export volume YTD: $${(totalExport / 1000000).toFixed(2)}M USD\n` +
+        `- Pending compliance/admin tasks: ${pendingTasks}\n` +
+        `- Registered startups in incubation: ${startupsCount}\n` +
+        `- Uncontacted CRM leads: ${uncontactedLeads}`;
+
+      const text = await callGemini({ prompt, maxTokens: 1024 });
+      if (text) briefing = text;
+    } catch (err) {
+      console.warn("Notice: Using template morning briefing (AI narrative unavailable).");
+      console.error("AI call failed:", err?.message || err);
+    }
 
     return {
       date: new Date().toISOString().split("T")[0],
@@ -410,6 +462,7 @@ Include:
       }
     } catch (err) {
       console.warn("Notice: Switching to local domain intelligence copilot engine for email draft.");
+      console.error("AI call failed:", err?.message || err);
     }
 
     // Fallback Email
@@ -462,6 +515,7 @@ Provide:
       }
     } catch (err) {
       console.warn("Notice: Switching to local domain intelligence copilot engine for document analysis.");
+      console.error("AI call failed:", err?.message || err);
     }
 
     // Fallback Document Analysis
@@ -514,6 +568,7 @@ Include:
       }
     } catch (err) {
       console.warn("Notice: Switching to local domain intelligence copilot engine for report generation.");
+      console.error("AI call failed:", err?.message || err);
     }
 
     // Fallback Report
@@ -563,6 +618,7 @@ Provide:
       }
     } catch (err) {
       console.warn("Notice: Switching to local domain intelligence copilot engine for meeting summary.");
+      console.error("AI call failed:", err?.message || err);
     }
 
     const fallbackSummary = `📌 **Executive Meeting Summary: ${title}**\n\n` +
@@ -589,9 +645,10 @@ Provide:
       }
     } catch (err) {
       console.warn("Notice: Switching to local domain intelligence copilot engine for context analysis.");
+      console.error("AI call failed:", err?.message || err);
     }
 
-    const fallbackAnalysis = `**IT PARK ECONOMIC FORECAST & STRATEGIC RECOMMENDATIONS (PREPARED BY GEMINI AI)**\n\n` +
+    const fallbackAnalysis = `**IT PARK ECONOMIC FORECAST & STRATEGIC RECOMMENDATIONS (ITPMS OFFLINE INTELLIGENCE ENGINE)**\n\n` +
       `1. **Export Growth Target Projection:** Current IT Export velocity represents strong Year-over-Year momentum. Concentration in Qarshi Central Hub provides a solid foundation to scale BPO regional clusters across Shahrisabz ($1.2M target) and Kitob.\n\n` +
       `2. **Sandbox & Incubation Sourcing:** Active startup pipeline is progressing well. Recommendation: Automate matchmaking within the CRM to sync local SaaS MVPs directly with verified venture partners.\n\n` +
       `3. **BPO Talent Funnel Alignment:** Developer technical scores are strong (avg 84/100). Recommending accelerated specialized English and international business communication modules to elevate global deal closure rates.`;
@@ -695,34 +752,121 @@ Provide:
     return true;
   }
 
+  // Previously returned a fixed set of three hardcoded example
+  // recommendations (EPAM Systems / CyberShield Uz / Shahrisabz Hub) every
+  // single time, regardless of what the actual data said - not derived from
+  // real records at all. This now computes real candidates from the live
+  // dataset (top exporter by actual export volume, the hottest CRM lead
+  // that's actually overdue for follow-up, the district with the highest
+  // actual property occupancy), then asks the AI to sharpen the phrasing of
+  // those real findings into punchier executive sentences. If the AI call
+  // fails or isn't configured, the deterministic descriptions below are
+  // already accurate on their own and are shown as-is.
   static async getRecommendations() {
     const db = await EntityRepository.getFullState();
-    return db.recommendations || [
-      {
-        id: "rec-1",
-        title: "Tax Exemption Audit for EPAM Systems",
-        description: "EPAM Systems Q2 export volume surged past $4.2M. Conduct quarterly reconciliation to ensure 100% OKED compliance.",
+    const residents: any[] = db.residents || [];
+    const companies: any[] = db.companies || [];
+    const properties: any[] = db.properties || [];
+
+    type Candidate = { id: string; title: string; description: string; type: string; targetEntity: string };
+    const candidates: Candidate[] = [];
+
+    // 1) Top exporter compliance nudge - real resident, real export figure.
+    const activeResidents = residents.filter((r) => r.status === "ACTIVE" || !r.status);
+    const topExporter = [...activeResidents].sort(
+      (a, b) => (Number(b.exportVolume) || 0) - (Number(a.exportVolume) || 0)
+    )[0];
+    if (topExporter && Number(topExporter.exportVolume) > 0) {
+      candidates.push({
+        id: "rec-top-exporter",
+        title: `Tax Exemption Audit for ${topExporter.companyName}`,
+        description: `${topExporter.companyName} leads the portfolio with $${(Number(topExporter.exportVolume) / 1000000).toFixed(2)}M in export volume. Conduct a quarterly reconciliation to maintain 100% OKED compliance.`,
         type: "warning",
-        targetEntity: "EPAM Systems",
-        dismissed: false
-      },
-      {
-        id: "rec-2",
-        title: "Demo Day Pitch Preparation for CyberShield",
-        description: "CyberShield Uz MVP readiness is at 90%. Schedule pitch coaching before the Tashkent Investor Summit.",
+        targetEntity: topExporter.companyName,
+      });
+    }
+
+    // 2) Hottest CRM lead actually overdue for follow-up - real company, real leadScore/status.
+    const now = new Date();
+    const staleLeads = companies.filter(
+      (c) =>
+        (c.status === "NEGOTIATION" || c.status === "CONTACTED") &&
+        (!c.lastContactedDate || (c.nextFollowUpDate && new Date(c.nextFollowUpDate) < now))
+    );
+    const topLead = [...staleLeads].sort((a, b) => (Number(b.leadScore) || 0) - (Number(a.leadScore) || 0))[0];
+    if (topLead) {
+      candidates.push({
+        id: "rec-hot-lead",
+        title: `Follow-up Needed: ${topLead.name}`,
+        description: `${topLead.name} is in ${topLead.status} with a lead score of ${topLead.leadScore}/100 but has ${!topLead.lastContactedDate ? "no logged contact yet" : "an overdue follow-up date"}. Re-engage before this deal goes cold.`,
         type: "opportunity",
-        targetEntity: "CyberShield Uz",
-        dismissed: false
-      },
-      {
-        id: "rec-3",
-        title: "Sub-hub Expansion in Shahrisabz",
-        description: "Shahrisabz Tech Center reached 85% occupancy. Prepare expansion proposal for Phase 2 coworking spaces.",
+        targetEntity: topLead.name,
+      });
+    }
+
+    // 3) District expansion opportunity - real occupancy rate from real property records.
+    const districtOccupancy: Record<string, { total: number; occupied: number }> = {};
+    for (const p of properties) {
+      const d = p.district || p.city || "Unknown";
+      districtOccupancy[d] = districtOccupancy[d] || { total: 0, occupied: 0 };
+      districtOccupancy[d].total += 1;
+      if (p.status === "Occupied") districtOccupancy[d].occupied += 1;
+    }
+    const busiestDistrict = Object.entries(districtOccupancy)
+      .filter(([, v]) => v.total >= 2)
+      .map(([district, v]) => ({ district, rate: v.occupied / v.total, ...v }))
+      .sort((a, b) => b.rate - a.rate)[0];
+    if (busiestDistrict) {
+      candidates.push({
+        id: "rec-district-expansion",
+        title: `Sub-hub Expansion in ${busiestDistrict.district}`,
+        description: `${busiestDistrict.district} is at ${Math.round(busiestDistrict.rate * 100)}% occupancy (${busiestDistrict.occupied}/${busiestDistrict.total} properties). Prepare an expansion proposal for additional coworking space.`,
         type: "opportunity",
-        targetEntity: "Shahrisabz Hub",
-        dismissed: false
+        targetEntity: busiestDistrict.district,
+      });
+    }
+
+    if (candidates.length > 0) {
+      try {
+        const prompt =
+          `You are advising the Regional Director of IT Park Kashkadarya. Rewrite each of the following ` +
+          `data-driven findings as a single punchy, executive-style action sentence (max 30 words each). ` +
+          `Keep every number exactly as given - do not invent or change any figures. Reply with exactly ` +
+          `${candidates.length} lines, each starting with "1)", "2)", etc. matching the order below, and no other text.\n\n` +
+          candidates.map((c, i) => `${i + 1}) [${c.title}] ${c.description}`).join("\n");
+
+        const text = await callGemini({ prompt, maxTokens: 400 });
+        if (text) {
+          for (const line of text.split("\n").map((l) => l.trim()).filter(Boolean)) {
+            const match = line.match(/^(\d+)\)\s*(.+)$/);
+            if (match) {
+              const idx = parseInt(match[1], 10) - 1;
+              if (candidates[idx] && match[2]) {
+                candidates[idx].description = match[2].replace(/^\[.*?\]\s*/, "").trim();
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Notice: Using deterministic recommendation phrasing (AI enhancement unavailable).");
+        console.error("AI call failed:", err?.message || err);
       }
-    ];
+    }
+
+    // Preserve dismissal state across recomputes: a candidate that resurfaces
+    // under the same id AND the same real target entity stays dismissed;
+    // if the underlying entity changed (e.g. a new top exporter), it's a
+    // genuinely new finding and starts undismissed.
+    const previous: any[] = db.recommendations || [];
+    const merged = candidates.map((c) => {
+      const prior = previous.find((p) => p.id === c.id && p.targetEntity === c.targetEntity);
+      return { ...c, dismissed: prior?.dismissed || false };
+    });
+
+    db.recommendations = merged;
+    await EntityRepository.saveFullState(db);
+
+    return merged;
   }
 
   static async dismissRecommendation(id: string) {
@@ -758,6 +902,7 @@ Provide an executive, highly actionable management strategy:
       }
     } catch (err) {
       console.warn("Notice: Switching to local domain intelligence copilot engine for pipeline synthesis.");
+      console.error("AI call failed:", err?.message || err);
     }
 
     const fallbackReport =
@@ -810,6 +955,7 @@ Provide a crisp, actionable Deal Conversion Strategy tailored to IT Park Kashkad
       }
     } catch (err) {
       console.warn("Notice: Switching to local domain intelligence copilot engine for lead strategy.");
+      console.error("AI call failed:", err?.message || err);
     }
 
     const fallbackStrategy =

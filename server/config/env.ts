@@ -11,6 +11,6 @@ export const config = {
   jwtRefreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "7d",
   databaseUrl: process.env.DATABASE_URL || "",
   corsOrigins: process.env.CORS_ORIGIN || "*",
-  geminiApiKey: process.env.GEMINI_API_KEY || "",
+  groqApiKey: process.env.GROQ_API_KEY || "",
   googleMapsPlatformKey: process.env.GOOGLE_MAPS_PLATFORM_KEY || "",
 };
