@@ -881,6 +881,150 @@ Provide:
     return true;
   }
 
+
+  // AI Insights card for individual modules (Residents, CRM, Startups,
+  // Executive) - 2-3 short, real-data-grounded observations shown at the
+  // top of that module, refreshed on load. Each finding below is computed
+  // straight from the live dataset; a single Groq call only sharpens the
+  // phrasing (never invents or changes a number) - the deterministic
+  // sentence is already accurate on its own and is used as the fallback.
+  static async getModuleInsights(moduleKey: string) {
+    const db = await EntityRepository.getFullState();
+    const residents: any[] = db.residents || [];
+    const companies: any[] = db.companies || [];
+    const startups: any[] = db.startups || [];
+
+    const activeResidents = residents.filter((r: any) => r.status === "ACTIVE");
+    let findings: string[] = [];
+
+    switch (moduleKey) {
+      case "residents": {
+        const industryCounts: Record<string, number> = {};
+        for (const r of activeResidents) {
+          if (!r.industry) continue;
+          industryCounts[r.industry] = (industryCounts[r.industry] || 0) + 1;
+        }
+        const sortedIndustries = Object.entries(industryCounts).sort((a, b) => b[1] - a[1]);
+        if (sortedIndustries.length > 0 && activeResidents.length > 0) {
+          const [topIndustry, topCount] = sortedIndustries[0];
+          const pct = Math.round((topCount / activeResidents.length) * 100);
+          findings.push(`${topIndustry} is the largest industry segment with ${topCount} of ${activeResidents.length} active residents (${pct}%).`);
+        }
+
+        const districtCounts: Record<string, number> = {};
+        for (const r of activeResidents) {
+          if (!r.district) continue;
+          districtCounts[r.district] = (districtCounts[r.district] || 0) + 1;
+        }
+        const districtsCovered = Object.keys(districtCounts).length;
+        const sortedDistricts = Object.entries(districtCounts).sort((a, b) => b[1] - a[1]);
+        if (sortedDistricts.length > 0) {
+          const [topDistrict, topDistCount] = sortedDistricts[0];
+          findings.push(`${topDistrict} hosts the most active residents (${topDistCount}), spread across ${districtsCovered} districts with at least one resident.`);
+        }
+
+        const missingIndustry = activeResidents.filter((r: any) => !r.industry).length;
+        if (missingIndustry > 0) {
+          findings.push(`${missingIndustry} active resident${missingIndustry === 1 ? "" : "s"} still ${missingIndustry === 1 ? "has" : "have"} no industry classification on file.`);
+        }
+        break;
+      }
+
+      case "crm": {
+        const total = companies.length;
+        const contacted = companies.filter((c: any) => c.status !== "LEAD").length;
+        const advanced = companies.filter((c: any) => c.status === "NEGOTIATION" || c.status === "PARTNER").length;
+        if (total > 0) {
+          findings.push(`${contacted} of ${total} leads (${Math.round((contacted / total) * 100)}%) have been contacted, but only ${advanced} have advanced to negotiation or partnership.`);
+        }
+
+        const now = new Date();
+        const overdue = companies.filter(
+          (c: any) => c.nextFollowUpDate && new Date(c.nextFollowUpDate) < now && c.status !== "PARTNER" && c.status !== "INACTIVE"
+        );
+        if (overdue.length > 0) {
+          findings.push(`${overdue.length} lead${overdue.length === 1 ? " is" : "s are"} past ${overdue.length === 1 ? "its" : "their"} scheduled follow-up date.`);
+        }
+
+        const topLead = [...companies]
+          .filter((c: any) => c.status === "NEGOTIATION" || c.status === "CONTACTED")
+          .sort((a: any, b: any) => (Number(b.leadScore) || 0) - (Number(a.leadScore) || 0))[0];
+        if (topLead) {
+          findings.push(`${topLead.name} is the hottest active lead with a score of ${topLead.leadScore}/100, currently in ${topLead.status}.`);
+        }
+        break;
+      }
+
+      case "startups": {
+        const total = startups.length;
+        const graduated = startups.filter((s: any) => s.status === "GRADUATED").length;
+        if (total > 0) {
+          findings.push(`${graduated} of ${total} startups have graduated the program so far.`);
+        }
+
+        const fundedCount = startups.filter((s: any) => Number(s.fundingRaised) > 0).length;
+        const totalFunding = startups.reduce((sum: number, s: any) => sum + (Number(s.fundingRaised) || 0), 0);
+        if (fundedCount > 0) {
+          findings.push(`${fundedCount} of ${total} startups have reported funding, totaling $${(totalFunding / 1000).toFixed(0)}K.`);
+        }
+
+        const topFunded = [...startups].sort((a: any, b: any) => (Number(b.fundingRaised) || 0) - (Number(a.fundingRaised) || 0))[0];
+        if (topFunded && Number(topFunded.fundingRaised) > 0) {
+          findings.push(`${topFunded.name} has raised the most funding in the portfolio at $${(Number(topFunded.fundingRaised) / 1000).toFixed(0)}K.`);
+        }
+        break;
+      }
+
+      case "executive": {
+        const totalExport = residents.reduce((sum: number, r: any) => sum + (Number(r.exportVolume) || 0), 0);
+        findings.push(`${activeResidents.length} active residents across the portfolio, with $${(totalExport / 1000000).toFixed(2)}M in reported export volume.`);
+
+        const uncontactedLeads = companies.filter((c: any) => c.status === "LEAD" && !c.lastContactedDate).length;
+        findings.push(`${uncontactedLeads} CRM leads have never been contacted.`);
+
+        const graduated = startups.filter((s: any) => s.status === "GRADUATED").length;
+        findings.push(`${startups.length} startups in the incubation pipeline, ${graduated} graduated to date.`);
+        break;
+      }
+
+      default:
+        return { insights: [], generatedAt: new Date().toISOString(), module: moduleKey };
+    }
+
+    findings = findings.filter(Boolean).slice(0, 3);
+    let insights = findings;
+
+    if (findings.length > 0) {
+      try {
+        const prompt =
+          `Rewrite each of the following data-driven findings for the "${moduleKey}" module of an IT Park ` +
+          `management system as a single sharp, executive-style sentence (max 25 words each). Keep every ` +
+          `number exactly as given - do not invent or change any figures. Reply with exactly ${findings.length} ` +
+          `lines, each starting with "1)", "2)", etc. matching the order below, and no other text.\n\n` +
+          findings.map((f, i) => `${i + 1}) ${f}`).join("\n");
+
+        const text = await callGemini({ prompt, maxTokens: 300 });
+        if (text) {
+          const rewritten: string[] = [...findings];
+          for (const line of text.split("\n").map((l) => l.trim()).filter(Boolean)) {
+            const match = line.match(/^(\d+)\)\s*(.+)$/);
+            if (match) {
+              const idx = parseInt(match[1], 10) - 1;
+              if (rewritten[idx] !== undefined && match[2]) {
+                rewritten[idx] = match[2].trim();
+              }
+            }
+          }
+          insights = rewritten;
+        }
+      } catch (err: any) {
+        console.error("AI call failed:", err?.message || err);
+      }
+    }
+
+    return { insights, generatedAt: new Date().toISOString(), module: moduleKey };
+  }
+
   static async generatePipelineSynthesis(residents: any[]) {
     const totalExport = residents.reduce((a: number, b: any) => a + (b.exportVolume || 0), 0);
 

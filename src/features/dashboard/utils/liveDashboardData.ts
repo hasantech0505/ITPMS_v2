@@ -56,11 +56,19 @@ function asDate(dateStr?: string): Date | null {
  * Returns null when the raw value can't be confidently matched (e.g. "-",
  * or a village-level name like "Ko'kdala" that isn't one of the 14 units).
  */
+const KASHKADARYA_DISTRICTS_SET = new Set<string>(KASHKADARYA_DISTRICTS);
+
 export function normalizeDistrict(raw?: string | null): string | null {
   if (!raw) return null;
-  const cleaned = raw
+  const trimmed = raw.trim();
+  // Already a clean canonical name (e.g. backfilled directly from a
+  // corrected data source) - return as-is instead of re-parsing it as
+  // free text, which would otherwise incorrectly re-bucket a bare
+  // "Qarshi" (the city) into "Qarshi District" below.
+  if (KASHKADARYA_DISTRICTS_SET.has(trimmed)) return trimmed;
+
+  const cleaned = trimmed
     .replace(/[ʻʼ’‘`]/g, "'")
-    .trim()
     .toLowerCase();
   if (!cleaned || cleaned === "-") return null;
 
@@ -79,6 +87,9 @@ export function normalizeDistrict(raw?: string | null): string | null {
     kasbi: "Kasbi",
     kitob: "Kitob",
     koson: "Koson",
+    kukdala: "Koʻkdala",
+    "ko'kdala": "Koʻkdala",
+    "koʻkdala": "Koʻkdala",
     mirishkor: "Mirishkor",
     muborak: "Muborak",
     nishon: "Nishon",

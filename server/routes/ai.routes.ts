@@ -36,6 +36,9 @@ router.delete("/knowledge/:id", AIController.deleteKnowledgeDoc);
 router.get("/recommendations", AIController.getRecommendations);
 router.put("/recommendations/:id/dismiss", AIController.dismissRecommendation);
 
+// Per-module insights cards (Residents, CRM, Startups, Executive)
+router.get("/insights/:module", AIController.getModuleInsights);
+
 // Feedback & Briefing
 router.post("/feedback", AIController.saveFeedback);
 router.get("/briefing", AIController.getMorningBriefing);

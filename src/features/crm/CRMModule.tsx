@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import AiInsightsCard from "../ai/AiInsightsCard";
 import { 
   Briefcase, 
   Search, 
@@ -619,6 +620,8 @@ export default function CRMModule({
           </div>
         </div>
       </div>
+
+      <AiInsightsCard module="crm" />
 
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 p-6 rounded-xl border border-slate-800 text-white">

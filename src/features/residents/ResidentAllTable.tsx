@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from "react";
+import AiInsightsCard from "../ai/AiInsightsCard";
 import { 
   Search, 
   ChevronRight, 
@@ -110,10 +111,17 @@ export default function ResidentAllTable({
   const baseList = residents.filter(r => r.status !== ResidentStatus.POTENTIAL && r.status !== ResidentStatus.REMOVED);
 
   const filteredResidents = baseList.filter(r => {
+    // Defensive `|| ""` guards (2026-09-01, night): a chunk of real,
+    // legitimately-incomplete records (early PENDING applications with no
+    // director on file yet) have `director`/`registrationNumber` as `null`.
+    // ensureResidentEnrichment() now defaults these before this component
+    // ever sees them, but guarding here too means a future caller that
+    // passes un-enriched residents straight into this table can't crash
+    // the whole page with one uncaught TypeError again.
     const matchesSearch = 
-      r.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      r.director.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      r.registrationNumber.includes(searchTerm) ||
+      (r.companyName || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (r.director || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (r.registrationNumber || "").includes(searchTerm) ||
       (r.assignedManager && r.assignedManager.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchesIndustry = industryFilter === "ALL" || r.industry === industryFilter;
@@ -285,6 +293,8 @@ export default function ResidentAllTable({
           </div>
         </div>
       </div>
+
+      <AiInsightsCard module="residents" />
 
       {/* Search and Professional Filters bar */}
       <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs space-y-3.5">

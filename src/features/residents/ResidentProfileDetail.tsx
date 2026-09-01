@@ -48,11 +48,15 @@ import {
   KASHKADARYA_DISTRICTS
 } from "../../types";
 import { useLanguage } from "../../lib/LanguageContext";
+import PhotoUploader from "../../components/PhotoUploader";
 
 interface ResidentProfileDetailProps {
   resident: Resident;
   onClose: () => void;
-  onUpdate: (id: string, payload: Partial<Resident>) => Promise<void>;
+  // Returns boolean (true = succeeded) so handleSaveEditProfile below can
+  // avoid closing the modal on a rejected save - see the NOTE on
+  // handleAddItem in src/App.tsx for the full story.
+  onUpdate: (id: string, payload: Partial<Resident>) => Promise<boolean>;
   userRole: string;
 }
 
@@ -167,11 +171,16 @@ export default function ResidentProfileDetail({
       timestamp: new Date().toISOString().split("T")[0]
     };
 
-    await onUpdate(resident.id, {
+    // Only close the modal on an actual success - see the prop comment
+    // above for why (this used to close unconditionally, so a rejected
+    // save silently discarded the user's edits with no way to retry them).
+    const succeeded = await onUpdate(resident.id, {
       ...editForm,
       historyLogs: [log, ...(resident.historyLogs || [])]
     });
-    setShowEditModal(false);
+    if (succeeded) {
+      setShowEditModal(false);
+    }
   };
 
   const handleAddNote = async () => {
@@ -469,13 +478,26 @@ export default function ResidentProfileDetail({
                     </div>
                   ))}
                   {!isReadOnly && (
-                    <button
-                      onClick={() => alert("Upload photo action triggered.")}
-                      className="border border-dashed border-slate-300 rounded-lg flex flex-col items-center justify-center gap-1 hover:bg-slate-50 transition-all text-slate-400 text-[10px] cursor-pointer h-28"
-                    >
-                      <Image className="w-5 h-5 text-slate-300" />
-                      <span>Upload Photo</span>
-                    </button>
+                    // NOTE (2026-09-01, night): this used to be a plain
+                    // `alert("Upload photo action triggered.")` stub - no
+                    // file was ever picked, uploaded, or saved. Replaced
+                    // with the same real PhotoUploader component the
+                    // Infrastructure/Buildings modules already use against
+                    // the existing POST /api/uploads/:category endpoint,
+                    // storing office photos server-side under
+                    // public/resident-photos/<resident-id>/ and appending
+                    // the returned URLs onto the resident's `photos` array.
+                    <PhotoUploader
+                      category="resident-photos"
+                      folder={resident.id}
+                      multiple
+                      className="h-28"
+                      onUploaded={(urls) => {
+                        onUpdate(resident.id, {
+                          photos: [...(resident.photos || []), ...urls]
+                        });
+                      }}
+                    />
                   )}
                 </div>
               </div>

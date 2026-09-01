@@ -140,6 +140,16 @@ export class AIController {
     }
   }
 
+  static async getModuleInsights(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { module } = req.params;
+      const insights = await AIService.getModuleInsights(module);
+      res.json(insights);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async dismissRecommendation(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;

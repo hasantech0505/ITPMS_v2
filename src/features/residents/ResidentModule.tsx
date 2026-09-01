@@ -27,9 +27,12 @@ interface ResidentModuleProps {
   activeSubTab: string;
   setActiveSubTab: (tab: string) => void;
   residents: Resident[];
-  onAdd: (resident: Omit<Resident, "id">) => Promise<void>;
-  onUpdate: (id: string, resident: Partial<Resident>) => Promise<void>;
-  onDelete: (id: string) => Promise<void>;
+  // Return boolean so handleRegister below can tell whether the submission
+  // actually succeeded before closing the modal / resetting the form - see
+  // the NOTE on handleAddItem in src/App.tsx for why this matters.
+  onAdd: (resident: Omit<Resident, "id">) => Promise<boolean>;
+  onUpdate: (id: string, resident: Partial<Resident>) => Promise<boolean>;
+  onDelete: (id: string) => Promise<boolean>;
   userRole: string;
   onSyncState?: () => void;
 }
@@ -69,6 +72,17 @@ export default function ResidentModule({
   // Map backend residents ensuring all optional fields exist
   const enrichedList = (residents && residents.length > 0 ? residents : localSeedResidents).map(ensureResidentEnrichment);
 
+  // Real industries actually in use across the live resident register (from
+  // the official Residents.xlsx import), instead of a hardcoded, mostly
+  // fictional 5-option list. Falls back to a small curated starter set only
+  // when no resident has a real industry recorded yet.
+  const realIndustries = Array.from(
+    new Set((residents || []).map((r) => (r?.industry || "").trim()).filter(Boolean))
+  ).sort((a, b) => a.localeCompare(b));
+  const industryOptions = realIndustries.length > 0
+    ? realIndustries
+    : ["Software Development", "IT ta'lim", "Eksport", "Xizmat ko'rsatish", "FinTech", "EdTech"];
+
   // Handle register new certified resident manually
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,9 +108,20 @@ export default function ResidentModule({
       documents: ["tax_registration_inn.pdf"]
     };
 
-    await onAdd(payload);
+    // NOTE (2026-09-01, night): only close the modal and reset the form on
+    // an actual success. This used to run unconditionally right after
+    // `await onAdd(...)`, which always resolved even when the server
+    // rejected the submission (duplicate INN, missing field) - so the user
+    // would see the rejection alert, click OK, and find the whole form
+    // gone, forcing them to retype the company name, director, address,
+    // etc. just to fix the one field that was actually wrong.
+    const succeeded = await onAdd(payload);
+    if (!succeeded) {
+      return;
+    }
+
     setShowAddModal(false);
-    
+
     // Reset form
     setFormData({
       companyName: "",
@@ -122,6 +147,21 @@ export default function ResidentModule({
       setFormData({ ...formData, benefits: [...formData.benefits, b] });
     }
   };
+
+  // Several sub-panels below (all-residents table, 2026 table, declined/
+  // removed archive, potential pipeline, upcoming workflow, audit
+  // management, reports grid) still declare their onAdd/onUpdate/onDelete
+  // props as returning `Promise<void>` - they predate the success/failure
+  // boolean added to onAdd/onUpdate/onDelete above (see the NOTE on
+  // handleAddItem in src/App.tsx) and haven't been updated to act on it.
+  // These thin wrappers let them keep compiling and behaving exactly as
+  // before (fire-and-forget) without silently dropping the real fix for
+  // the primary Add Resident modal and Edit Profile modal, which use the
+  // boolean-returning versions directly. Following up on these panels too
+  // is tracked as a separate item.
+  const onAddVoid = async (resident: Omit<Resident, "id">): Promise<void> => { await onAdd(resident); };
+  const onUpdateVoid = async (id: string, resident: Partial<Resident>): Promise<void> => { await onUpdate(id, resident); };
+  const onDeleteVoid = async (id: string): Promise<void> => { await onDelete(id); };
 
   // If a resident detailed profile is currently inspected, render it!
   if (selectedResident) {
@@ -153,9 +193,9 @@ export default function ResidentModule({
           <ResidentAllTable 
             residents={enrichedList}
             onSelect={setSelectedResident}
-            onDelete={onDelete}
-            onUpdate={onUpdate}
-            onAdd={onAdd}
+            onDelete={onDeleteVoid}
+            onUpdate={onUpdateVoid}
+            onAdd={onAddVoid}
             userRole={userRole}
             onSyncState={onSyncState}
             onAddNewClick={() => setShowAddModal(true)}
@@ -167,7 +207,7 @@ export default function ResidentModule({
           <Resident2026Table 
             residents={enrichedList}
             onSelect={setSelectedResident}
-            onUpdate={onUpdate}
+            onUpdate={onUpdateVoid}
             userRole={userRole}
             onSyncState={onSyncState}
             onAddNewClick={() => setShowAddModal(true)}
@@ -179,8 +219,8 @@ export default function ResidentModule({
         return (
           <ResidentDeclinedYearly 
             residents={enrichedList}
-            onUpdate={onUpdate}
-            onAdd={onAdd}
+            onUpdate={onUpdateVoid}
+            onAdd={onAddVoid}
             userRole={userRole}
             onSyncState={onSyncState}
           />
@@ -190,9 +230,9 @@ export default function ResidentModule({
         return (
           <ResidentPotentialPipeline 
             residents={enrichedList}
-            onUpdate={onUpdate}
-            onAdd={onAdd}
-            onDelete={onDelete}
+            onUpdate={onUpdateVoid}
+            onAdd={onAddVoid}
+            onDelete={onDeleteVoid}
             userRole={userRole}
             onSyncState={onSyncState}
           />
@@ -202,9 +242,9 @@ export default function ResidentModule({
         return (
           <ResidentUpcomingWorkflow 
             residents={enrichedList}
-            onUpdate={onUpdate}
-            onAdd={onAdd}
-            onDelete={onDelete}
+            onUpdate={onUpdateVoid}
+            onAdd={onAddVoid}
+            onDelete={onDeleteVoid}
             userRole={userRole}
             onSyncState={onSyncState}
           />
@@ -216,7 +256,7 @@ export default function ResidentModule({
         return (
           <ResidentAuditManagement 
             residents={enrichedList}
-            onUpdate={onUpdate}
+            onUpdate={onUpdateVoid}
             userRole={userRole}
             onSyncState={onSyncState}
           />
@@ -226,7 +266,7 @@ export default function ResidentModule({
         return (
           <ResidentReportsGrid 
             residents={enrichedList}
-            onUpdate={onUpdate}
+            onUpdate={onUpdateVoid}
             userRole={userRole}
             onSyncState={onSyncState}
           />
@@ -314,17 +354,19 @@ export default function ResidentModule({
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Industry</label>
-                    <select
+                    <input
+                      type="text"
+                      list="resident-industry-options"
                       value={formData.industry}
                       onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+                      placeholder="e.g. IT ta'lim, Eksport, Software Development..."
                       className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs bg-white"
-                    >
-                      <option value="Software Development">Software Dev</option>
-                      <option value="FinTech">FinTech</option>
-                      <option value="EdTech">EdTech</option>
-                      <option value="BPO & IT Services">BPO & IT</option>
-                      <option value="GameDev">GameDev</option>
-                    </select>
+                    />
+                    <datalist id="resident-industry-options">
+                      {industryOptions.map((ind) => (
+                        <option key={ind} value={ind} />
+                      ))}
+                    </datalist>
                   </div>
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">District</label>

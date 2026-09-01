@@ -311,9 +311,21 @@ export async function syncDataToPostgres(connectionString: string, currentData: 
     if (residents.length > 0) {
       logs.push(`Streaming ${residents.length} IT Resident exporters...`);
       for (const r of residents) {
+        // Same fix as saveDocToPostgres's per-document residents upsert above -
+        // the bulk migration had the identical 14-of-45-column gap, so a fresh
+        // `syncDataToPostgres` run is what actually backfills every resident's
+        // district/industry/activityType/contact fields and full CRM-pipeline
+        // history into Postgres for the first time.
         await client.query(`
-          INSERT INTO residents (id, "companyName", director, "registrationNumber", "legalAddress", "employeesCount", "exportVolume", "domesticVolume", status, "appliedAt", "approvedAt", "benefitsApplied", notes, documents)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+          INSERT INTO residents (
+            id, "companyName", director, "registrationNumber", "legalAddress", "employeesCount", "exportVolume", "domesticVolume", status, "appliedAt", "approvedAt", "benefitsApplied", notes, documents,
+            email, phone, website, telegram, linkedin, district, industry, "activityType", "assignedManager",
+            "potentialStage", "potentialFounder", "potentialSource", "potentialProbability", "potentialOwner", "potentialNextFollowUp", "potentialNotes", "potentialTimeline",
+            "upcomingStage", "upcomingDetails",
+            "removedDate", "removedReason", "removedDebt", "removedInspection", "removedAppeal", "removedCourt", "removedCanReapply",
+            "monitoringHistory", "quarterlyReports", "docFiles", meetings, tasks, "historyLogs", photos
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45, $46, $47)
           ON CONFLICT (id) DO UPDATE SET
             "companyName" = EXCLUDED."companyName",
             director = EXCLUDED.director,
@@ -327,12 +339,63 @@ export async function syncDataToPostgres(connectionString: string, currentData: 
             "approvedAt" = EXCLUDED."approvedAt",
             "benefitsApplied" = EXCLUDED."benefitsApplied",
             notes = EXCLUDED.notes,
-            documents = EXCLUDED.documents
+            documents = EXCLUDED.documents,
+            email = EXCLUDED.email,
+            phone = EXCLUDED.phone,
+            website = EXCLUDED.website,
+            telegram = EXCLUDED.telegram,
+            linkedin = EXCLUDED.linkedin,
+            district = EXCLUDED.district,
+            industry = EXCLUDED.industry,
+            "activityType" = EXCLUDED."activityType",
+            "assignedManager" = EXCLUDED."assignedManager",
+            "potentialStage" = EXCLUDED."potentialStage",
+            "potentialFounder" = EXCLUDED."potentialFounder",
+            "potentialSource" = EXCLUDED."potentialSource",
+            "potentialProbability" = EXCLUDED."potentialProbability",
+            "potentialOwner" = EXCLUDED."potentialOwner",
+            "potentialNextFollowUp" = EXCLUDED."potentialNextFollowUp",
+            "potentialNotes" = EXCLUDED."potentialNotes",
+            "potentialTimeline" = EXCLUDED."potentialTimeline",
+            "upcomingStage" = EXCLUDED."upcomingStage",
+            "upcomingDetails" = EXCLUDED."upcomingDetails",
+            "removedDate" = EXCLUDED."removedDate",
+            "removedReason" = EXCLUDED."removedReason",
+            "removedDebt" = EXCLUDED."removedDebt",
+            "removedInspection" = EXCLUDED."removedInspection",
+            "removedAppeal" = EXCLUDED."removedAppeal",
+            "removedCourt" = EXCLUDED."removedCourt",
+            "removedCanReapply" = EXCLUDED."removedCanReapply",
+            "monitoringHistory" = EXCLUDED."monitoringHistory",
+            "quarterlyReports" = EXCLUDED."quarterlyReports",
+            "docFiles" = EXCLUDED."docFiles",
+            meetings = EXCLUDED.meetings,
+            tasks = EXCLUDED.tasks,
+            "historyLogs" = EXCLUDED."historyLogs",
+            photos = EXCLUDED.photos
         `, [
           r.id, r.companyName || "", r.director || null, r.registrationNumber || null,
           r.legalAddress || null, Number(r.employeesCount) || 0, Number(r.exportVolume) || 0,
           Number(r.domesticVolume) || 0, r.status || "PENDING", r.appliedAt || null, r.approvedAt || null,
-          r.benefitsApplied || [], r.notes || [], r.documents || []
+          r.benefitsApplied || [], r.notes || [], r.documents || [],
+          r.email || null, r.phone || null, r.website || null, r.telegram || null, r.linkedIn || null,
+          r.district || null, r.industry || null, r.activityType || null, r.assignedManager || null,
+          r.potentialStage || null, r.potentialFounder || null, r.potentialSource || null,
+          r.potentialProbability != null ? Number(r.potentialProbability) : null, r.potentialOwner || null,
+          r.potentialNextFollowUp || null, r.potentialNotes || null,
+          r.potentialTimeline ? JSON.stringify(r.potentialTimeline) : null,
+          r.upcomingStage || null, r.upcomingDetails ? JSON.stringify(r.upcomingDetails) : null,
+          r.removedDate || null, r.removedReason || null,
+          r.removedDebt != null ? Number(r.removedDebt) : null,
+          r.removedInspection || null, r.removedAppeal || null, r.removedCourt || null,
+          r.removedCanReapply != null ? Boolean(r.removedCanReapply) : null,
+          r.monitoringHistory ? JSON.stringify(r.monitoringHistory) : null,
+          r.quarterlyReports ? JSON.stringify(r.quarterlyReports) : null,
+          r.docFiles ? JSON.stringify(r.docFiles) : null,
+          r.meetings ? JSON.stringify(r.meetings) : null,
+          r.tasks ? JSON.stringify(r.tasks) : null,
+          r.historyLogs ? JSON.stringify(r.historyLogs) : null,
+          r.photos || []
         ]);
         totalRows++;
       }
@@ -870,9 +933,28 @@ export async function saveDocToPostgres(collection: string, docId: string, field
         fields.notes || [], fields.documents || [], fields.kpis ? JSON.stringify(fields.kpis) : null
       ]);
     } else if (collection === "residents") {
+      // NOTE (2026-09-01): this upsert used to cover only 14 of the ~45
+      // columns residents actually has - district/industry/activityType,
+      // every contact field (email/phone/website/telegram/linkedin), the
+      // whole CRM pipeline (potential*/upcoming*/removed*), and every
+      // JSONB/array sub-collection (monitoringHistory, quarterlyReports,
+      // docFiles, meetings, tasks, historyLogs, photos) were silently
+      // dropped on every write - never inserted, never updated - even
+      // though the app's own db_store.json and every UI form had real
+      // values for them. This is why repeated district/industry
+      // "corrections" never stuck once Postgres became the primary read
+      // source: the JSON fallback file had the right values, Postgres
+      // never received them. Expanded to the full schema.
       await activePool.query(`
-        INSERT INTO residents (id, "companyName", director, "registrationNumber", "legalAddress", "employeesCount", "exportVolume", "domesticVolume", status, "appliedAt", "approvedAt", "benefitsApplied", notes, documents)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        INSERT INTO residents (
+          id, "companyName", director, "registrationNumber", "legalAddress", "employeesCount", "exportVolume", "domesticVolume", status, "appliedAt", "approvedAt", "benefitsApplied", notes, documents,
+          email, phone, website, telegram, linkedin, district, industry, "activityType", "assignedManager",
+          "potentialStage", "potentialFounder", "potentialSource", "potentialProbability", "potentialOwner", "potentialNextFollowUp", "potentialNotes", "potentialTimeline",
+          "upcomingStage", "upcomingDetails",
+          "removedDate", "removedReason", "removedDebt", "removedInspection", "removedAppeal", "removedCourt", "removedCanReapply",
+          "monitoringHistory", "quarterlyReports", "docFiles", meetings, tasks, "historyLogs", photos
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44, $45, $46, $47)
         ON CONFLICT (id) DO UPDATE SET
           "companyName" = EXCLUDED."companyName",
           director = EXCLUDED.director,
@@ -886,12 +968,63 @@ export async function saveDocToPostgres(collection: string, docId: string, field
           "approvedAt" = EXCLUDED."approvedAt",
           "benefitsApplied" = EXCLUDED."benefitsApplied",
           notes = EXCLUDED.notes,
-          documents = EXCLUDED.documents
+          documents = EXCLUDED.documents,
+          email = EXCLUDED.email,
+          phone = EXCLUDED.phone,
+          website = EXCLUDED.website,
+          telegram = EXCLUDED.telegram,
+          linkedin = EXCLUDED.linkedin,
+          district = EXCLUDED.district,
+          industry = EXCLUDED.industry,
+          "activityType" = EXCLUDED."activityType",
+          "assignedManager" = EXCLUDED."assignedManager",
+          "potentialStage" = EXCLUDED."potentialStage",
+          "potentialFounder" = EXCLUDED."potentialFounder",
+          "potentialSource" = EXCLUDED."potentialSource",
+          "potentialProbability" = EXCLUDED."potentialProbability",
+          "potentialOwner" = EXCLUDED."potentialOwner",
+          "potentialNextFollowUp" = EXCLUDED."potentialNextFollowUp",
+          "potentialNotes" = EXCLUDED."potentialNotes",
+          "potentialTimeline" = EXCLUDED."potentialTimeline",
+          "upcomingStage" = EXCLUDED."upcomingStage",
+          "upcomingDetails" = EXCLUDED."upcomingDetails",
+          "removedDate" = EXCLUDED."removedDate",
+          "removedReason" = EXCLUDED."removedReason",
+          "removedDebt" = EXCLUDED."removedDebt",
+          "removedInspection" = EXCLUDED."removedInspection",
+          "removedAppeal" = EXCLUDED."removedAppeal",
+          "removedCourt" = EXCLUDED."removedCourt",
+          "removedCanReapply" = EXCLUDED."removedCanReapply",
+          "monitoringHistory" = EXCLUDED."monitoringHistory",
+          "quarterlyReports" = EXCLUDED."quarterlyReports",
+          "docFiles" = EXCLUDED."docFiles",
+          meetings = EXCLUDED.meetings,
+          tasks = EXCLUDED.tasks,
+          "historyLogs" = EXCLUDED."historyLogs",
+          photos = EXCLUDED.photos
       `, [
         docId, fields.companyName || "", fields.director || null, fields.registrationNumber || null,
         fields.legalAddress || null, Number(fields.employeesCount) || 0, Number(fields.exportVolume) || 0,
         Number(fields.domesticVolume) || 0, fields.status || "PENDING", fields.appliedAt || null, fields.approvedAt || null,
-        fields.benefitsApplied || [], fields.notes || [], fields.documents || []
+        fields.benefitsApplied || [], fields.notes || [], fields.documents || [],
+        fields.email || null, fields.phone || null, fields.website || null, fields.telegram || null, fields.linkedIn || null,
+        fields.district || null, fields.industry || null, fields.activityType || null, fields.assignedManager || null,
+        fields.potentialStage || null, fields.potentialFounder || null, fields.potentialSource || null,
+        fields.potentialProbability != null ? Number(fields.potentialProbability) : null, fields.potentialOwner || null,
+        fields.potentialNextFollowUp || null, fields.potentialNotes || null,
+        fields.potentialTimeline ? JSON.stringify(fields.potentialTimeline) : null,
+        fields.upcomingStage || null, fields.upcomingDetails ? JSON.stringify(fields.upcomingDetails) : null,
+        fields.removedDate || null, fields.removedReason || null,
+        fields.removedDebt != null ? Number(fields.removedDebt) : null,
+        fields.removedInspection || null, fields.removedAppeal || null, fields.removedCourt || null,
+        fields.removedCanReapply != null ? Boolean(fields.removedCanReapply) : null,
+        fields.monitoringHistory ? JSON.stringify(fields.monitoringHistory) : null,
+        fields.quarterlyReports ? JSON.stringify(fields.quarterlyReports) : null,
+        fields.docFiles ? JSON.stringify(fields.docFiles) : null,
+        fields.meetings ? JSON.stringify(fields.meetings) : null,
+        fields.tasks ? JSON.stringify(fields.tasks) : null,
+        fields.historyLogs ? JSON.stringify(fields.historyLogs) : null,
+        fields.photos || []
       ]);
     } else if (collection === "activityLogs") {
       await activePool.query(`

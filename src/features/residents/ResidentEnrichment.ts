@@ -186,8 +186,30 @@ export const ensureResidentEnrichment = (r: Resident): Resident => {
     r.status === "PENDING" ? "Document Review" : undefined
   );
 
+  // NOTE (2026-09-01, night): a real chunk of the live register - mostly
+  // early-stage PENDING applications imported without a named director yet,
+  // e.g. "HIRERIGHT", "Parvez IT Park", "Bigway Academy" - genuinely have
+  // `director` and/or `registrationNumber` as `null` in the database. Every
+  // other optional field above already gets a safe default here, but these
+  // three "core identity" fields didn't, and several places downstream
+  // (ResidentAllTable's search filter chief among them: `r.director.
+  // toLowerCase()`, `r.registrationNumber.includes(...)`) call string
+  // methods on them unconditionally, assuming they're always populated.
+  // That's what was crashing the Residents page to a blank white screen -
+  // React has no error boundary around this tree, so one uncaught
+  // TypeError on render takes down the whole app. Defaulting them here,
+  // in the one place every resident already passes through before
+  // rendering, fixes every consumer at once instead of patching each call
+  // site individually.
+  const companyName = r.companyName || "(Unnamed company)";
+  const director = r.director || "(Director not yet on file)";
+  const registrationNumber = r.registrationNumber || "";
+
   return {
     ...r,
+    companyName,
+    director,
+    registrationNumber,
     email,
     phone,
     website,

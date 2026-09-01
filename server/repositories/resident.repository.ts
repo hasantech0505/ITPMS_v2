@@ -287,20 +287,42 @@ export class ResidentRepository {
   }
 
   static async updateResident(id: string, updates: Partial<Resident>): Promise<Resident | null> {
-    const db = await readDB();
-    db.residents = db.residents || [];
+    // NOTE (2026-09-01, night): this used to build `existing` from a raw
+    // local readDB() of db_store.json - NOT from this.findById(id), which
+    // is Postgres-first like every other read in this class. That local
+    // file can genuinely be stale: confirmed directly against a real
+    // resident ("ART-MATBAA-DESIGN" MCHJ, res-0050) that Postgres correctly
+    // holds a real `industry` value for, while db_store.json's own copy
+    // still had `industry: null`. Every edit was therefore merging the
+    // user's changes on top of a STALE base - any field the edit form
+    // doesn't resend (most of the JSONB sub-collections, for instance)
+    // would silently regress to whatever wrong/missing value the local
+    // file happened to have, even though the save itself "succeeded" with
+    // no error. This is very likely what the user was experiencing as
+    // "edit doesn't save" - not an outright failure, but edits quietly not
+    // sticking or other fields reverting. Fetching the current record via
+    // findById() (Postgres-first) as the merge base fixes that at the
+    // source; the local file is still kept in sync afterward as the
+    // offline fallback it's meant to be.
+    const current = await this.findById(id);
+    if (!current) return null;
 
-    const index = db.residents.findIndex((r: Resident) => r.id === id);
-    if (index === -1) return null;
-
-    const existing = db.residents[index];
     const updated: Resident = {
-      ...existing,
+      ...current,
       ...updates,
-      id: existing.id // preserve ID
+      id: current.id // preserve ID
     };
 
-    db.residents[index] = updated;
+    const db = await readDB();
+    db.residents = db.residents || [];
+    const index = db.residents.findIndex((r: Resident) => r.id === id);
+    if (index === -1) {
+      // Postgres had it but the local fallback file never did (or lost it) -
+      // add it now instead of silently dropping the write on the local side.
+      db.residents.push(updated);
+    } else {
+      db.residents[index] = updated;
+    }
     await writeDB(db);
 
     await saveDocToPostgres("residents", id, updated);
@@ -308,15 +330,19 @@ export class ResidentRepository {
   }
 
   static async deleteResident(id: string): Promise<boolean> {
+    // Same Postgres-first existence check as updateResident() above - a
+    // resident that exists in Postgres but is missing from the local
+    // db_store.json fallback (the same divergence documented there) used to
+    // make delete incorrectly report "not found" for a record that very
+    // much still exists and should be deletable.
+    const current = await this.findById(id);
+    if (!current) return false;
+
     const db = await readDB();
     db.residents = db.residents || [];
-
-    const lenBefore = db.residents.length;
     db.residents = db.residents.filter((r: Resident) => r.id !== id);
-
-    if (db.residents.length === lenBefore) return false;
-
     await writeDB(db);
+
     await deleteDocFromPostgres("residents", id);
     return true;
   }

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useMemo } from "react";
+import AiInsightsCard from "../ai/AiInsightsCard";
 import { 
   Rocket, 
   Plus, 
@@ -314,6 +315,8 @@ export default function StartupModule({
 
       {/* 2. Top 8 KPI Summary Cards */}
       <StartupKPIs startups={startups} />
+
+      <AiInsightsCard module="startups" />
 
       {/* 3. Visual 7-Step Lifecycle Funnel */}
       <StartupLifecycleBar

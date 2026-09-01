@@ -200,6 +200,45 @@ export default function App() {
   ]);
   const [isAiLoading, setIsAiLoading] = useState(false);
 
+  // Exchanges the stored refresh token for a new access token, persisting
+  // both to localStorage. Returns the new access token, or null if the
+  // refresh itself failed (refresh token missing, expired, or revoked -
+  // session cannot be recovered without a fresh login).
+  const refreshAccessToken = async (): Promise<string | null> => {
+    const refreshToken = localStorage.getItem("itpms_refresh_token");
+    if (!refreshToken) return null;
+    try {
+      const refreshRes = await fetch("/api/auth/refresh", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refreshToken })
+      });
+      if (!refreshRes.ok) return null;
+      const refreshData = await refreshRes.json();
+      const payload = refreshData.data || refreshData;
+      const newAccessToken = payload.accessToken;
+      const newRefreshToken = payload.refreshToken;
+      if (!newAccessToken) return null;
+      localStorage.setItem("itpms_access_token", newAccessToken);
+      if (newRefreshToken) {
+        localStorage.setItem("itpms_refresh_token", newRefreshToken);
+      }
+      return newAccessToken;
+    } catch (err) {
+      console.error("Token refresh error:", err);
+      return null;
+    }
+  };
+
+  // Clears the local session when it can no longer be recovered (refresh
+  // failed). Shared by session validation on load and by authFetch below.
+  const forceLogout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem("itpms_user");
+    localStorage.removeItem("itpms_access_token");
+    localStorage.removeItem("itpms_refresh_token");
+  };
+
   // Validate authentication session on app load
   useEffect(() => {
     const validateSession = async () => {
@@ -220,30 +259,11 @@ export default function App() {
         });
 
         if (res.status === 401) {
-          // Attempt refresh
-          const refreshToken = localStorage.getItem("itpms_refresh_token");
-          if (refreshToken) {
-            const refreshRes = await fetch("/api/auth/refresh", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ refreshToken })
+          const newAccessToken = await refreshAccessToken();
+          if (newAccessToken) {
+            res = await fetch("/api/auth/me", {
+              headers: { "Authorization": `Bearer ${newAccessToken}` }
             });
-
-            if (refreshRes.ok) {
-              const refreshData = await refreshRes.json();
-              const payload = refreshData.data || refreshData;
-              const newAccessToken = payload.accessToken;
-              const newRefreshToken = payload.refreshToken;
-              if (newAccessToken) {
-                localStorage.setItem("itpms_access_token", newAccessToken);
-                if (newRefreshToken) {
-                  localStorage.setItem("itpms_refresh_token", newRefreshToken);
-                }
-                res = await fetch("/api/auth/me", {
-                  headers: { "Authorization": `Bearer ${newAccessToken}` }
-                });
-              }
-            }
           }
         }
 
@@ -256,11 +276,8 @@ export default function App() {
             localStorage.setItem("itpms_user", JSON.stringify(user));
           }
         } else {
-          // Token invalid and cannot be refreshed
-          setCurrentUser(null);
-          localStorage.removeItem("itpms_user");
-          localStorage.removeItem("itpms_access_token");
-          localStorage.removeItem("itpms_refresh_token");
+          // Token invalid and could not be refreshed
+          forceLogout();
         }
       } catch (err) {
         console.error("Auth validation error:", err);
@@ -281,7 +298,7 @@ export default function App() {
     setIsSyncing(true);
     try {
       const headers: Record<string, string> = { "Authorization": `Bearer ${token}` };
-      const response = await fetch("/api/db", { headers });
+      const response = await authFetch("/api/db", { headers });
       if (response.ok) {
         const data = await response.json();
         setStartups(data.startups || []);
@@ -329,12 +346,75 @@ export default function App() {
     return headers;
   };
 
+  // fetch() wrapper used by every CRUD dispatcher (and by syncState) below.
+  // Without this, any session left open longer than the access token's
+  // lifetime (15 min by default - see server/utils/jwt.ts) started failing
+  // every Add/Edit/Delete/Save with a raw "Token verification failed or
+  // token has expired" alert, even though a perfectly good refresh token
+  // was sitting in localStorage the whole time and the app already knew how
+  // to use one (see validateSession's on-load check above) - it just never
+  // did so for anything after the initial page load. On a 401, this
+  // silently refreshes the access token and retries the request once
+  // before giving up; if the refresh itself fails (refresh token expired
+  // or revoked), it logs the session out locally so the user sees a clean
+  // "please log in again" state instead of a wall of failed requests.
+  const authFetch = async (url: string, options: RequestInit = {}): Promise<Response> => {
+    const withToken = (token: string | null): RequestInit => {
+      const headers: Record<string, string> = { ...(options.headers as Record<string, string> | undefined) };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      return { ...options, headers };
+    };
+
+    let res = await fetch(url, withToken(localStorage.getItem("itpms_access_token")));
+
+    if (res.status === 401) {
+      const newToken = await refreshAccessToken();
+      if (newToken) {
+        res = await fetch(url, withToken(newToken));
+      } else {
+        forceLogout();
+      }
+    }
+
+    return res;
+  };
+
   // --- CRUD DISPATCH ACTIONS ---
 
-  // Add Item Generic
-  const handleAddItem = async (entity: string, payload: any, updateState: (prev: any) => void) => {
+  // Every controller error (validation failures, duplicate-key rejections,
+  // unhandled exceptions caught by server/middleware/errorHandler.ts) comes
+  // back as { success: false, message, errors? } (see server/utils/
+  // response.ts's sendError()). The three dispatchers below used to either
+  // show a hardcoded generic alert ("Action rejected by the server.", with
+  // no indication of WHY - e.g. a duplicate INN) or, for edit/delete, show
+  // NOTHING at all on failure, silently leaving the UI as if nothing
+  // happened. Centralized here so every module's add/edit/delete surfaces
+  // the server's actual reason.
+  const extractErrorMessage = async (res: Response, fallback: string): Promise<string> => {
     try {
-      const res = await fetch(`/api/${entity}`, {
+      const body = await res.json();
+      if (body && typeof body.message === "string" && body.message.trim()) {
+        return body.message;
+      }
+    } catch {
+      // response body wasn't JSON (or was empty) - fall through to the generic message
+    }
+    return fallback;
+  };
+
+  // Add Item Generic
+  // NOTE (2026-09-01, night): now returns a boolean (true = succeeded) so
+  // callers - e.g. ResidentModule's "Register Certified IT Park Resident"
+  // modal - can tell whether their submission actually went through. It
+  // used to return nothing at all, so `await onAdd(payload)` always
+  // resolved normally even on a server rejection (a duplicate INN, a
+  // missing required field), and every caller unconditionally closed its
+  // modal and reset its form right after - the user would see the "action
+  // rejected" alert, click OK, and find their whole form gone, forcing them
+  // to retype everything just to fix the one field that was wrong.
+  const handleAddItem = async (entity: string, payload: any, updateState: (prev: any) => void): Promise<boolean> => {
+    try {
+      const res = await authFetch(`/api/${entity}`, {
         method: "POST",
         headers: getContextHeaders(),
         body: JSON.stringify(payload)
@@ -347,18 +427,21 @@ export default function App() {
         });
         // Re-sync after a tick to keep logs aligned
         setTimeout(syncState, 200);
+        return true;
       } else {
-        alert("Action rejected by the server.");
+        alert(await extractErrorMessage(res, "Action rejected by the server."));
+        return false;
       }
     } catch (err) {
       console.error(err);
+      return false;
     }
   };
 
-  // Update Item Generic
-  const handleUpdateItem = async (entity: string, id: string, payload: any, updateState: (prev: any) => void) => {
+  // Update Item Generic - same return-value fix as handleAddItem above.
+  const handleUpdateItem = async (entity: string, id: string, payload: any, updateState: (prev: any) => void): Promise<boolean> => {
     try {
-      const res = await fetch(`/api/${entity}/${id}`, {
+      const res = await authFetch(`/api/${entity}/${id}`, {
         method: "PUT",
         headers: getContextHeaders(),
         body: JSON.stringify(payload)
@@ -374,25 +457,35 @@ export default function App() {
           }
         });
         setTimeout(syncState, 200);
+        return true;
+      } else {
+        alert(await extractErrorMessage(res, "Update rejected by the server."));
+        return false;
       }
     } catch (err) {
       console.error(err);
+      return false;
     }
   };
 
-  // Delete Item Generic
-  const handleDeleteItem = async (entity: string, id: string, updateState: (prev: any) => void) => {
+  // Delete Item Generic - same return-value fix as handleAddItem above.
+  const handleDeleteItem = async (entity: string, id: string, updateState: (prev: any) => void): Promise<boolean> => {
     try {
-      const res = await fetch(`/api/${entity}/${id}`, {
+      const res = await authFetch(`/api/${entity}/${id}`, {
         method: "DELETE",
         headers: getContextHeaders()
       });
       if (res.ok) {
         updateState((prev: any[]) => prev.filter(item => item.id !== id));
         setTimeout(syncState, 200);
+        return true;
+      } else {
+        alert(await extractErrorMessage(res, "Delete rejected by the server."));
+        return false;
       }
     } catch (err) {
       console.error(err);
+      return false;
     }
   };
 

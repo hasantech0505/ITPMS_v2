@@ -325,6 +325,22 @@ export const REGIONAL_PERFORMANCE_DATA: RegionalDistrictPerformance[] = [
     status: "BEHIND"
   },
   {
+    // Koʻkdala was established as its own district in 2022 (Presidential
+    // Decree PF-142), after the 2026 Strategic Plan's district-level
+    // targets were originally set - so there is no official target to
+    // report here yet. residentsActual/jobsActual are still computed live
+    // from real resident records; targets stay 0 rather than a guess.
+    districtId: "kokdala",
+    districtName: "Koʻkdala",
+    residentsActual: 0,
+    residentsTarget: 0,
+    jobsActual: 0,
+    jobsTarget: 0,
+    exportActualUSD: 0,
+    exportTargetUSD: 0,
+    status: "BEHIND"
+  },
+  {
     districtId: "muborak",
     districtName: "Muborak",
     residentsActual: 3,

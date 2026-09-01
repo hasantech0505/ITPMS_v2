@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// Kashkadarya Region Districts (14 official administrative units)
+// Kashkadarya Region Districts (15 official administrative units, incl. Koʻkdala est. 2022)
 export const KASHKADARYA_DISTRICTS = [
   "Qarshi",
   "Shahrisabz",
@@ -13,6 +13,7 @@ export const KASHKADARYA_DISTRICTS = [
   "Kasbi",
   "Kitob",
   "Koson",
+  "Koʻkdala", // established 2022 (Presidential Decree PF-142), split out from neighboring districts
   "Mirishkor",
   "Muborak",
   "Nishon",

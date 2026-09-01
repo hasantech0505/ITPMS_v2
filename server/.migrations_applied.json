@@ -1,3 +1,5 @@
 {
-  "residentsCorrectionV1": true
+  "residentsCorrectionV1": true,
+  "residentsCorrectionV2": true,
+  "residentsCleanupTestRecordV1": true
 }

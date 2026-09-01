@@ -19,7 +19,7 @@ import aiRoutes from "./server/routes/ai.routes";
 import healthRoutes from "./server/routes/health.routes";
 import { EntityService } from "./server/services/entity.service";
 import { RbacRepository } from "./server/repositories/rbac.repository";
-import { applyPendingResidentCorrections } from "./server/startup/applyResidentCorrections";
+import { applyPendingResidentCorrections, applyPendingResidentCorrectionsV2, cleanupLeftoverTestResident } from "./server/startup/applyResidentCorrections";
 import { errorHandler } from "./server/middleware/errorHandler";
 
 async function startServer() {
@@ -29,11 +29,18 @@ async function startServer() {
   // Seed RBAC roles and permissions
   RbacRepository.seedRbacData().catch((err) => console.warn("RBAC seed error:", err));
 
-  // One-time backfill: real district/industry/activityType/phone for residents
-  // (from the official register Excel + address-derived districts). Applies
-  // itself through the database automatically on this boot, then marks
-  // itself done so it never re-runs unnecessarily.
-  applyPendingResidentCorrections().catch((err) => console.warn("Resident correction error:", err));
+  // NOTE (2026-09-01, later): the two resident-correction backfills used to
+  // fire here, unawaited, at the very top of startup - racing against the
+  // Postgres handshake below. `EntityRepository.getFullState()` "keeps the
+  // JSON cache warm" by overwriting db_store.json with whatever Postgres
+  // currently holds every time it's called (see server/repositories/
+  // entity.repository.ts), and that overwrite could land in the middle of
+  // these corrections' own read-modify-write loop over the SAME file,
+  // clobbering most of the in-progress updates. That race is the real
+  // reason a fresh boot logged "1 updated, 76 not found" / "1 updated, 165
+  // not found" here even though every id genuinely existed in db_store.json
+  // moments before and after. Moved below, into the sequential Postgres
+  // handshake chain, so nothing else touches db_store.json while they run.
 
   // Global Middleware
   app.use(express.json({ limit: "10mb" }));
@@ -100,6 +107,27 @@ async function startServer() {
       .then(async (res) => {
         if (res.success) {
           console.log("✅ Startup PostgreSQL migration finished successfully.");
+
+          // Pull Postgres into db_store.json as a consistent baseline FIRST,
+          // so the corrections' own readDB()/writeDB() calls below aren't
+          // racing against this same cache-warming overwrite (see NOTE at
+          // the top of startServer()).
+          await EntityService.getFullState();
+
+          // One-time backfills: real district/industry/activityType/phone
+          // for residents (from the official register Excel + address-
+          // derived districts). Applied sequentially - not fire-and-forget -
+          // now that server/postgres.ts's residents INSERT/UPSERT actually
+          // covers the full column set, so these persist to Postgres too via
+          // ResidentRepository.updateResident()'s own saveDocToPostgres call.
+          await applyPendingResidentCorrections();
+          await applyPendingResidentCorrectionsV2();
+          await cleanupLeftoverTestResident();
+
+          // Re-read the now-corrected state (Postgres already has the
+          // per-resident correction writes from above) and push it through
+          // one more full sync pass so every OTHER collection is reconciled
+          // too, same as before.
           const fullState = await EntityService.getFullState();
           syncDataToPostgres(dbUrl, fullState).catch((e) => console.warn("Initial background sync:", e.message));
         } else {

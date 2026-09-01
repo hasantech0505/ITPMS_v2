@@ -114,7 +114,16 @@ export class ResidentController {
         details: `Registered new resident '${created.companyName}' (INN: ${created.registrationNumber})`,
       }).catch(() => {});
 
-      sendSuccess(res, created, "Resident registered successfully", 201);
+      // NOTE: return the raw resident object (not the {success,data,message}
+      // envelope sendSuccess produces) - the frontend's generic handleAddItem
+      // dispatcher (src/App.tsx) does `const newItem = await res.json()` and
+      // reads `newItem.id` directly, matching every other module's generic
+      // entity controller (server/controllers/entity.controller.ts uses
+      // `res.json(item)`). Wrapping this response silently broke "Add
+      // Resident": newItem.id was always undefined, so the new resident got
+      // pushed into local state as a bare {success,data,message} object
+      // instead of the real record.
+      res.status(201).json(created);
     } catch (error) {
       next(error);
     }
@@ -156,7 +165,11 @@ export class ResidentController {
         details: `Updated resident record '${updated?.companyName || id}'`,
       }).catch(() => {});
 
-      sendSuccess(res, updated, "Resident updated successfully");
+      // Same fix as createResident above: return the raw updated resident,
+      // not the sendSuccess envelope, so handleUpdateItem's `updatedItem.id`
+      // check actually matches and the edited fields make it into state
+      // instead of overwriting the resident with a malformed placeholder.
+      res.json(updated);
     } catch (error) {
       next(error);
     }
@@ -205,7 +218,8 @@ export class ResidentController {
         details: `Changed status of resident '${resident.companyName}' from ${resident.status} to ${status}`,
       }).catch(() => {});
 
-      sendSuccess(res, updated, `Resident status updated to ${status}`);
+      // Raw object for consistency with createResident/updateResident above.
+      res.json(updated);
     } catch (error) {
       next(error);
     }

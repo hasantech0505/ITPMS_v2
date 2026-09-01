@@ -14,6 +14,7 @@ import InternationalPipeline from "./components/InternationalPipeline";
 import RegionalPerformance from "./components/RegionalPerformance";
 import UpcomingActions from "./components/UpcomingActions";
 import ExecutiveAiBrief from "./components/ExecutiveAiBrief";
+import AiInsightsCard from "../ai/AiInsightsCard";
 
 import { CalculatedKPI, KpiTargetOverride } from "./types/kpiTypes";
 import { 
@@ -125,6 +126,8 @@ export default function ExecutiveControlCenter({
         onNavigateToModule={setActiveTab}
         t={t}
       />
+
+      <AiInsightsCard module="executive" />
 
       {/* 3. PERFORMANCE VS TARGET (4 STRATEGIC CORE METRICS IN RESPONSIVE GRID) */}
       <TargetTrajectoryCard
