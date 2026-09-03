@@ -482,6 +482,17 @@ export enum TalentStatus {
   EMPLOYED = "EMPLOYED"
 }
 
+// A CEFR-style proficiency rating, used both for the assessed English score
+// (Talent.englishLevel) and for any additional languages a candidate lists
+// (Talent.languages) - a candidate is rarely monolingual, so English alone
+// doesn't capture the full picture.
+export type LanguageProficiencyLevel = "None" | "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Native";
+
+export interface LanguageProficiency {
+  language: string; // free text - e.g. "Russian", "Uzbek", "Korean", "Turkish"
+  level: LanguageProficiencyLevel;
+}
+
 export interface Talent {
   id: string;
   fullName: string;
@@ -492,8 +503,10 @@ export interface Talent {
   status: TalentStatus;
   phone: string;
   email: string;
-  englishLevel: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+  englishLevel: LanguageProficiencyLevel;
   gitHubUrl?: string;
+  cvUrl?: string; // Link to the candidate's CV/resume (e.g. a OneDrive-hosted Word doc), not an uploaded file
+  languages?: LanguageProficiency[]; // Any languages besides English (English itself is tracked via englishLevel/testScores.english)
   certifications: string[];
   testScores: {
     coding: number; // 0-100

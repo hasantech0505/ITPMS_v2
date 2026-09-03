@@ -226,6 +226,8 @@ CREATE TABLE IF NOT EXISTS talent (
   email VARCHAR(255),
   "englishLevel" VARCHAR(10),
   "gitHubUrl" VARCHAR(500),
+  "cvUrl" VARCHAR(1000),
+  "languages" JSONB DEFAULT '[]'::jsonb,
   certifications TEXT[],
   "codingScore" INTEGER DEFAULT 0,
   "englishScore" INTEGER DEFAULT 0,
@@ -438,4 +440,12 @@ ALTER TABLE residents ALTER COLUMN phone TYPE VARCHAR(150);
 ALTER TABLE talent ALTER COLUMN phone TYPE VARCHAR(150);
 ALTER TABLE contacts ALTER COLUMN phone TYPE VARCHAR(150);
 ALTER TABLE startups ALTER COLUMN phone TYPE VARCHAR(150);
+
+-- Talent: add the CV link field (a URL to an externally-hosted resume, e.g. a
+-- OneDrive Word doc link - not an uploaded file). Safe to run repeatedly.
+ALTER TABLE talent ADD COLUMN IF NOT EXISTS "cvUrl" VARCHAR(1000);
+
+-- Talent: add a structured list of additional languages a candidate speaks
+-- beyond English (each entry: {language, level}). Safe to run repeatedly.
+ALTER TABLE talent ADD COLUMN IF NOT EXISTS "languages" JSONB DEFAULT '[]'::jsonb;
 

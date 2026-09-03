@@ -529,8 +529,8 @@ export async function syncDataToPostgres(connectionString: string, currentData: 
       logs.push(`Streaming ${talent.length} talent candidates...`);
       for (const t of talent) {
         await client.query(`
-          INSERT INTO talent (id, "fullName", university, major, "graduationYear", skills, status, phone, email, "englishLevel", "gitHubUrl", certifications, "codingScore", "englishScore", "softSkillsScore")
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+          INSERT INTO talent (id, "fullName", university, major, "graduationYear", skills, status, phone, email, "englishLevel", "gitHubUrl", "cvUrl", "languages", certifications, "codingScore", "englishScore", "softSkillsScore")
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
           ON CONFLICT (id) DO UPDATE SET
             "fullName" = EXCLUDED."fullName",
             university = EXCLUDED.university,
@@ -542,6 +542,8 @@ export async function syncDataToPostgres(connectionString: string, currentData: 
             email = EXCLUDED.email,
             "englishLevel" = EXCLUDED."englishLevel",
             "gitHubUrl" = EXCLUDED."gitHubUrl",
+            "cvUrl" = EXCLUDED."cvUrl",
+            "languages" = EXCLUDED."languages",
             certifications = EXCLUDED.certifications,
             "codingScore" = EXCLUDED."codingScore",
             "englishScore" = EXCLUDED."englishScore",
@@ -549,7 +551,7 @@ export async function syncDataToPostgres(connectionString: string, currentData: 
         `, [
           t.id, t.fullName || "", t.university || null, t.major || null, Number(t.graduationYear) || 2026,
           t.skills || [], t.status || "STUDENT", t.phone || "", t.email || "", t.englishLevel || "B2",
-          t.gitHubUrl || null, t.certifications || [],
+          t.gitHubUrl || null, t.cvUrl || null, JSON.stringify(t.languages || []), t.certifications || [],
           t.testScores ? Number(t.testScores.coding) || 0 : 0,
           t.testScores ? Number(t.testScores.english) || 0 : 0,
           t.testScores ? Number(t.testScores.softSkills) || 0 : 0
@@ -1110,8 +1112,8 @@ export async function saveDocToPostgres(collection: string, docId: string, field
       ]);
     } else if (collection === "talent") {
       await activePool.query(`
-        INSERT INTO talent (id, "fullName", university, major, "graduationYear", skills, status, phone, email, "englishLevel", "gitHubUrl", certifications, "codingScore", "englishScore", "softSkillsScore")
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+        INSERT INTO talent (id, "fullName", university, major, "graduationYear", skills, status, phone, email, "englishLevel", "gitHubUrl", "cvUrl", "languages", certifications, "codingScore", "englishScore", "softSkillsScore")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
         ON CONFLICT (id) DO UPDATE SET
           "fullName" = EXCLUDED."fullName",
           university = EXCLUDED.university,
@@ -1123,6 +1125,8 @@ export async function saveDocToPostgres(collection: string, docId: string, field
           email = EXCLUDED.email,
           "englishLevel" = EXCLUDED."englishLevel",
           "gitHubUrl" = EXCLUDED."gitHubUrl",
+          "cvUrl" = EXCLUDED."cvUrl",
+          "languages" = EXCLUDED."languages",
           certifications = EXCLUDED.certifications,
           "codingScore" = EXCLUDED."codingScore",
           "englishScore" = EXCLUDED."englishScore",
@@ -1130,7 +1134,7 @@ export async function saveDocToPostgres(collection: string, docId: string, field
       `, [
         docId, fields.fullName || "", fields.university || null, fields.major || null, Number(fields.graduationYear) || 2026,
         fields.skills || [], fields.status || "STUDENT", fields.phone || "", fields.email || "", fields.englishLevel || "B2",
-        fields.gitHubUrl || null, fields.certifications || [],
+        fields.gitHubUrl || null, fields.cvUrl || null, JSON.stringify(fields.languages || []), fields.certifications || [],
         fields.testScores ? Number(fields.testScores.coding) || 0 : 0,
         fields.testScores ? Number(fields.testScores.english) || 0 : 0,
         fields.testScores ? Number(fields.testScores.softSkills) || 0 : 0

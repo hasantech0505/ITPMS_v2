@@ -12,6 +12,7 @@ import {
   X, 
   ChevronRight, 
   FileCheck, 
+  FileText,
   Github, 
   GraduationCap, 
   Trash2,
@@ -50,8 +51,10 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
     status: TalentStatus.CANDIDATE,
     phone: "",
     email: "",
-    englishLevel: "B2" as "A1" | "A2" | "B1" | "B2" | "C1" | "C2",
+    englishLevel: "B2" as "None" | "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Native",
     gitHubUrl: "",
+    cvUrl: "",
+    languages: [] as Array<{ language: string; level: "None" | "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Native" }>,
     codingScore: 85,
     englishScore: 80,
     softSkillsScore: 80,
@@ -80,8 +83,10 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
     status: TalentStatus.CANDIDATE,
     phone: "",
     email: "",
-    englishLevel: "B2" as "A1" | "A2" | "B1" | "B2" | "C1" | "C2",
+    englishLevel: "B2" as "None" | "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Native",
     gitHubUrl: "",
+    cvUrl: "",
+    languages: [] as Array<{ language: string; level: "None" | "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Native" }>,
     codingScore: 85,
     englishScore: 80,
     softSkillsScore: 80,
@@ -100,6 +105,8 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
       email: candidate.email || "",
       englishLevel: candidate.englishLevel || "B2",
       gitHubUrl: candidate.gitHubUrl || "",
+      cvUrl: candidate.cvUrl || "",
+      languages: (candidate.languages || []).map(l => ({ language: l.language, level: l.level })),
       codingScore: candidate.testScores?.coding ?? 80,
       englishScore: candidate.testScores?.english ?? 80,
       softSkillsScore: candidate.testScores?.softSkills ?? 80,
@@ -108,6 +115,23 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
     setEditingTalentId(candidate.id);
     setSelectedTalent(null);
     setShowAddModal(true);
+  };
+
+  // Additional-languages repeater (beyond English, which has its own
+  // dedicated field/score above) - a candidate is rarely monolingual, so
+  // this lets the form capture e.g. Russian, Uzbek, Korean, Turkish, each
+  // with its own CEFR-style proficiency level.
+  const addLanguageRow = () => {
+    setFormData({ ...formData, languages: [...formData.languages, { language: "", level: "B2" }] });
+  };
+
+  const updateLanguageRow = (index: number, field: "language" | "level", value: string) => {
+    const next = formData.languages.map((row, i) => i === index ? { ...row, [field]: value } : row);
+    setFormData({ ...formData, languages: next as typeof formData.languages });
+  };
+
+  const removeLanguageRow = (index: number) => {
+    setFormData({ ...formData, languages: formData.languages.filter((_, i) => i !== index) });
   };
 
   const handleRegisterTalent = async (e: React.FormEvent) => {
@@ -128,6 +152,10 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
       email: formData.email,
       englishLevel: formData.englishLevel,
       gitHubUrl: formData.gitHubUrl || undefined,
+      cvUrl: formData.cvUrl || undefined,
+      languages: formData.languages
+        .map(l => ({ language: l.language.trim(), level: l.level }))
+        .filter(l => l.language.length > 0),
       certifications: formData.certifications.split(",").map(c => c.trim()).filter(Boolean),
       testScores: {
         coding: Number(formData.codingScore) || 80,
@@ -172,6 +200,7 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
               { key: "graduationYear", label: "Graduation Year", type: "number" },
               { key: "englishLevel", label: "English Level", type: "string" },
               { key: "gitHubUrl", label: "GitHub URL", type: "string" },
+              { key: "cvUrl", label: "CV Link", type: "string" },
               { key: "status", label: "Status", type: "string" }
             ]}
             onImportCompleted={() => onSyncState && onSyncState()}
@@ -261,7 +290,7 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-2.5">
                   <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-emerald-600">
-                    {c.fullName.split(" ").map(w => w[0]).join("")}
+                    {(c.fullName || "?").split(" ").filter(Boolean).map(w => w[0]).join("") || "?"}
                   </div>
                   <div>
                     <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">{c.fullName}</h3>
@@ -282,14 +311,14 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
 
               {/* Skills Tags */}
               <div className="flex flex-wrap gap-1 mt-3">
-                {c.skills.slice(0, 3).map((skill, i) => (
+                {(c.skills || []).slice(0, 3).map((skill, i) => (
                   <span key={i} className="text-[9px] bg-slate-50 border border-slate-200 px-1.5 py-0.5 rounded font-medium text-slate-600">
                     {skill}
                   </span>
                 ))}
-                {c.skills.length > 3 && (
+                {(c.skills || []).length > 3 && (
                   <span className="text-[9px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded font-semibold">
-                    +{c.skills.length - 3} {t("more")}
+                    +{(c.skills || []).length - 3} {t("more")}
                   </span>
                 )}
               </div>
@@ -299,7 +328,7 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
             <div className="border-t border-slate-100 pt-3 mt-4 flex items-center justify-between text-[10px]">
               <div>
                 <span className="text-slate-400 block uppercase font-bold text-[8px]">{t("Coding Score")}</span>
-                <span className="font-extrabold text-slate-800 font-mono">{c.testScores.coding}%</span>
+                <span className="font-extrabold text-slate-800 font-mono">{c.testScores?.coding ?? 0}%</span>
               </div>
               <div>
                 <span className="text-slate-400 block uppercase font-bold text-[8px]">{t("English Lvl")}</span>
@@ -325,7 +354,7 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
             <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
               <div className="flex items-center gap-2.5">
                 <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-indigo-600 border border-slate-200">
-                  {selectedTalent.fullName.split(" ").map(w => w[0]).join("")}
+                  {(selectedTalent.fullName || "?").split(" ").filter(Boolean).map(w => w[0]).join("") || "?"}
                 </div>
                 <div>
                   <h2 className="text-sm font-bold text-slate-800 uppercase tracking-tight">{selectedTalent.fullName}</h2>
@@ -355,7 +384,7 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
               <div className="space-y-3">
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono font-bold">{t("Skills Inventory")}</h3>
                 <div className="flex flex-wrap gap-1.5">
-                  {selectedTalent.skills.map((s, idx) => (
+                  {(selectedTalent.skills || []).map((s, idx) => (
                     <span key={idx} className="text-xs bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg font-medium text-slate-700">
                       {s}
                     </span>
@@ -374,7 +403,34 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
                     <span>{t("View GitHub Portfolio")}</span>
                   </a>
                 )}
+
+                {selectedTalent.cvUrl && (
+                  <a
+                    id="cv-link"
+                    href={selectedTalent.cvUrl}
+                    target="_blank"
+                    rel="referrer"
+                    className="flex items-center gap-2 p-2.5 bg-indigo-600 text-white rounded-lg text-xs font-semibold justify-center hover:bg-indigo-700 transition-all cursor-pointer"
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>{t("View CV")}</span>
+                  </a>
+                )}
               </div>
+
+              {/* Other Languages - beyond the assessed English level shown below */}
+              {(selectedTalent.languages || []).length > 0 && (
+                <div className="space-y-2">
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">{t("Other Languages")}</h3>
+                  <div className="flex flex-wrap gap-1.5">
+                    {(selectedTalent.languages || []).map((lang, idx) => (
+                      <span key={idx} className="text-xs bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-lg font-medium text-indigo-700">
+                        {lang.language} <span className="text-indigo-400 font-mono">&bull; {lang.level}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Verified Test Indicators */}
               <div className="space-y-3">
@@ -383,28 +439,28 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
                   <div>
                     <div className="flex justify-between text-xs font-semibold text-slate-700 mb-1">
                       <span>{t("Coding Proficiency")}</span>
-                      <span className="font-mono">{selectedTalent.testScores.coding}%</span>
+                      <span className="font-mono">{selectedTalent.testScores?.coding ?? 0}%</span>
                     </div>
                     <div className="w-full bg-slate-100 h-2 rounded-full">
-                      <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${selectedTalent.testScores.coding}%` }} />
+                      <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${selectedTalent.testScores?.coding ?? 0}%` }} />
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between text-xs font-semibold text-slate-700 mb-1">
                       <span>{t("English Grammar & Speaking")}</span>
-                      <span className="font-mono">{selectedTalent.testScores.english}%</span>
+                      <span className="font-mono">{selectedTalent.testScores?.english ?? 0}%</span>
                     </div>
                     <div className="w-full bg-slate-100 h-2 rounded-full">
-                      <div className="bg-indigo-500 h-full rounded-full" style={{ width: `${selectedTalent.testScores.english}%` }} />
+                      <div className="bg-indigo-500 h-full rounded-full" style={{ width: `${selectedTalent.testScores?.english ?? 0}%` }} />
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between text-xs font-semibold text-slate-700 mb-1">
                       <span>{t("Soft Skills (Behavioral Audit)")}</span>
-                      <span className="font-mono">{selectedTalent.testScores.softSkills}%</span>
+                      <span className="font-mono">{selectedTalent.testScores?.softSkills ?? 0}%</span>
                     </div>
                     <div className="w-full bg-slate-100 h-2 rounded-full">
-                      <div className="bg-amber-500 h-full rounded-full" style={{ width: `${selectedTalent.testScores.softSkills}%` }} />
+                      <div className="bg-amber-500 h-full rounded-full" style={{ width: `${selectedTalent.testScores?.softSkills ?? 0}%` }} />
                     </div>
                   </div>
                 </div>
@@ -497,17 +553,15 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t("University *")}</label>
-                  <select
+                  <input
                     id="form-talent-uni"
+                    type="text"
+                    required
                     value={formData.university}
                     onChange={(e) => setFormData({ ...formData, university: e.target.value })}
-                    className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs bg-white cursor-pointer font-medium text-slate-700"
-                  >
-                    <option value="Tashkent University of Information Technologies (TUIT)">{t("Tashkent University of Information Technologies (TUIT)")}</option>
-                    <option value="Inha University in Tashkent (IUT)">{t("Inha University in Tashkent (IUT)")}</option>
-                    <option value="Westminster International University in Tashkent (WIUT)">{t("Westminster International University in Tashkent (WIUT)")}</option>
-                    <option value="Amity University in Tashkent">{t("Amity University in Tashkent")}</option>
-                  </select>
+                    placeholder={t("e.g. Tashkent University of Information Technologies (TUIT)")}
+                    className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-medium text-slate-700"
+                  />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t("Graduation Year")}</label>
@@ -550,12 +604,14 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
                     onChange={(e) => setFormData({ ...formData, englishLevel: e.target.value as any })}
                     className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs bg-white cursor-pointer"
                   >
+                    <option value="None">{t("None")}</option>
                     <option value="A1">A1</option>
                     <option value="A2">A2</option>
                     <option value="B1">B1</option>
                     <option value="B2">B2</option>
                     <option value="C1">C1</option>
                     <option value="C2">C2</option>
+                    <option value="Native">{t("Native")}</option>
                   </select>
                 </div>
                 <div className="space-y-1">
@@ -566,6 +622,17 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
                     value={formData.gitHubUrl}
                     onChange={(e) => setFormData({ ...formData, gitHubUrl: e.target.value })}
                     placeholder={t("https://github.com/...")}
+                    className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t("CV Link")}</label>
+                  <input
+                    id="form-talent-cv"
+                    type="url"
+                    value={formData.cvUrl}
+                    onChange={(e) => setFormData({ ...formData, cvUrl: e.target.value })}
+                    placeholder={t("https://onedrive.live.com/... (Word doc link)")}
                     className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs"
                   />
                 </div>
@@ -581,6 +648,66 @@ export default function TalentModule({ talent, onAdd, onUpdate, onDelete, userRo
                   placeholder={t("React, Node.js, Python...")}
                   className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs"
                 />
+              </div>
+
+              {/* Other Languages - English has its own dedicated field/score
+                  above; most candidates speak more than one language, so
+                  this repeater captures each additional one with its own
+                  proficiency level rather than forcing it all into one
+                  "English Level" dropdown. */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t("Other Languages")}</label>
+                  <button
+                    type="button"
+                    id="add-language-row-btn"
+                    onClick={addLanguageRow}
+                    className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 hover:text-emerald-700 cursor-pointer"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>{t("Add Language")}</span>
+                  </button>
+                </div>
+                {formData.languages.length === 0 && (
+                  <p className="text-[10px] text-slate-400 italic">
+                    {t("English is tracked above. Add Uzbek, Russian, Korean, etc. here if the candidate speaks them.")}
+                  </p>
+                )}
+                <div className="space-y-2">
+                  {formData.languages.map((row, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={row.language}
+                        onChange={(e) => updateLanguageRow(idx, "language", e.target.value)}
+                        placeholder={t("e.g. Russian, Uzbek, Korean...")}
+                        className="flex-1 min-w-0 px-3 py-1.5 border border-slate-200 rounded-lg text-xs"
+                      />
+                      <select
+                        value={row.level}
+                        onChange={(e) => updateLanguageRow(idx, "level", e.target.value)}
+                        className="w-24 shrink-0 px-2 py-1.5 border border-slate-200 rounded-lg text-xs bg-white cursor-pointer"
+                      >
+                        <option value="None">{t("None")}</option>
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="B1">B1</option>
+                        <option value="B2">B2</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                        <option value="Native">{t("Native")}</option>
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() => removeLanguageRow(idx)}
+                        className="shrink-0 p-1.5 text-slate-400 hover:text-red-600 cursor-pointer"
+                        aria-label={t("Remove language")}
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="border-t border-slate-100 pt-4 grid grid-cols-3 gap-3">
