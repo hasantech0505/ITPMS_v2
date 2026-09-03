@@ -1025,6 +1025,148 @@ Provide:
     return { insights, generatedAt: new Date().toISOString(), module: moduleKey };
   }
 
+  // ------------------------------------------------------------------
+  // Edo Ijro Tizim quarterly report — AI writing assistance.
+  //
+  // The report's KPI numbers are always computed deterministically on the
+  // frontend from live Residents/Startups/Property data (see
+  // src/features/edoReport/edoReportStats.ts) and passed in here as-is -
+  // these three methods only ever REPHRASE numbers/text a human or the
+  // stats engine already produced, matching the same discipline used by
+  // getModuleInsights()/getRecommendations() above: never invent or
+  // silently change a figure. Every method degrades to a plain,
+  // non-AI fallback if Groq is unavailable or the call fails, so the
+  // report can always be completed even offline.
+
+  // "Formalize with AI" - rewrites (and, if needed, translates) a rough
+  // draft into formal Uzbek government-report prose matching the
+  // register of the official "Malumot" documents (passive constructions,
+  // standard phrases like "amalga oshirildi", "tashkil etildi"). Returns
+  // a SUGGESTION - the caller decides whether to accept it; the original
+  // text is never touched server-side.
+  static async polishEdoNarrative(params: { text: string; sectionTitle?: string; heading?: string }) {
+    const text = (params.text || "").trim();
+    if (!text) return { polished: "", usedAI: false };
+
+    try {
+      const context = [params.sectionTitle, params.heading].filter(Boolean).join(" — ");
+      const prompt =
+        `You are drafting a section of an official quarterly "Malumot" (information) report that IT Park ` +
+        `Qashqadaryo submits to the Ministry of Digital Technologies of Uzbekistan via the "Edo Ijro tizim" ` +
+        `document system. Rewrite the draft note below into formal, official Uzbek report prose - the tone ` +
+        `used in real government reports (passive constructions such as "amalga oshirildi", "tashkil etildi", ` +
+        `"olib borildi"; no first person; no casual phrasing). If the note is written in another language, ` +
+        `translate it into Uzbek as part of the rewrite. Preserve every fact, name, and number in the draft ` +
+        `exactly - do not invent, drop, or change any of them. Reply with ONLY the rewritten Uzbek paragraph(s), ` +
+        `no preamble, no quotation marks, no notes.\n\n` +
+        (context ? `Section: ${context}\n\n` : "") +
+        `Draft note:\n${text}`;
+
+      const result = await callGemini({ prompt, maxTokens: 900 });
+      if (result && result.trim()) {
+        return { polished: result.trim(), usedAI: true };
+      }
+    } catch (err: any) {
+      console.error("AI call failed:", err?.message || err);
+    }
+    // Offline/failed fallback: hand the original text back unchanged rather
+    // than blocking the user - they can still edit and submit manually.
+    return { polished: text, usedAI: false };
+  }
+
+  // "Draft summary from KPIs" - turns a section's already-computed stats
+  // into one flowing Uzbek paragraph in the source document's own style
+  // (e.g. "...резидентлар сони 77 тани ташкил этмоқда"), instead of the
+  // app's bulleted KPI list. The stats themselves are supplied by the
+  // caller (computed by edoReportStats.ts) and are the ONLY facts the
+  // model is allowed to use.
+  static async summarizeEdoStats(params: {
+    sectionTitle: string;
+    autoStats: Record<string, any>;
+    manualStats?: { label: string; value: string }[];
+  }) {
+    const facts: string[] = [
+      ...Object.entries(params.autoStats || {}).map(([label, value]) => `${label}: ${value}`),
+      ...(params.manualStats || []).filter((m) => m.value && m.value.trim()).map((m) => `${m.label}: ${m.value}`),
+    ];
+    const fallback = facts.length > 0
+      ? `${params.sectionTitle} bo'yicha asosiy ko'rsatkichlar: ${facts.join("; ")}.`
+      : "";
+    if (facts.length === 0) return { summary: "", usedAI: false };
+
+    try {
+      const prompt =
+        `You are drafting the opening summary paragraph of the "${params.sectionTitle}" section of an official ` +
+        `quarterly Uzbek government report ("Malumot", submitted via the Edo Ijro tizim system). Using ONLY the ` +
+        `figures listed below, write ONE flowing formal Uzbek paragraph (not a bulleted list) that reads like ` +
+        `an official report, in the style of: "Qashqadaryo viloyatida joriy yil joriy holatiga ko'ra IT-Park ` +
+        `rezidentlar soni 77 tani tashkil etmoqda." Use every number given exactly as given - do not invent, ` +
+        `round, or omit any of them, and do not introduce any number not listed below. Reply with ONLY the ` +
+        `paragraph, no preamble, no bullet points, no notes.\n\nFigures:\n${facts.map((f) => `- ${f}`).join("\n")}`;
+
+      const result = await callGemini({ prompt, maxTokens: 500 });
+      if (result && result.trim()) {
+        return { summary: result.trim(), usedAI: true };
+      }
+    } catch (err: any) {
+      console.error("AI call failed:", err?.message || err);
+    }
+    return { summary: fallback, usedAI: false };
+  }
+
+  // "Compare vs previous period" - the numeric diff itself is computed
+  // HERE, deterministically, from the two stat snapshots the caller
+  // supplies (never left to the model - LLMs are not reliable at
+  // subtraction). Groq is only asked to phrase the already-computed
+  // deltas into 1-2 report-style Uzbek sentences.
+  static async compareEdoPeriods(params: {
+    sectionTitle: string;
+    currentStats: Record<string, any>;
+    previousStats: Record<string, any>;
+  }) {
+    const parseNum = (v: any): number | null => {
+      if (typeof v === "number") return v;
+      if (typeof v !== "string") return null;
+      const cleaned = v.replace(/[^0-9.\-]/g, "");
+      if (!cleaned || cleaned === "-" || cleaned === ".") return null;
+      const n = parseFloat(cleaned);
+      return isNaN(n) ? null : n;
+    };
+
+    const deltas: string[] = [];
+    for (const [label, currentRaw] of Object.entries(params.currentStats || {})) {
+      const previousRaw = (params.previousStats || {})[label];
+      const cur = parseNum(currentRaw);
+      const prev = parseNum(previousRaw);
+      if (cur === null || prev === null || prev === 0) continue;
+      const diff = cur - prev;
+      if (diff === 0) continue;
+      const pct = Math.round((diff / Math.abs(prev)) * 100);
+      deltas.push(`${label}: ${prev} -> ${cur} (${diff > 0 ? "+" : ""}${diff}, ${diff > 0 ? "+" : ""}${pct}%)`);
+    }
+
+    if (deltas.length === 0) return { narrative: "", usedAI: false, changeCount: 0 };
+
+    const fallback = `${params.sectionTitle} bo'yicha o'tgan davrga nisbatan o'zgarishlar: ${deltas.join("; ")}.`;
+
+    try {
+      const prompt =
+        `You are drafting a quarter-over-quarter comparison note for the "${params.sectionTitle}" section of an ` +
+        `official Uzbek government quarterly report. The exact changes below have ALREADY been calculated - do ` +
+        `not recompute, round differently, or add any figure not listed. Phrase them into 1-2 formal Uzbek report ` +
+        `sentences (e.g. "...soni o'tgan chorakka nisbatan 12 taga oshdi"). Reply with ONLY the sentence(s), no ` +
+        `preamble, no notes.\n\nChanges (label: previous -> current, absolute change, percent change):\n${deltas.map((d) => `- ${d}`).join("\n")}`;
+
+      const result = await callGemini({ prompt, maxTokens: 400 });
+      if (result && result.trim()) {
+        return { narrative: result.trim(), usedAI: true, changeCount: deltas.length };
+      }
+    } catch (err: any) {
+      console.error("AI call failed:", err?.message || err);
+    }
+    return { narrative: fallback, usedAI: false, changeCount: deltas.length };
+  }
+
   static async generatePipelineSynthesis(residents: any[]) {
     const totalExport = residents.reduce((a: number, b: any) => a + (b.exportVolume || 0), 0);
 

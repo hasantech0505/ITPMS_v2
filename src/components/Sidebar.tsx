@@ -19,6 +19,7 @@ import {
   UserCheck, 
   MessageSquare,
   Milestone,
+  Landmark,
   ChevronDown, 
   ChevronRight, 
   LogOut,
@@ -82,6 +83,7 @@ export default function Sidebar({
     { id: "crm", label: "Global Outreach (CRM)", icon: Briefcase },
     { id: "ai", label: "ITPMS AI Workspace", icon: BrainCircuit },
     { id: "reports", label: "Activity Logs & Reports", icon: FileSpreadsheet },
+    { id: "edoReport", label: "Edo Ijro Tizim Report", icon: Landmark },
     { id: "planning", label: "Strategic Planning & Roadmap", icon: Milestone },
     { id: "users", label: "RBAC Users", icon: UserCheck },
   ];

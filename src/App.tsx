@@ -27,6 +27,7 @@ const CopilotModule = React.lazy(() => import("./features/ai/CopilotModule"));
 const CommentsModule = React.lazy(() => import("./features/comments/CommentsModule"));
 const UserManagementModule = React.lazy(() => import("./features/auth/UserManagementModule"));
 const PlanningModule = React.lazy(() => import("./features/planning/PlanningModule"));
+const EdoReportModule = React.lazy(() => import("./features/edoReport/EdoReportModule"));
 import ITParkBrandBackground, { BrandBackgroundVariant } from "./components/ITParkBrandBackground";
 import { Property } from "./features/infrastructure/propertyTypes";
 
@@ -59,7 +60,8 @@ import {
   BuildingRecord,
   ProjectComment,
   PlanningItem,
-  OutreachCampaign
+  OutreachCampaign,
+  EdoReport
 } from "./types";
 
 function ModuleLoadingFallback() {
@@ -95,7 +97,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>(() => {
     const rawHash = window.location.hash.replace("#", "");
     const tabName = rawHash.split("?")[0];
-    if (tabName && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "events", "comments", "crm", "ai", "reports", "settings"].some(t => tabName.startsWith(t))) {
+    if (tabName && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
       return tabName;
     }
     return "dashboard";
@@ -106,7 +108,7 @@ export default function App() {
     const handleSyncHash = () => {
       const rawHash = window.location.hash.replace("#", "");
       const tabName = rawHash.split("?")[0];
-      if (tabName && tabName !== activeTab && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "events", "comments", "crm", "ai", "reports", "settings"].some(t => tabName.startsWith(t))) {
+      if (tabName && tabName !== activeTab && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
         setActiveTab(tabName);
       }
     };
@@ -192,6 +194,7 @@ export default function App() {
   const [kpiTargets, setKpiTargets] = useState<any[]>([]);
   const [planningItems, setPlanningItems] = useState<PlanningItem[]>([]);
   const [campaigns, setCampaigns] = useState<OutreachCampaign[]>([]);
+  const [edoReports, setEdoReports] = useState<EdoReport[]>([]);
 
   // AI Chat States
   const [chatInput, setChatInput] = useState("");
@@ -317,6 +320,7 @@ export default function App() {
         setKpiTargets(data.kpiTargets || []);
         setPlanningItems(data.planningItems || []);
         setCampaigns(data.campaigns || []);
+        setEdoReports(data.edoReports || []);
       }
     } catch (e) {
       console.error("Failed to sync database state:", e);
@@ -837,6 +841,19 @@ export default function App() {
               onAdd={(payload) => handleAddItem("planningItems", payload, setPlanningItems)}
               onUpdate={(id, payload) => handleUpdateItem("planningItems", id, payload, setPlanningItems)}
               onDelete={(id) => handleDeleteItem("planningItems", id, setPlanningItems)}
+            />
+          )}
+
+          {activeTab === "edoReport" && (
+            <EdoReportModule
+              edoReports={edoReports}
+              residents={residents}
+              startups={startups}
+              properties={properties}
+              onAdd={(payload) => handleAddItem("edoReports", payload, setEdoReports)}
+              onUpdate={(id, payload) => handleUpdateItem("edoReports", id, payload, setEdoReports)}
+              onDelete={(id) => handleDeleteItem("edoReports", id, setEdoReports)}
+              currentUser={currentUser}
             />
           )}
           </Suspense>

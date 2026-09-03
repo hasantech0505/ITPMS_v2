@@ -138,6 +138,9 @@ export function checkEntityPermission(action: "read" | "create" | "update" | "de
       case "comments":
         // All authenticated users can read, post comments, boost, and reply
         return next();
+      case "edoreports":
+        requiredPerm = action === "read" ? "edoReports.read" : "edoReports.manage";
+        break;
       default:
         requiredPerm = action === "read" ? "infrastructure.read" : "infrastructure.manage";
         break;

@@ -20,6 +20,7 @@ import healthRoutes from "./server/routes/health.routes";
 import { EntityService } from "./server/services/entity.service";
 import { RbacRepository } from "./server/repositories/rbac.repository";
 import { applyPendingResidentCorrections, applyPendingResidentCorrectionsV2, cleanupLeftoverTestResident } from "./server/startup/applyResidentCorrections";
+import { importQashqadaryoPropertiesV2 } from "./server/startup/importQashqadaryoProperties";
 import { errorHandler } from "./server/middleware/errorHandler";
 
 async function startServer() {
@@ -123,6 +124,12 @@ async function startServer() {
           await applyPendingResidentCorrections();
           await applyPendingResidentCorrectionsV2();
           await cleanupLeftoverTestResident();
+
+          // One-time data import: 26 new Qashqadaryo vacant-space property
+          // listings (Property Marketplace / infrastructure module), from
+          // the second uploaded slide deck. Same single-read/single-write
+          // shape as the resident corrections above - no race window.
+          await importQashqadaryoPropertiesV2();
 
           // Re-read the now-corrected state (Postgres already has the
           // per-resident correction writes from above) and push it through

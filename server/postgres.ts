@@ -33,6 +33,7 @@ const TABLE_NAME_MAP: Record<string, string> = {
 // modules never need a schema migration just to get real persistence.
 export const GENERIC_STORE_COLLECTIONS = [
   "properties", "planningItems", "kpiTargets", "comments", "campaigns", "aiConversations", "aiMessages",
+  "edoReports",
 ];
 
 let pool: pg.Pool | null = null;

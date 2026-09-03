@@ -1,0 +1,1422 @@
+[
+  {
+    "id": "prop-qshq-12",
+    "city": "Qarshi",
+    "name": "Qarshi - Guzor ko’chasi",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-12/photo-1.png",
+      "/property-photos/prop-qshq-12/photo-2.png",
+      "/property-photos/prop-qshq-12/photo-3.png",
+      "/property-photos/prop-qshq-12/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shahri, Guzor ko’chasi",
+    "areaSqM": 120,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-12/photo-1.png",
+    "ownerPhone": "+998 91 262 19 29",
+    "description": "Manzil: Qarshi shahri, Guzor ko’chasi. Bino maydoni 120 m.kv, 3 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: https://yandex.uz/maps/-/CTUhz630. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 91 262 19 29",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-13",
+    "city": "Qarshi",
+    "name": "Qarshi - Uzbekiston ko’chasi",
+    "type": "Office",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-13/photo-1.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shahri, Uzbekiston ko’chasi",
+    "areaSqM": 60,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-13/photo-1.png",
+    "ownerPhone": "+998 88 898 60 60",
+    "description": "Manzil: Qarshi shahri, Uzbekiston ko’chasi. Bino maydoni 60 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: https://maps.app.goo.gl/hriyVan7i6FoAMov8. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 88 898 60 60",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-14",
+    "city": "Qarshi",
+    "name": "Qarshi - xokimligi yonida",
+    "type": "Office",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-14/photo-1.png",
+      "/property-photos/prop-qshq-14/photo-2.png",
+      "/property-photos/prop-qshq-14/photo-3.png",
+      "/property-photos/prop-qshq-14/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shahri, xokimligi yonida",
+    "areaSqM": 50,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-14/photo-1.png",
+    "ownerPhone": "+998 90 887 78 79",
+    "description": "Manzil: Qarshi shahri, xokimligi yonida. Bino maydoni 50 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 887 78 79",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-15",
+    "city": "Qarshi",
+    "name": "Qarshi - Amir Timur ko’chasi",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-15/photo-1.png",
+      "/property-photos/prop-qshq-15/photo-2.png",
+      "/property-photos/prop-qshq-15/photo-3.png",
+      "/property-photos/prop-qshq-15/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shahri, Amir Timur ko’chasi",
+    "areaSqM": 1200,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-15/photo-1.png",
+    "ownerPhone": "+998 90 722 24 99",
+    "description": "Manzil: Qarshi shahri, Amir Timur ko’chasi. Bino maydoni 1200 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 722 24 99",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-16",
+    "city": "Qarshi",
+    "name": "Qarshi - Sokin Plaza mexmonxona yonida",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-16/photo-1.png",
+      "/property-photos/prop-qshq-16/photo-2.png",
+      "/property-photos/prop-qshq-16/photo-3.png",
+      "/property-photos/prop-qshq-16/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Sokin Plaza mexmonxona yonida",
+    "areaSqM": 200,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-16/photo-1.png",
+    "ownerPhone": "+998 97 802 23 33",
+    "description": "Manzil: Sokin Plaza mexmonxona yonida. Bino maydoni 200 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 97 802 23 33",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-17",
+    "city": "Qarshi",
+    "name": "Qarshi - 3-mitti tumani, Ipak yoʻli banki va apelsin restorani yonida",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-17/photo-1.png",
+      "/property-photos/prop-qshq-17/photo-2.png",
+      "/property-photos/prop-qshq-17/photo-3.png",
+      "/property-photos/prop-qshq-17/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "3-mitti tumani, Ipak yoʻli banki va apelsin restorani yonida",
+    "areaSqM": 200,
+    "district": "3-mitti tumani",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-17/photo-1.png",
+    "ownerPhone": "+998 91 227 47 93",
+    "description": "Manzil: 3-mitti tumani, Ipak yoʻli banki va apelsin restorani yonida. Bino maydoni 200 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 91 227 47 93",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-18",
+    "city": "Qarshi",
+    "name": "Qarshi - Infin banki ruparasida",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-18/photo-1.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Infin banki ruparasida",
+    "areaSqM": 120,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-18/photo-1.png",
+    "ownerPhone": "+998 97 382 74 47",
+    "description": "Manzil: Infin banki ruparasida. Bino maydoni 120 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 97 382 74 47",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-19",
+    "city": "Qarshi",
+    "name": "Qarshi - Boxodir SHerqulov ko’chasi",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-19/photo-1.png",
+      "/property-photos/prop-qshq-19/photo-2.png",
+      "/property-photos/prop-qshq-19/photo-3.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shahri, Boxodir SHerqulov ko’chasi",
+    "areaSqM": 100,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-19/photo-1.png",
+    "ownerPhone": "+998 93 687 07 93",
+    "description": "Manzil: Qarshi shahri, Boxodir SHerqulov ko’chasi. Bino maydoni 100 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 93 687 07 93",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-20",
+    "city": "Qarshi",
+    "name": "Qarshi - Amir Timur ko’chasi",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-20/photo-1.png",
+      "/property-photos/prop-qshq-20/photo-2.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shahri, Amir Timur ko’chasi",
+    "areaSqM": 100,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-20/photo-1.png",
+    "ownerPhone": "+998 90 518 10 73",
+    "description": "Manzil: Qarshi shahri, Amir Timur ko’chasi. Bino maydoni 100 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 518 10 73",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-21",
+    "city": "Qarshi",
+    "name": "Qarshi - Islom Karimov kuchasi 11 uy",
+    "type": "Office",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-21/photo-1.png",
+      "/property-photos/prop-qshq-21/photo-2.png",
+      "/property-photos/prop-qshq-21/photo-3.png",
+      "/property-photos/prop-qshq-21/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shahri, Islom Karimov kuchasi 11 uy",
+    "areaSqM": 73,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-21/photo-1.png",
+    "ownerPhone": "+998 93 697 02 00",
+    "description": "Manzil: Qarshi shahri, Islom Karimov kuchasi 11 uy. Bino maydoni 73 m.kv, 3 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 93 697 02 00",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-22",
+    "city": "Qarshi",
+    "name": "Qarshi - Mustaqillik ko’chasi, 35 uy",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-22/photo-1.png",
+      "/property-photos/prop-qshq-22/photo-2.png",
+      "/property-photos/prop-qshq-22/photo-3.png",
+      "/property-photos/prop-qshq-22/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shahri, Mustaqillik ko’chasi, 35 uy",
+    "areaSqM": 1400,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-22/photo-1.png",
+    "ownerPhone": "+998 90 356 01 28",
+    "description": "Manzil: Qarshi shahri, Mustaqillik ko’chasi, 35 uy. Bino maydoni 1400 m.kv, 3 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 356 01 28",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-23",
+    "city": "Qarshi",
+    "name": "Qarshi - Nuriston MFY, Omad ko'chasi, 3/50-uy",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-23/photo-1.png",
+      "/property-photos/prop-qshq-23/photo-2.png",
+      "/property-photos/prop-qshq-23/photo-3.png",
+      "/property-photos/prop-qshq-23/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shahri, Nuriston MFY, Omad ko'chasi, 3/50-uy",
+    "areaSqM": 691,
+    "district": "Nuriston MFY",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-23/photo-1.png",
+    "ownerPhone": "+998 90 356 01 28",
+    "description": "Manzil: Qarshi shahri, Nuriston MFY, Omad ko'chasi, 3/50-uy. Bino maydoni 691 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 356 01 28",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-24",
+    "city": "Qarshi",
+    "name": "Qarshi - xokimiyatini oldida, Anis magazini ruparasida",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-24/photo-1.png",
+      "/property-photos/prop-qshq-24/photo-2.png",
+      "/property-photos/prop-qshq-24/photo-3.png",
+      "/property-photos/prop-qshq-24/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shaxar xokimiyatini oldida, Anis magazini ruparasida",
+    "areaSqM": 100,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-24/photo-1.png",
+    "ownerPhone": "+998 97 229 33 29",
+    "description": "Manzil: Qarshi shaxar xokimiyatini oldida, Anis magazini ruparasida. Bino maydoni 100 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 97 229 33 29",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-25",
+    "city": "Qarshi",
+    "name": "Qarshi - Zarinka ruparasida, Original super marketi katorida",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-25/photo-1.png",
+      "/property-photos/prop-qshq-25/photo-2.png",
+      "/property-photos/prop-qshq-25/photo-3.png",
+      "/property-photos/prop-qshq-25/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shaxar, Zarinka ruparasida, Original super marketi katorida",
+    "areaSqM": 100,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-25/photo-1.png",
+    "ownerPhone": "+998 88 475 22 22",
+    "description": "Manzil: Qarshi shaxar, Zarinka ruparasida, Original super marketi katorida. Bino maydoni 100 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 88 475 22 22",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-26",
+    "city": "Qarshi",
+    "name": "Qarshi - orenter Mumtoz choyhona",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-26/photo-1.png",
+      "/property-photos/prop-qshq-26/photo-2.png",
+      "/property-photos/prop-qshq-26/photo-3.png",
+      "/property-photos/prop-qshq-26/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shaxar, orenter Mumtoz choyhona",
+    "areaSqM": 700,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-26/photo-1.png",
+    "ownerPhone": "+998 97 294 99 19",
+    "description": "Manzil: Qarshi shaxar, orenter Mumtoz choyhona. Bino maydoni 700 m.kv, 3 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 97 294 99 19",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-27",
+    "city": "Qarshi",
+    "name": "Qarshi - O‘zbekiston ko‘chasi, Qarshi, Qashqadaryo Viloyati",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-27/photo-1.png",
+      "/property-photos/prop-qshq-27/photo-2.jpg",
+      "/property-photos/prop-qshq-27/photo-3.jpg",
+      "/property-photos/prop-qshq-27/photo-4.jpg"
+    ],
+    "status": "Pending Verification",
+    "address": "O‘zbekiston ko‘chasi, Qarshi, Qashqadaryo Viloyati",
+    "areaSqM": 350,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-27/photo-1.png",
+    "ownerPhone": "+998 97 832 22 00",
+    "description": "Manzil: O‘zbekiston ko‘chasi, Qarshi, Qashqadaryo Viloyati. Bino maydoni 350 m.kv, 4 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: https://maps.app.goo.gl/Q19Z6WvBv8NKyHLs9. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 97 832 22 00",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-28",
+    "city": "Qarshi",
+    "name": "Qarshi - O‘zbekiston ko‘chasi",
+    "type": "Office",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-28/photo-1.png",
+      "/property-photos/prop-qshq-28/photo-2.png",
+      "/property-photos/prop-qshq-28/photo-3.png"
+    ],
+    "status": "Pending Verification",
+    "address": "O‘zbekiston ko‘chasi, Qarshi shaxar",
+    "areaSqM": 60,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-28/photo-1.png",
+    "ownerPhone": "+998 90 721 97 00",
+    "description": "Manzil: O‘zbekiston ko‘chasi, Qarshi shaxar. Bino maydoni 60 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Orenter Qarshi shaxar xokimligi yonida. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 721 97 00",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-29",
+    "city": "Qarshi",
+    "name": "Qarshi - O‘zbekiston ko‘chasi",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-29/photo-1.png",
+      "/property-photos/prop-qshq-29/photo-2.png",
+      "/property-photos/prop-qshq-29/photo-3.png",
+      "/property-photos/prop-qshq-29/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "O‘zbekiston ko‘chasi, Qarshi shaxar",
+    "areaSqM": 170,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-29/photo-1.png",
+    "ownerPhone": "+998 90 617 70 01",
+    "description": "Manzil: O‘zbekiston ko‘chasi, Qarshi shaxar. Bino maydoni 170 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Orenter Mittivoy magazin. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 617 70 01",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-30",
+    "city": "Qarshi",
+    "name": "Qarshi - O‘zbekiston ko‘chasi",
+    "type": "Office",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-30/photo-1.png",
+      "/property-photos/prop-qshq-30/photo-2.png",
+      "/property-photos/prop-qshq-30/photo-3.png",
+      "/property-photos/prop-qshq-30/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "O‘zbekiston ko‘chasi, Qarshi shaxar",
+    "areaSqM": 66,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-30/photo-1.png",
+    "ownerPhone": "+998 90 342 30 03",
+    "description": "Manzil: O‘zbekiston ko‘chasi, Qarshi shaxar. Bino maydoni 66 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Orenter Qarshi shaxar xokimligi ro‘parasida. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 342 30 03",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-31",
+    "city": "Qarshi",
+    "name": "Qarshi - O‘zbekiston ko‘chasi",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-31/photo-1.png",
+      "/property-photos/prop-qshq-31/photo-2.png",
+      "/property-photos/prop-qshq-31/photo-3.png",
+      "/property-photos/prop-qshq-31/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "O‘zbekiston ko‘chasi, Qarshi shaxar",
+    "areaSqM": 450,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-31/photo-1.png",
+    "ownerPhone": "+998 90 721 97 00",
+    "description": "Manzil: O‘zbekiston ko‘chasi, Qarshi shaxar. Bino maydoni 450 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Orenter Qarshi shaxar. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 721 97 00",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-32",
+    "city": "Qarshi",
+    "name": "Qarshi - O‘zbekiston ko‘chasi",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-32/photo-1.png",
+      "/property-photos/prop-qshq-32/photo-2.png",
+      "/property-photos/prop-qshq-32/photo-3.png",
+      "/property-photos/prop-qshq-32/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "O‘zbekiston ko‘chasi, Qarshi shaxar",
+    "areaSqM": 3000,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-32/photo-1.png",
+    "ownerPhone": "+998 90 720 17 66",
+    "description": "Manzil: O‘zbekiston ko‘chasi, Qarshi shaxar. Bino maydoni 3000 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Orenter Qarshi shaxar. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 720 17 66",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-33",
+    "city": "Qarshi",
+    "name": "Qarshi - O‘zbekiston ko‘chasi",
+    "type": "Office",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-33/photo-1.png",
+      "/property-photos/prop-qshq-33/photo-2.png",
+      "/property-photos/prop-qshq-33/photo-3.png",
+      "/property-photos/prop-qshq-33/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "O‘zbekiston ko‘chasi, Qarshi shaxar",
+    "areaSqM": 65,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-33/photo-1.png",
+    "ownerPhone": "+998 90 176 86 61",
+    "description": "Manzil: O‘zbekiston ko‘chasi, Qarshi shaxar. Bino maydoni 65 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Orenter Qarshi shaxar, Hamkor bank yoni Aroma kafesi ro‘parasi, Orzu bozori atrofida joylashgan (https://maps.app.goo.gl/SHmzMR2822Nnfb6H8). Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 176 86 61",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-34",
+    "city": "Qarshi",
+    "name": "Qarshi - O‘zbekiston ko‘chasi, 47-uy",
+    "type": "Office",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-34/photo-1.png",
+      "/property-photos/prop-qshq-34/photo-2.png",
+      "/property-photos/prop-qshq-34/photo-3.png",
+      "/property-photos/prop-qshq-34/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "O‘zbekiston ko‘chasi, 47-uy, Qarshi shaxar",
+    "areaSqM": 70,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-34/photo-1.png",
+    "ownerPhone": "+998 94 560 65 45",
+    "description": "Manzil: O‘zbekiston ko‘chasi, 47-uy, Qarshi shaxar. Bino maydoni 70 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Qarshi shaxar xokimligi ro‘parasida. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 94 560 65 45",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-35",
+    "city": "Qarshi",
+    "name": "Qarshi - Vacant space (contact +998 90 721 97 00)",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-35/photo-1.png",
+      "/property-photos/prop-qshq-35/photo-2.png",
+      "/property-photos/prop-qshq-35/photo-3.png",
+      "/property-photos/prop-qshq-35/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Qarshi shaxar",
+    "areaSqM": 550,
+    "district": "Qarshi",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-35/photo-1.png",
+    "ownerPhone": "+998 90 721 97 00",
+    "description": "Manzil: Qarshi shaxar. Bino maydoni 550 m.kv, 1 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Qarshi shaxar. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 90 721 97 00",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-36",
+    "city": "Dehqonobod",
+    "name": "Dehqonobod - Dehqonobod tuman davlat xizmatlari markazi binosining bo'sh turgan qismi",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-36/photo-1.png",
+      "/property-photos/prop-qshq-36/photo-2.png",
+      "/property-photos/prop-qshq-36/photo-3.png",
+      "/property-photos/prop-qshq-36/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Dehqonobod tuman",
+    "areaSqM": 250,
+    "district": "Dehqonobod",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-36/photo-1.png",
+    "ownerPhone": "+998 91 947 29 89",
+    "description": "Manzil: Dehqonobod tuman. Bino maydoni 250 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Dehqonobod tuman davlat xizmatlari markazi binosining bo'sh turgan qismi. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 91 947 29 89",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  },
+  {
+    "id": "prop-qshq-37",
+    "city": "Yakkabogʻ",
+    "name": "Yakkabogʻ - Yakkabog‘ tuman Davlat kadastrlari palatasi Ma`muriy binosining bo`sh turgan joyi",
+    "type": "Commercial Building",
+    "hasAC": false,
+    "rooms": 0,
+    "images": [
+      "/property-photos/prop-qshq-37/photo-1.png",
+      "/property-photos/prop-qshq-37/photo-2.png",
+      "/property-photos/prop-qshq-37/photo-3.png",
+      "/property-photos/prop-qshq-37/photo-4.png"
+    ],
+    "status": "Pending Verification",
+    "address": "Yakkabog‘ tuman",
+    "areaSqM": 690,
+    "district": "Yakkabogʻ",
+    "timeline": [
+      {
+        "date": "2026-09-03",
+        "user": "Data Import",
+        "stage": "Found",
+        "description": "Qashqadaryo viloyat hokimiyatining rasmiy bo'sh joylar ro'yxatidan olindi (PPTX ma'lumotnoma, 2-nusxa)."
+      }
+    ],
+    "verified": false,
+    "documents": [],
+    "ownerName": "Qashqadaryo viloyat hokimiyati",
+    "utilities": {
+      "waterCost": 0,
+      "internetCost": 0,
+      "electricityCost": 0
+    },
+    "coverImage": "/property-photos/prop-qshq-37/photo-1.png",
+    "ownerPhone": "+998 91 947 29 89",
+    "description": "Manzil: Yakkabog‘ tuman. Bino maydoni 690 m.kv, 2 qavat. Internet: mavjud (tezlik ko'rsatilmagan). Ijara narxi kelishuv asosida (bozor narxidan kelib chiqib belgilanadi). Joylashuv: Yakkabog‘ tuman Davlat kadastrlari palatasi Ma`muriy binosining bo`sh turgan joyi. Manba: Qashqadaryo viloyat hokimiyatining bo'sh joylar ro'yxati (2026-09-03 holatiga, 2-fayl). Xonalar soni, avtoturargoh, konditsioner va yig'ilishlar xonasi mavjudligi hali tekshirilmagan -- joyga tashrif buyurilgach aniqlanadi.",
+    "managerName": "Belgilanmagan",
+    "managerPhone": "+998 91 947 29 89",
+    "parkingSpots": 0,
+    "availableDate": "2026-09-03",
+    "nearbyTransit": [],
+    "pipelineStage": "Found",
+    "cadastreNumber": "",
+    "hasMeetingRooms": false,
+    "nearbyResidents": [],
+    "inspectionReport": {
+      "notes": "Joyga tashrif buyurish kutilmoqda.",
+      "status": "PENDING",
+      "findings": "Hali tekshirilmagan -- ob'ekt Qashqadaryo viloyat hokimiyati ro'yxatidan olindi.",
+      "inspectorName": "",
+      "inspectionDate": ""
+    },
+    "internetSpeedMbps": 0,
+    "nearbyUniversities": []
+  }
+]

@@ -242,4 +242,32 @@ export class AIController {
       next(error);
     }
   }
+
+  // Edo Ijro Tizim report — AI writing assistance
+  static async edoPolishNarrative(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await AIService.polishEdoNarrative(req.body);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async edoSummarizeStats(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await AIService.summarizeEdoStats(req.body);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async edoComparePeriods(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await AIService.compareEdoPeriods(req.body);
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

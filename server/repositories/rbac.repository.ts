@@ -94,6 +94,10 @@ export const SYSTEM_PERMISSIONS = [
   { id: "p-planning-read", name: "planning.read", module: "planning", description: "View the strategic planning & roadmap board" },
   { id: "p-planning-manage", name: "planning.manage", module: "planning", description: "Create, edit, and update strategic planning & roadmap items" },
 
+  // Edo Ijro Tizim — Government Reporting Module
+  { id: "p-edoreports-read", name: "edoReports.read", module: "edoReports", description: "View Edo Ijro Tizim quarterly reports" },
+  { id: "p-edoreports-manage", name: "edoReports.manage", module: "edoReports", description: "Create, edit, and export Edo Ijro Tizim quarterly reports" },
+
   // System Settings & RBAC
   { id: "p-settings-manage", name: "settings.manage", module: "settings", description: "Manage RBAC roles, permission assignments, and system config" },
 ];
@@ -110,6 +114,7 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<string, string[]> = {
     "analytics.read", "analytics.manage",
     "planning.read", "planning.manage",
     "infrastructure.read", "infrastructure.manage",
+    "edoReports.read", "edoReports.manage",
     "audit.read",
   ],
 };

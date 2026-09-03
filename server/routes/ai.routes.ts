@@ -52,4 +52,9 @@ router.post("/analyze-context", AIController.analyzeContext);
 router.post("/pipeline-synthesis", AIController.pipelineSynthesis);
 router.post("/lead-strategy", AIController.leadStrategy);
 
+// Edo Ijro Tizim quarterly report — AI writing assistance
+router.post("/edo/polish", AIController.edoPolishNarrative);
+router.post("/edo/summarize-stats", AIController.edoSummarizeStats);
+router.post("/edo/compare-periods", AIController.edoComparePeriods);
+
 export default router;

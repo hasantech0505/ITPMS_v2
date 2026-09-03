@@ -787,3 +787,52 @@ export interface ProjectComment {
 }
 
 
+// ============================================================
+// Edo Ijro Tizim — Government Quarterly Reporting Module
+// Aggregates data from Residents / Startups / Infrastructure into
+// the periodic "Malumot" (information) document IT Park Qashqadaryo
+// submits to the Ministry of Digital Technologies' "Edo Ijro tizim"
+// (document/task execution oversight) system.
+// ============================================================
+
+export type EdoReportStatus = "DRAFT" | "SUBMITTED";
+export type EdoReportSectionKey = "residents" | "startups" | "infrastructure";
+
+export interface EdoReportStatItem {
+  id: string;
+  label: string;
+  value: string;
+}
+
+export interface EdoReportNarrativeBlock {
+  id: string;
+  heading: string;
+  body: string;
+}
+
+export interface EdoReportSection {
+  key: EdoReportSectionKey;
+  title: string;
+  autoStats: Record<string, number | string>;
+  autoStatsUpdatedAt?: string;
+  manualStats: EdoReportStatItem[];
+  narrative: EdoReportNarrativeBlock[];
+  /** AI-drafted (or hand-written) flowing opening paragraph, weaving the
+   *  stats above into official report prose instead of a bulleted list.
+   *  Optional - falls back to the bullet list in the .docx export when absent. */
+  summaryNarrative?: string;
+}
+
+export interface EdoReport {
+  id: string;
+  period: string; // e.g. "2026-Q2"
+  periodLabel: string; // e.g. "2026 йил 2-чорак"
+  title: string;
+  status: EdoReportStatus;
+  sections: EdoReportSection[];
+  createdAt: string;
+  updatedAt: string;
+  submittedAt?: string;
+  createdBy?: string;
+  notes?: string;
+}
