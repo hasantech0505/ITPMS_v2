@@ -97,6 +97,13 @@ export default function CRMModule({
   const [openCompanyId, setOpenCompanyId] = useState<string | null>(null);
   // Set when Today hands off to the list pre-filtered to one pipeline stage.
   const [directoryStage, setDirectoryStage] = useState<PipelineStage | null>(null);
+  // Companies or People inside Partners & Leads. Lifted out of CrmDirectory so
+  // the header's Import/Export button can offer the right columns.
+  const [directoryView, setDirectoryView] = useState<"companies" | "people">("companies");
+  // Which form the create/edit dialog shows. This used to be read off
+  // activeSubTab, which only worked while the page tabs happened to be named
+  // after record types -- renaming the tabs left the dialog rendering nothing.
+  const [modalForm, setModalForm] = useState<"company" | "contact" | "meeting" | "task">("company");
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
   const [editingCompanyId, setEditingCompanyId] = useState<string | null>(null);
@@ -576,6 +583,14 @@ export default function CRMModule({
 
   const today = () => new Date().toISOString().slice(0, 10);
 
+  /** Open the create/edit dialog on a specific form. */
+  const openModal = (form: "company" | "contact" | "meeting" | "task", editId?: string) => {
+    setModalForm(form);
+    setEditingCompanyId(form === "company" ? editId ?? null : null);
+    setEditingContactId(form === "contact" ? editId ?? null : null);
+    setShowAddModal(true);
+  };
+
   /** Move a company along the pipeline. Reaching a stage is itself contact. */
   const handleChangeStage = async (company: Company, stage: PipelineStage) => {
     const patch: Partial<Company> = { status: statusForStage(stage) };
@@ -617,7 +632,7 @@ export default function CRMModule({
           <p className="text-[11px] text-slate-400 mt-1">Overseeing cross-border investment partners, scheduling consultations, drafting campaign sequences, and delegating action checklists.</p>
         </div>
         <div className="flex items-center gap-2">
-          {activeSubTab === "companies" && (
+          {activeSubTab === "directory" && directoryView === "companies" && (
             <ExportImportManager
               module="companies"
               moduleTitle="Partners & Leads"
@@ -628,16 +643,19 @@ export default function CRMModule({
                 { key: "industry", label: "Vertical Industry", type: "string" },
                 { key: "website", label: "Website", type: "string" },
                 { key: "leadScore", label: "Lead Score", type: "number" },
-                { key: "status", label: "Status", type: "string" }
+                { key: "status", label: "Status", type: "string" },
+                { key: "nextStep", label: "Next Step", type: "string" },
+                { key: "nextFollowUpDate", label: "Follow Up Date", type: "date" },
+                { key: "lastContactedDate", label: "Last Contacted", type: "date" }
               ]}
               onImportCompleted={() => onSyncState && onSyncState()}
               userRole={userRole as any}
             />
           )}
-          {activeSubTab === "contacts" && (
+          {activeSubTab === "directory" && directoryView === "people" && (
             <ExportImportManager
               module="contacts"
-              moduleTitle="Global Contacts"
+              moduleTitle="People"
               data={contacts}
               columns={[
                 { key: "fullName", label: "Full Name", required: true, type: "string" },
@@ -652,57 +670,15 @@ export default function CRMModule({
               userRole={userRole as any}
             />
           )}
-          {activeSubTab === "meetings" && (
-            <ExportImportManager
-              module="meetings"
-              moduleTitle="Meetings Register"
-              data={meetings}
-              columns={[
-                { key: "title", label: "Meeting Title", required: true, type: "string" },
-                { key: "companyName", label: "Company Name", required: true, type: "string" },
-                { key: "dateTime", label: "Date & Time", required: true, type: "date" },
-                { key: "notes", label: "Notes", type: "string" },
-                { key: "status", label: "Status", type: "string" }
-              ]}
-              onImportCompleted={() => onSyncState && onSyncState()}
-              userRole={userRole as any}
-            />
-          )}
-          {activeSubTab === "tasks" && (
-            <ExportImportManager
-              module="tasks"
-              moduleTitle="Action Tasks"
-              data={tasks}
-              columns={[
-                { key: "title", label: "Task Title", required: true, type: "string" },
-                { key: "assignedTo", label: "Assigned To ID", type: "string" },
-                { key: "dueDate", label: "Due Date", required: true, type: "date" },
-                { key: "priority", label: "Priority", type: "string" },
-                { key: "status", label: "Status", type: "string" }
-              ]}
-              onImportCompleted={() => onSyncState && onSyncState()}
-              userRole={userRole as any}
-            />
-          )}
 
-          {!isReadOnly && activeSubTab !== "campaigns" && activeSubTab !== "sprints" && (
+          {!isReadOnly && activeSubTab !== "campaigns" && (
             <button
               id="crm-add-btn"
-              onClick={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
+              onClick={() => openModal(activeSubTab === "directory" && directoryView === "people" ? "contact" : "company")}
               className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs px-4 py-2.5 rounded-lg cursor-pointer transition-all shadow-md shadow-emerald-500/10 h-[38px]"
             >
               <Plus className="w-4 h-4" />
-              <span>Add CRM Entry</span>
-            </button>
-          )}
-          {!isReadOnly && activeSubTab === "sprints" && (
-            <button
-              id="crm-add-sprint-btn"
-              onClick={() => { setEditingSprintId(null); setNewSprint({ name: "", segment: "", startDate: "", endDate: "", companyIds: [], notes: "" }); setShowSprintModal(true); }}
-              className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs px-4 py-2.5 rounded-lg cursor-pointer transition-all shadow-md shadow-emerald-500/10 h-[38px]"
-            >
-              <Plus className="w-4 h-4" />
-              <span>New Outreach Sprint</span>
+              <span>{activeSubTab === "directory" && directoryView === "people" ? "Add contact" : "Add CRM Entry"}</span>
             </button>
           )}
         </div>
@@ -754,8 +730,8 @@ export default function CRMModule({
           onSetNextStep={(c) => setOpenCompanyId(c.id)}
           onToggleTask={handleToggleTask}
           onGoToStage={(stage) => { setDirectoryStage(stage); setActiveSubTab("directory"); }}
-          onAddTask={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
-          onScheduleMeeting={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
+          onAddTask={() => openModal("task")}
+          onScheduleMeeting={() => openModal("meeting")}
         />
       )}
 
@@ -766,13 +742,15 @@ export default function CRMModule({
           contacts={contacts}
           isReadOnly={isReadOnly}
           initialStage={directoryStage}
+          view={directoryView}
+          onViewChange={setDirectoryView}
           onOpenCompany={setOpenCompanyId}
           onChangeStage={handleChangeStage}
           onBulkStage={handleBulkStage}
           onSetNextStep={(c) => setOpenCompanyId(c.id)}
-          onEditCompany={(id) => { setEditingCompanyId(id); setEditingContactId(null); setShowAddModal(true); }}
+          onEditCompany={(id) => openModal("company", id)}
           onDeleteCompany={(c) => setDeleteTarget({ kind: "company", id: c.id, label: c.name })}
-          onEditContact={(id) => { setEditingContactId(id); setEditingCompanyId(null); setShowAddModal(true); }}
+          onEditContact={(id) => openModal("contact", id)}
           onDeleteContact={(c) => setDeleteTarget({ kind: "contact", id: c.id, label: c.fullName })}
         />
       )}
@@ -788,11 +766,11 @@ export default function CRMModule({
           onClose={() => setOpenCompanyId(null)}
           onChangeStage={handleChangeStage}
           onSaveNextStep={handleSaveNextStep}
-          onAddMeeting={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
-          onAddTask={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
-          onEditCompany={(id) => { setEditingCompanyId(id); setEditingContactId(null); setShowAddModal(true); }}
-          onEditContact={(id) => { setEditingContactId(id); setEditingCompanyId(null); setShowAddModal(true); }}
-          onAddContact={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
+          onAddMeeting={() => openModal("meeting")}
+          onAddTask={() => openModal("task")}
+          onEditCompany={(id) => openModal("company", id)}
+          onEditContact={(id) => openModal("contact", id)}
+          onAddContact={() => openModal("contact")}
         />
       )}
 
@@ -1104,15 +1082,15 @@ export default function CRMModule({
             {/* TAB SELECTOR FOR CREATION TYPE (hidden while editing an existing record) */}
             {!editingCompanyId && !editingContactId && (
               <div className="grid grid-cols-4 gap-2 border-b border-slate-100 pb-2 text-[10px] font-bold uppercase text-slate-400 text-center">
-                <button onClick={() => setActiveSubTab("companies")} className={`pb-1 ${activeSubTab === "companies" ? "border-b-2 border-slate-800 text-slate-800" : ""}`}>Partner</button>
-                <button onClick={() => setActiveSubTab("contacts")} className={`pb-1 ${activeSubTab === "contacts" ? "border-b-2 border-slate-800 text-slate-800" : ""}`}>Contact</button>
-                <button onClick={() => setActiveSubTab("meetings")} className={`pb-1 ${activeSubTab === "meetings" ? "border-b-2 border-slate-800 text-slate-800" : ""}`}>Meeting</button>
-                <button onClick={() => setActiveSubTab("tasks")} className={`pb-1 ${activeSubTab === "tasks" ? "border-b-2 border-slate-800 text-slate-800" : ""}`}>Task</button>
+                <button onClick={() => setModalForm("company")} className={`pb-1 ${modalForm === "company" ? "border-b-2 border-slate-800 text-slate-800" : ""}`}>Partner</button>
+                <button onClick={() => setModalForm("contact")} className={`pb-1 ${modalForm === "contact" ? "border-b-2 border-slate-800 text-slate-800" : ""}`}>Contact</button>
+                <button onClick={() => setModalForm("meeting")} className={`pb-1 ${modalForm === "meeting" ? "border-b-2 border-slate-800 text-slate-800" : ""}`}>Meeting</button>
+                <button onClick={() => setModalForm("task")} className={`pb-1 ${modalForm === "task" ? "border-b-2 border-slate-800 text-slate-800" : ""}`}>Task</button>
               </div>
             )}
 
             {/* 1. COMPANYS FORM */}
-            {activeSubTab === "companies" && (
+            {modalForm === "company" && (
               <form onSubmit={handleAddCompanySubmit} className="space-y-3.5 text-xs">
                 <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Company / Partner Name *</label>
@@ -1317,7 +1295,7 @@ export default function CRMModule({
             )}
 
             {/* 2. CONTACT FORM */}
-            {activeSubTab === "contacts" && (
+            {modalForm === "contact" && (
               <form onSubmit={handleAddContactSubmit} className="space-y-3 text-xs">
                 <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Affiliated Partner Company *</label>
@@ -1409,7 +1387,7 @@ export default function CRMModule({
             )}
 
             {/* 3. MEETINGS FORM */}
-            {activeSubTab === "meetings" && (
+            {modalForm === "meeting" && (
               <form onSubmit={handleAddMeetingSubmit} className="space-y-3.5 text-xs">
                 <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Affiliated Company / Partner *</label>
@@ -1463,7 +1441,7 @@ export default function CRMModule({
             )}
 
             {/* 4. TASK FORM */}
-            {activeSubTab === "tasks" && (
+            {modalForm === "task" && (
               <form onSubmit={handleAddTaskSubmit} className="space-y-3.5 text-xs">
                 <div>
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">Task Action Description *</label>

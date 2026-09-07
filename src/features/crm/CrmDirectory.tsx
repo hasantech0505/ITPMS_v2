@@ -30,6 +30,8 @@ interface CrmDirectoryProps {
   contacts: Contact[];
   isReadOnly: boolean;
   initialStage?: PipelineStage | null;
+  view: "companies" | "people";
+  onViewChange: (view: "companies" | "people") => void;
   onOpenCompany: (id: string) => void;
   onChangeStage: (company: Company, stage: PipelineStage) => void;
   onBulkStage: (companies: Company[], stage: PipelineStage) => void;
@@ -41,12 +43,11 @@ interface CrmDirectoryProps {
 }
 
 export default function CrmDirectory({
-  companies, contacts, isReadOnly, initialStage = null,
+  companies, contacts, isReadOnly, initialStage = null, view, onViewChange,
   onOpenCompany, onChangeStage, onBulkStage, onSetNextStep,
   onEditCompany, onDeleteCompany, onEditContact, onDeleteContact,
 }: CrmDirectoryProps) {
 
-  const [view, setView] = useState<"companies" | "people">("companies");
   const [stageFilter, setStageFilter] = useState<PipelineStage | null>(initialStage);
   const [quick, setQuick] = useState<QuickFilter>("none");
   const [search, setSearch] = useState("");
@@ -181,7 +182,7 @@ export default function CrmDirectory({
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex bg-slate-100 rounded-[9px] p-[3px]">
             <button
-              onClick={() => setView("companies")}
+              onClick={() => onViewChange("companies")}
               className={`text-[12px] font-bold px-3.5 py-1.5 rounded-[7px] cursor-pointer transition-all ${
                 view === "companies" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
               }`}
@@ -189,7 +190,7 @@ export default function CrmDirectory({
               Companies <span className="text-slate-400">{companies.length}</span>
             </button>
             <button
-              onClick={() => setView("people")}
+              onClick={() => onViewChange("people")}
               className={`text-[12px] font-bold px-3.5 py-1.5 rounded-[7px] cursor-pointer transition-all ${
                 view === "people" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
               }`}
