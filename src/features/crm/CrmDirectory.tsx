@@ -38,6 +38,7 @@ interface CrmDirectoryProps {
   onSetNextStep: (company: Company) => void;
   onEditCompany: (id: string) => void;
   onDeleteCompany: (company: Company) => void;
+  onAddMeeting: (company: Company) => void;
   onEditContact: (id: string) => void;
   onDeleteContact: (contact: Contact) => void;
 }
@@ -45,7 +46,7 @@ interface CrmDirectoryProps {
 export default function CrmDirectory({
   companies, contacts, isReadOnly, initialStage = null, view, onViewChange,
   onOpenCompany, onChangeStage, onBulkStage, onSetNextStep,
-  onEditCompany, onDeleteCompany, onEditContact, onDeleteContact,
+  onEditCompany, onDeleteCompany, onEditContact, onDeleteContact, onAddMeeting,
 }: CrmDirectoryProps) {
 
   const [stageFilter, setStageFilter] = useState<PipelineStage | null>(initialStage);
@@ -326,6 +327,7 @@ export default function CrmDirectory({
           onSetNextStep={onSetNextStep}
           onEditCompany={onEditCompany}
           onDeleteCompany={onDeleteCompany}
+          onAddMeeting={onAddMeeting}
         />
       ) : (
         <CrmPeopleList

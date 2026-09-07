@@ -14,7 +14,7 @@
 
 import React from "react";
 import {
-  Calendar, ChevronDown, ChevronsUpDown, ChevronUp, Mail, MoreHorizontal, Pencil, Trash2,
+  Calendar, ChevronDown, ChevronsUpDown, ChevronUp, Mail, Pencil, Trash2,
 } from "lucide-react";
 import { Company, Contact } from "../../types";
 import {
@@ -43,6 +43,7 @@ interface CrmCompanyTableProps {
   onSetNextStep: (company: Company) => void;
   onEditCompany: (id: string) => void;
   onDeleteCompany: (company: Company) => void;
+  onAddMeeting: (company: Company) => void;
 }
 
 const GRID = "grid grid-cols-[38px_minmax(0,1.6fr)_150px_136px_minmax(0,1.15fr)_112px] gap-3.5 items-center";
@@ -50,7 +51,7 @@ const GRID = "grid grid-cols-[38px_minmax(0,1.6fr)_150px_136px_minmax(0,1.15fr)_
 export default function CrmCompanyTable({
   companies, contacts, selectedIds, expandedId, sortKey, sortDir, isReadOnly, stageMenuFor,
   onToggleSelect, onToggleSelectAll, onSort, onToggleExpand, onOpenCompany,
-  onChangeStage, onOpenStageMenu, onSetNextStep, onEditCompany, onDeleteCompany,
+  onChangeStage, onOpenStageMenu, onSetNextStep, onEditCompany, onDeleteCompany, onAddMeeting,
 }: CrmCompanyTableProps) {
 
   const allSelected = companies.length > 0 && selectedIds.length === companies.length;
@@ -92,6 +93,7 @@ export default function CrmCompanyTable({
         const isSelected = selectedIds.includes(c.id);
         const isExpanded = expandedId === c.id;
         const companyContacts = contacts.filter((ct) => ct.companyId === c.id);
+        const emails = companyContacts.map((ct) => ct.email).filter(Boolean);
 
         return (
           <div key={c.id} className={isExpanded ? "bg-slate-50/60" : ""}>
@@ -226,11 +228,20 @@ export default function CrmCompanyTable({
                   </div>
                   {!isReadOnly && (
                     <div className="flex gap-2 mt-1">
-                      <IconBtn title="Edit" onClick={() => onEditCompany(c.id)}><Pencil className="w-3.5 h-3.5" /></IconBtn>
-                      <IconBtn title="Email"><Mail className="w-3.5 h-3.5" /></IconBtn>
-                      <IconBtn title="Meeting"><Calendar className="w-3.5 h-3.5" /></IconBtn>
-                      <IconBtn title="Delete" onClick={() => onDeleteCompany(c)} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
-                      <IconBtn title="More"><MoreHorizontal className="w-3.5 h-3.5" /></IconBtn>
+                      <IconBtn title="Edit company" onClick={() => onEditCompany(c.id)}><Pencil className="w-3.5 h-3.5" /></IconBtn>
+                      {emails.length > 0 ? (
+                        <a
+                          href={`mailto:${emails.join(",")}`}
+                          title={`Email ${emails.length === 1 ? emails[0] : `${emails.length} contacts`}`}
+                          className="w-7 h-7 rounded-[7px] bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 transition-colors"
+                        >
+                          <Mail className="w-3.5 h-3.5" />
+                        </a>
+                      ) : (
+                        <IconBtn title="No email address on file yet" disabled><Mail className="w-3.5 h-3.5" /></IconBtn>
+                      )}
+                      <IconBtn title="Log a meeting" onClick={() => onAddMeeting(c)}><Calendar className="w-3.5 h-3.5" /></IconBtn>
+                      <IconBtn title="Delete company" onClick={() => onDeleteCompany(c)} danger><Trash2 className="w-3.5 h-3.5" /></IconBtn>
                     </div>
                   )}
                 </div>
@@ -253,13 +264,16 @@ function Box({ checked }: { checked: boolean }) {
   );
 }
 
-function IconBtn({ children, title, onClick, danger }: { children: React.ReactNode; title: string; onClick?: () => void; danger?: boolean }) {
+function IconBtn({ children, title, onClick, danger, disabled }: { children: React.ReactNode; title: string; onClick?: () => void; danger?: boolean; disabled?: boolean }) {
   return (
     <button
       title={title}
       onClick={onClick}
-      className={`w-7 h-7 rounded-[7px] bg-white border border-slate-200 flex items-center justify-center cursor-pointer transition-colors ${
-        danger ? "text-slate-500 hover:text-rose-600 hover:border-rose-200" : "text-slate-500 hover:text-slate-900"
+      disabled={disabled}
+      className={`w-7 h-7 rounded-[7px] bg-white border border-slate-200 flex items-center justify-center transition-colors ${
+        disabled ? "text-slate-200 cursor-not-allowed"
+          : danger ? "text-slate-500 hover:text-rose-600 hover:border-rose-200 cursor-pointer"
+          : "text-slate-500 hover:text-slate-900 cursor-pointer"
       }`}
     >
       {children}

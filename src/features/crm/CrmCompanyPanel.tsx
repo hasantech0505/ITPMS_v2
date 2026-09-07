@@ -37,15 +37,18 @@ interface CrmCompanyPanelProps {
   onEditCompany: (id: string) => void;
   onEditContact: (id: string) => void;
   onAddContact: (company: Company) => void;
+  /** Open straight into the next-step editor (set when the caller was a "Set next step" button). */
+  autoEditNextStep?: boolean;
 }
 
 export default function CrmCompanyPanel({
   company, contacts, meetings, tasks, isReadOnly, onClose, onChangeStage,
   onSaveNextStep, onAddMeeting, onAddTask, onEditCompany, onEditContact, onAddContact,
+  autoEditNextStep = false,
 }: CrmCompanyPanelProps) {
 
   const [stageOpen, setStageOpen] = useState(false);
-  const [editingNext, setEditingNext] = useState(false);
+  const [editingNext, setEditingNext] = useState(autoEditNextStep);
   const [nextText, setNextText] = useState(company.nextStep || "");
   const [nextDate, setNextDate] = useState(company.nextFollowUpDate || "");
 

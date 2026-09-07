@@ -100,6 +100,8 @@ export default function CRMModule({
   // Companies or People inside Partners & Leads. Lifted out of CrmDirectory so
   // the header's Import/Export button can offer the right columns.
   const [directoryView, setDirectoryView] = useState<"companies" | "people">("companies");
+  // Set when the panel was opened by a "Set next step" button, so it opens in the editor.
+  const [openForNextStep, setOpenForNextStep] = useState(false);
   // Which form the create/edit dialog shows. This used to be read off
   // activeSubTab, which only worked while the page tabs happened to be named
   // after record types -- renaming the tabs left the dialog rendering nothing.
@@ -727,7 +729,7 @@ export default function CRMModule({
           isReadOnly={isReadOnly}
           onOpenCompany={setOpenCompanyId}
           onLogFirstContact={handleLogFirstContact}
-          onSetNextStep={(c) => setOpenCompanyId(c.id)}
+          onSetNextStep={(c) => { setOpenCompanyId(c.id); setOpenForNextStep(true); }}
           onToggleTask={handleToggleTask}
           onGoToStage={(stage) => { setDirectoryStage(stage); setActiveSubTab("directory"); }}
           onAddTask={() => openModal("task")}
@@ -747,11 +749,12 @@ export default function CRMModule({
           onOpenCompany={setOpenCompanyId}
           onChangeStage={handleChangeStage}
           onBulkStage={handleBulkStage}
-          onSetNextStep={(c) => setOpenCompanyId(c.id)}
+          onSetNextStep={(c) => { setOpenCompanyId(c.id); setOpenForNextStep(true); }}
           onEditCompany={(id) => openModal("company", id)}
           onDeleteCompany={(c) => setDeleteTarget({ kind: "company", id: c.id, label: c.name })}
           onEditContact={(id) => openModal("contact", id)}
           onDeleteContact={(c) => setDeleteTarget({ kind: "contact", id: c.id, label: c.fullName })}
+          onAddMeeting={() => openModal("meeting")}
         />
       )}
 
@@ -763,7 +766,8 @@ export default function CRMModule({
           meetings={meetings}
           tasks={tasks}
           isReadOnly={isReadOnly}
-          onClose={() => setOpenCompanyId(null)}
+          autoEditNextStep={openForNextStep}
+          onClose={() => { setOpenCompanyId(null); setOpenForNextStep(false); }}
           onChangeStage={handleChangeStage}
           onSaveNextStep={handleSaveNextStep}
           onAddMeeting={() => openModal("meeting")}
