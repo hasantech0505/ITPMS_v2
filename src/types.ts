@@ -582,6 +582,8 @@ export interface Company {
   successStoryText?: string;
   benefitsPitched?: string[]; // subset of CRM_BENEFITS_PITCHED_OPTIONS already discussed with this lead
   competingOptions?: string; // free text: other locations/parks this lead is comparing against
+  nextStep?: string; // plain-language description of the agreed next action ("Send BPO deck", "Call on 11 Sep").
+                     // nextFollowUpDate says WHEN; this says WHAT. A lead with neither is stalled.
 }
 
 export interface OutreachCampaign {
@@ -625,6 +627,8 @@ export interface Task {
   dueDate: string;
   priority: "LOW" | "MEDIUM" | "HIGH";
   status: "TODO" | "IN_PROGRESS" | "DONE";
+  companyId?: string;   // links the task to a CRM company so it shows on that company's panel
+  companyName?: string; // denormalised for display, same pattern as Contact/Meeting
 }
 
 // System Logs & Activity Logs
@@ -835,4 +839,85 @@ export interface EdoReport {
   submittedAt?: string;
   createdBy?: string;
   notes?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Resident Vacancies (Job Board) Module
+// ---------------------------------------------------------------------------
+// A vacancy is an open position posted on behalf of a resident company
+// (residents don't have their own logins yet, so staff enter these the same
+// way Property Marketplace listings are staff-sourced rather than
+// self-service). VacancyApplication links a Talent-pool candidate to a
+// vacancy with its own pipeline stage, independent of both the Vacancy and
+// the Talent record, so one candidate can apply to several vacancies and one
+// vacancy can have several applicants without either side needing an array
+// of the other's ids.
+export type VacancyEmploymentType = "Full-time" | "Part-time" | "Internship" | "Remote" | "Contract";
+export type VacancySeniority = "Intern" | "Junior" | "Mid" | "Senior" | "Lead";
+export type VacancyStatus = "OPEN" | "ON_HOLD" | "FILLED" | "CLOSED" | "EXPIRED";
+
+export interface Vacancy {
+  id: string;
+  residentId: string;
+  residentName: string; // denormalized so lists/exports don't need a join
+  title: string;
+  department?: string;
+  employmentType: VacancyEmploymentType;
+  seniority: VacancySeniority;
+  location: string; // e.g. "Qarshi (on-site)", "Remote", "Hybrid"
+  requiredSkills: string[];
+  preferredSkills?: string[];
+  englishLevel?: LanguageProficiencyLevel; // minimum required, reuses Talent's scale
+  numberOfOpenings: number;
+  salaryMin?: number; // USD/month
+  salaryMax?: number;
+  salaryNegotiable: boolean;
+  description: string;
+  responsibilities?: string[];
+  requirements?: string[];
+  benefits?: string[];
+  status: VacancyStatus;
+  postedDate: string;
+  deadlineDate?: string;
+  filledDate?: string;
+  filledByTalentId?: string;
+  contactPerson?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt?: string;
+  createdBy?: string;
+}
+
+export type VacancyApplicationStage =
+  | "APPLIED"
+  | "SCREENING"
+  | "INTERVIEWING"
+  | "OFFER"
+  | "HIRED"
+  | "REJECTED"
+  | "WITHDRAWN";
+
+export interface VacancyApplicationHistoryEntry {
+  date: string;
+  stage: VacancyApplicationStage;
+  note?: string;
+  user?: string;
+}
+
+export interface VacancyApplication {
+  id: string;
+  vacancyId: string;
+  vacancyTitle: string; // denormalized
+  residentId: string; // denormalized from the vacancy, for resident-side rollups
+  talentId: string;
+  candidateName: string; // denormalized
+  stage: VacancyApplicationStage;
+  appliedDate: string;
+  matchScore?: number; // snapshot of vacancyMatching.ts's score at apply time
+  notes?: string;
+  history: VacancyApplicationHistoryEntry[];
+  createdAt: string;
+  updatedAt?: string;
 }

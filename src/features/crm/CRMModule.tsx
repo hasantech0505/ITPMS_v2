@@ -5,6 +5,12 @@
 
 import React, { useState } from "react";
 import AiInsightsCard from "../ai/AiInsightsCard";
+import CrmToday from "./CrmToday";
+import CrmDirectory from "./CrmDirectory";
+import CrmCompanyPanel from "./CrmCompanyPanel";
+import {
+  PipelineStage, isStalled, needsFirstResponse, statusForStage,
+} from "./crmDerive";
 import { 
   Briefcase, 
   Search, 
@@ -85,7 +91,12 @@ export default function CRMModule({
   userRole,
   onSyncState
 }: CRMModuleProps) {
-  const [activeSubTab, setActiveSubTab] = useState<"companies" | "contacts" | "meetings" | "tasks" | "campaigns" | "sprints">("companies");
+  const [activeSubTab, setActiveSubTab] = useState<"today" | "directory" | "campaigns">("today");
+  // Which company's panel is open. One piece of state replaces what used to be
+  // two whole tabs (Meetings Register, Action Tasks) plus a contacts screen.
+  const [openCompanyId, setOpenCompanyId] = useState<string | null>(null);
+  // Set when Today hands off to the list pre-filtered to one pipeline stage.
+  const [directoryStage, setDirectoryStage] = useState<PipelineStage | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
   const [editingCompanyId, setEditingCompanyId] = useState<string | null>(null);
@@ -558,71 +569,44 @@ export default function CRMModule({
   const uniqueCountries = Array.from(new Set(companies.map(c => c.country))).filter(Boolean);
   const uniqueIndustries = Array.from(new Set(companies.map(c => c.industry))).filter(Boolean);
 
+  const openCompany = openCompanyId ? companies.find(c => c.id === openCompanyId) || null : null;
+
+  // The badge on the Today tab: everything actually waiting on someone.
+  const todoCount = companies.filter(c => needsFirstResponse(c) || isStalled(c)).length;
+
+  const today = () => new Date().toISOString().slice(0, 10);
+
+  /** Move a company along the pipeline. Reaching a stage is itself contact. */
+  const handleChangeStage = async (company: Company, stage: PipelineStage) => {
+    const patch: Partial<Company> = { status: statusForStage(stage) };
+    if (stage !== "NEW" && !company.lastContactedDate) patch.lastContactedDate = today();
+    await onUpdateCompany(company.id, patch);
+  };
+
+  const handleBulkStage = async (list: Company[], stage: PipelineStage) => {
+    for (const c of list) await handleChangeStage(c, stage);
+  };
+
+  /** Record what happens next -- the field the old module had nowhere for. */
+  const handleSaveNextStep = async (company: Company, nextStep: string, followUpDate: string) => {
+    await onUpdateCompany(company.id, {
+      nextStep: nextStep || undefined,
+      nextFollowUpDate: followUpDate || undefined,
+    });
+  };
+
+  /** One click from the Today queue: they have now been contacted. */
+  const handleLogFirstContact = async (company: Company) => {
+    await onUpdateCompany(company.id, { status: "CONTACTED", lastContactedDate: today() });
+    setOpenCompanyId(company.id);
+  };
+
+  const handleToggleTask = async (task: Task) => {
+    await onUpdateTask(task.id, { status: task.status === "DONE" ? "TODO" : "DONE" });
+  };
+
   return (
     <div id="crm-module" className="space-y-6">
-      {/* Core CRM Performance Metrics Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div className="bg-white border border-slate-200 p-4 rounded-xl flex items-center justify-between">
-          <div>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Uncontacted Leads</span>
-            <p className="text-xl font-bold text-slate-900 mt-1 font-mono">{totalLeads}</p>
-          </div>
-          <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-lg">
-            <Briefcase className="w-5 h-5" />
-          </div>
-        </div>
-        <div className="bg-white border border-slate-200 p-4 rounded-xl flex items-center justify-between">
-          <div>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Strategic Partners</span>
-            <p className="text-xl font-bold text-emerald-600 mt-1 font-mono">{activePartners}</p>
-          </div>
-          <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-lg">
-            <Building2 className="w-5 h-5" />
-          </div>
-        </div>
-        <div className="bg-white border border-slate-200 p-4 rounded-xl flex items-center justify-between">
-          <div>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Avg Lead Score</span>
-            <div className="flex items-baseline gap-2 mt-1">
-              <p className="text-xl font-bold text-slate-900 font-mono">{averageLeadScore}</p>
-              <span className="text-[10px] text-emerald-500 font-semibold font-mono">/ 100</span>
-            </div>
-          </div>
-          <div className="p-2.5 bg-amber-50 text-amber-600 rounded-lg">
-            <Sparkles className="w-5 h-5 animate-pulse" />
-          </div>
-        </div>
-        <div className="bg-white border border-slate-200 p-4 rounded-xl flex items-center justify-between">
-          <div>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Scheduled Briefings</span>
-            <p className="text-xl font-bold text-slate-900 mt-1 font-mono">{upcomingMeetingsCount}</p>
-          </div>
-          <div className="p-2.5 bg-blue-50 text-blue-600 rounded-lg">
-            <Calendar className="w-5 h-5" />
-          </div>
-        </div>
-        <div className={`bg-white border p-4 rounded-xl flex items-center justify-between ${needsFirstResponseCount > 0 ? "border-rose-200" : "border-slate-200"}`}>
-          <div>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Needs First Response</span>
-            <p className={`text-xl font-bold mt-1 font-mono ${needsFirstResponseCount > 0 ? "text-rose-600" : "text-slate-900"}`}>{needsFirstResponseCount}</p>
-          </div>
-          <div className="p-2.5 bg-rose-50 text-rose-600 rounded-lg">
-            <AlertCircle className="w-5 h-5" />
-          </div>
-        </div>
-        <div className={`bg-white border p-4 rounded-xl flex items-center justify-between ${overdueFollowUpCount > 0 ? "border-amber-200" : "border-slate-200"}`}>
-          <div>
-            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Overdue Follow-ups</span>
-            <p className={`text-xl font-bold mt-1 font-mono ${overdueFollowUpCount > 0 ? "text-amber-600" : "text-slate-900"}`}>{overdueFollowUpCount}</p>
-          </div>
-          <div className="p-2.5 bg-amber-50 text-amber-600 rounded-lg">
-            <Clock className="w-5 h-5" />
-          </div>
-        </div>
-      </div>
-
-      <AiInsightsCard module="crm" />
-
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-900 p-6 rounded-xl border border-slate-800 text-white">
         <div>
@@ -724,671 +708,92 @@ export default function CRMModule({
         </div>
       </div>
 
-      {/* CRM Subtabs Navigation */}
+      {/* CRM sub-navigation. Six tabs became three: the two that were always
+          empty (Meetings Register, Action Tasks) now live inside a company's
+          own panel, and Global Contacts became a People switch inside Partners
+          & Leads. */}
       <div className="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
         <button
+          id="crm-tab-today"
+          onClick={() => setActiveSubTab("today")}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold cursor-pointer transition-all ${activeSubTab === "today" ? "bg-slate-900 text-white shadow-xs" : "bg-slate-100 hover:bg-slate-200 text-slate-600"}`}
+        >
+          <Clock className="w-3.5 h-3.5" />
+          <span>Today</span>
+          {todoCount > 0 && (
+            <span className="bg-rose-500 text-white text-[10px] font-bold px-1.5 py-px rounded-full ml-0.5">{todoCount}</span>
+          )}
+        </button>
+        <button
           id="crm-tab-companies"
-          onClick={() => setActiveSubTab("companies")}
-          className={`px-4 py-2 rounded-lg text-xs font-bold cursor-pointer transition-all ${activeSubTab === "companies" ? "bg-slate-900 text-white shadow-xs" : "bg-slate-100 hover:bg-slate-200 text-slate-600"}`}
+          onClick={() => setActiveSubTab("directory")}
+          className={`px-4 py-2 rounded-lg text-xs font-bold cursor-pointer transition-all ${activeSubTab === "directory" ? "bg-slate-900 text-white shadow-xs" : "bg-slate-100 hover:bg-slate-200 text-slate-600"}`}
         >
-          Partners & Leads
-        </button>
-        <button
-          id="crm-tab-contacts"
-          onClick={() => setActiveSubTab("contacts")}
-          className={`px-4 py-2 rounded-lg text-xs font-bold cursor-pointer transition-all ${activeSubTab === "contacts" ? "bg-slate-900 text-white shadow-xs" : "bg-slate-100 hover:bg-slate-200 text-slate-600"}`}
-        >
-          Global Contacts
-        </button>
-        <button
-          id="crm-tab-meetings"
-          onClick={() => setActiveSubTab("meetings")}
-          className={`px-4 py-2 rounded-lg text-xs font-bold cursor-pointer transition-all ${activeSubTab === "meetings" ? "bg-slate-900 text-white shadow-xs" : "bg-slate-100 hover:bg-slate-200 text-slate-600"}`}
-        >
-          Meetings Register
-        </button>
-        <button
-          id="crm-tab-tasks"
-          onClick={() => setActiveSubTab("tasks")}
-          className={`px-4 py-2 rounded-lg text-xs font-bold cursor-pointer transition-all ${activeSubTab === "tasks" ? "bg-slate-900 text-white shadow-xs" : "bg-slate-100 hover:bg-slate-200 text-slate-600"}`}
-        >
-          Action Tasks
+          Partners &amp; Leads
         </button>
         <button
           id="crm-tab-campaigns"
-          onClick={() => {
-            setActiveSubTab("campaigns");
-            setGeneratedEmail(null);
-          }}
+          onClick={() => { setActiveSubTab("campaigns"); setGeneratedEmail(null); }}
           className={`px-4 py-2 rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 ${activeSubTab === "campaigns" ? "bg-indigo-600 text-white shadow-sm" : "bg-indigo-50 hover:bg-indigo-100 text-indigo-700"}`}
         >
           <Sparkles className="w-3.5 h-3.5" />
           <span>AI Outreach Assistant</span>
         </button>
-        <button
-          id="crm-tab-sprints"
-          onClick={() => setActiveSubTab("sprints")}
-          className={`px-4 py-2 rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 ${activeSubTab === "sprints" ? "bg-slate-900 text-white shadow-xs" : "bg-slate-100 hover:bg-slate-200 text-slate-600"}`}
-        >
-          <Rocket className="w-3.5 h-3.5" />
-          <span>Outreach Sprints</span>
-        </button>
       </div>
 
-      {/* 1. COMPANIES / PARTNERS SUB-TAB */}
-      {activeSubTab === "companies" && (
-        <div className="space-y-4">
-          {/* Filters Panel */}
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col md:flex-row gap-3 items-center justify-between">
-            <div className="relative w-full md:w-72">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-              <input
-                type="text"
-                placeholder="Search by name, vertical..."
-                value={searchCompanyQuery}
-                onChange={(e) => setSearchCompanyQuery(e.target.value)}
-                className="w-full bg-white border border-slate-200 rounded-lg pl-9 pr-4 py-2 text-xs focus:ring-1 focus:ring-slate-400 outline-hidden"
-              />
-            </div>
-            <div className="flex gap-2.5 w-full md:w-auto">
-              <select
-                value={filterCountry}
-                onChange={(e) => setFilterCountry(e.target.value)}
-                className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs outline-hidden min-w-[120px]"
-              >
-                <option value="">All Countries</option>
-                {uniqueCountries.map(country => (
-                  <option key={country} value={country}>{country}</option>
-                ))}
-              </select>
-              <select
-                value={filterIndustry}
-                onChange={(e) => setFilterIndustry(e.target.value)}
-                className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs outline-hidden min-w-[120px]"
-              >
-                <option value="">All Industries</option>
-                {uniqueIndustries.map(industry => (
-                  <option key={industry} value={industry}>{industry}</option>
-                ))}
-              </select>
-              {(searchCompanyQuery || filterCountry || filterIndustry) && (
-                <button
-                  onClick={() => { setSearchCompanyQuery(""); setFilterCountry(""); setFilterIndustry(""); }}
-                  className="text-xs text-rose-600 hover:underline font-bold px-1.5"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                  <th className="py-3 px-4">Organization Name</th>
-                  <th className="py-3 px-4">Country</th>
-                  <th className="py-3 px-4">Vertical Industry</th>
-                  <th className="py-3 px-4">Lead score</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Follow-up</th>
-                  <th className="py-3 px-4">Website</th>
-                  {!isReadOnly && <th className="py-3 px-4 text-right">Actions</th>}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-xs">
-                {filteredCompanies.length > 0 ? (
-                  filteredCompanies.map((c) => (
-                    <tr key={c.id} className="hover:bg-slate-50/50 transition-all">
-                      <td className="py-3 px-4 font-bold text-slate-800">{c.name}</td>
-                      <td className="py-3 px-4 text-slate-600 font-medium">
-                        <span className="inline-flex items-center gap-1">
-                          <span>{c.country}</span>
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-slate-500 font-medium">{c.industry}</td>
-                      <td className="py-3 px-4">
-                        <div className="flex items-center gap-2.5 min-w-[110px]">
-                          <span className="font-mono font-bold text-indigo-600 w-12">{c.leadScore} / 100</span>
-                          <div className="w-16 bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div 
-                              className={`h-full ${
-                                c.leadScore > 75 ? "bg-emerald-500" : c.leadScore > 45 ? "bg-amber-500" : "bg-rose-500"
-                              }`} 
-                              style={{ width: `${c.leadScore}%` }}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className={`px-2.5 py-0.5 rounded-md text-[10px] font-bold tracking-wider ${
-                          c.status === "PARTNER" 
-                            ? "bg-emerald-50 text-emerald-700 border border-emerald-100" 
-                            : c.status === "NEGOTIATION"
-                            ? "bg-amber-50 text-amber-700 border border-amber-100"
-                            : c.status === "CONTACTED"
-                            ? "bg-indigo-50 text-indigo-700 border border-indigo-100"
-                            : "bg-slate-100 text-slate-700"
-                        }`}>
-                          {c.status}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        {c.status === "LEAD" && !c.lastContactedDate ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-100">
-                            <AlertCircle className="w-3 h-3" /> Needs first response
-                          </span>
-                        ) : c.nextFollowUpDate ? (
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold font-mono ${
-                            c.nextFollowUpDate < todayISO && c.status !== "PARTNER" && c.status !== "INACTIVE"
-                              ? "bg-amber-50 text-amber-700 border border-amber-100"
-                              : "bg-slate-50 text-slate-500 border border-slate-100"
-                          }`}>
-                            <Clock className="w-3 h-3" /> {c.nextFollowUpDate}
-                          </span>
-                        ) : (
-                          <span className="text-slate-300 text-[10px] italic">Not scheduled</span>
-                        )}
-                      </td>
-                      <td className="py-3 px-4">
-                        <a 
-                          href={c.website} 
-                          target="_blank" 
-                          referrerPolicy="no-referrer" 
-                          className="text-emerald-600 hover:underline font-semibold"
-                        >
-                          {c.website ? c.website.replace(/^https?:\/\/(www\.)?/, "") : "N/A"}
-                        </a>
-                      </td>
-                      {!isReadOnly && (
-                        <td className="py-3 px-4">
-                          <div className="flex items-center justify-end gap-1.5">
-                            <button
-                              id={`edit-company-${c.id}`}
-                              onClick={() => handleOpenEditCompany(c)}
-                              className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all cursor-pointer"
-                              title="Edit Profile"
-                            >
-                              <Pencil className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              id={`delete-company-${c.id}`}
-                              onClick={() => handleRequestDelete("company", c.id, c.name)}
-                              className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all cursor-pointer"
-                              title="Delete"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </td>
-                      )}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={isReadOnly ? 7 : 8} className="py-10 text-center text-slate-400 italic">
-                      No partners or outreach prospects match the selected filters.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+      {/* TODAY: the work queues */}
+      {activeSubTab === "today" && (
+        <CrmToday
+          companies={companies}
+          contacts={contacts}
+          meetings={meetings}
+          tasks={tasks}
+          isReadOnly={isReadOnly}
+          onOpenCompany={setOpenCompanyId}
+          onLogFirstContact={handleLogFirstContact}
+          onSetNextStep={(c) => setOpenCompanyId(c.id)}
+          onToggleTask={handleToggleTask}
+          onGoToStage={(stage) => { setDirectoryStage(stage); setActiveSubTab("directory"); }}
+          onAddTask={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
+          onScheduleMeeting={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
+        />
       )}
 
-      {/* 2. CONTACTS SUB-TAB */}
-      {activeSubTab === "contacts" && (
-        <div className="space-y-4">
-          {/* Filters Panel */}
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col sm:flex-row gap-3 items-center justify-between">
-            <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
-              <input
-                type="text"
-                placeholder="Search contacts by name, role, email..."
-                value={searchContactQuery}
-                onChange={(e) => setSearchContactQuery(e.target.value)}
-                className="w-full bg-white border border-slate-200 rounded-lg pl-9 pr-4 py-2 text-xs focus:ring-1 focus:ring-slate-400 outline-hidden"
-              />
-            </div>
-            <div className="flex gap-2 w-full sm:w-auto">
-              <select
-                value={filterContactCompany}
-                onChange={(e) => setFilterContactCompany(e.target.value)}
-                className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs outline-hidden min-w-[150px] w-full sm:w-auto"
-              >
-                <option value="">All Partner Orgs</option>
-                {companies.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-              {(searchContactQuery || filterContactCompany) && (
-                <button
-                  onClick={() => { setSearchContactQuery(""); setFilterContactCompany(""); }}
-                  className="text-xs text-rose-600 hover:underline font-bold px-1.5"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {filteredContacts.length > 0 ? (
-              filteredContacts.map((con) => {
-                const initial = con.fullName.charAt(0) || "C";
-                return (
-                  <div key={con.id} className="bg-white border border-slate-200 p-5 rounded-xl space-y-4 hover:shadow-sm transition-all">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-slate-700 text-sm border border-slate-200">
-                          {initial}
-                        </div>
-                        <div>
-                          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">{con.fullName}</h3>
-                          <span className="text-[10px] text-slate-400 font-medium">
-                            {con.role} &bull; <span className="font-bold text-slate-600">{con.companyName}</span>
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        {con.linkedInUrl && (
-                          <a 
-                            href={con.linkedInUrl} 
-                            target="_blank" 
-                            referrerPolicy="no-referrer" 
-                            className="text-indigo-600 p-1.5 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
-                          >
-                            <Linkedin className="w-4 h-4" />
-                          </a>
-                        )}
-                        {!isReadOnly && (
-                          <>
-                            <button
-                              id={`edit-contact-${con.id}`}
-                              onClick={() => handleOpenEditContact(con)}
-                              className="text-slate-400 p-1.5 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors cursor-pointer"
-                              title="Edit Profile"
-                            >
-                              <Pencil className="w-4 h-4" />
-                            </button>
-                            <button
-                              id={`delete-contact-${con.id}`}
-                              onClick={() => handleRequestDelete("contact", con.id, con.fullName)}
-                              className="text-slate-400 p-1.5 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
-                              title="Delete"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    </div>
-
-                    <p className="text-[11px] text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100 italic">
-                      {con.notes || "No extra profile notes entered."}
-                    </p>
-
-                    <div className="flex flex-col gap-1.5 pt-3 border-t border-slate-100 text-[10px] text-slate-500 font-mono">
-                      <span className="flex items-center gap-2">
-                        <Mail className="w-3.5 h-3.5 text-slate-400" /> 
-                        <a href={`mailto:${con.email}`} className="hover:text-emerald-600 hover:underline">{con.email}</a>
-                      </span>
-                      {con.phone && (
-                        <span className="flex items-center gap-2">
-                          <Phone className="w-3.5 h-3.5 text-slate-400" /> 
-                          <a href={`tel:${con.phone}`} className="hover:text-emerald-600 hover:underline">{con.phone}</a>
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="col-span-2 bg-white border border-slate-200 p-10 rounded-xl text-center text-slate-400 italic">
-                No contacts match your query.
-              </div>
-            )}
-          </div>
-        </div>
+      {/* PARTNERS & LEADS: pipeline, filters, and the companies or people list */}
+      {activeSubTab === "directory" && (
+        <CrmDirectory
+          companies={companies}
+          contacts={contacts}
+          isReadOnly={isReadOnly}
+          initialStage={directoryStage}
+          onOpenCompany={setOpenCompanyId}
+          onChangeStage={handleChangeStage}
+          onBulkStage={handleBulkStage}
+          onSetNextStep={(c) => setOpenCompanyId(c.id)}
+          onEditCompany={(id) => { setEditingCompanyId(id); setEditingContactId(null); setShowAddModal(true); }}
+          onDeleteCompany={(c) => setDeleteTarget({ kind: "company", id: c.id, label: c.name })}
+          onEditContact={(id) => { setEditingContactId(id); setEditingCompanyId(null); setShowAddModal(true); }}
+          onDeleteContact={(c) => setDeleteTarget({ kind: "contact", id: c.id, label: c.fullName })}
+        />
       )}
 
-      {/* 3. MEETINGS REGISTER SUB-TAB */}
-      {activeSubTab === "meetings" && (
-        <div className="space-y-4">
-          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                  <th className="py-3 px-4">Meeting title</th>
-                  <th className="py-3 px-4">Partner Company</th>
-                  <th className="py-3 px-4">Date / Time</th>
-                  <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-xs">
-                {meetings.map((m) => (
-                  <tr 
-                    key={m.id} 
-                    className={`hover:bg-slate-50/50 transition-all cursor-pointer ${selectedMeeting?.id === m.id ? "bg-slate-50 font-medium" : ""}`} 
-                    onClick={() => { 
-                      setSelectedMeeting(m); 
-                      setMeetingNotesForAI(m.notes);
-                      setExtractedActionItems([]);
-                    }}
-                  >
-                    <td className="py-3 px-4 font-bold text-slate-800">{m.title}</td>
-                    <td className="py-3 px-4 font-medium text-slate-600">{m.companyName}</td>
-                    <td className="py-3 px-4 font-mono text-slate-500">
-                      {new Date(m.dateTime).toLocaleString([], { dateStyle: "short", timeStyle: "short" })}
-                    </td>
-                    <td className="py-3 px-4">
-                      <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                        m.status === "COMPLETED" 
-                          ? "bg-emerald-50 text-emerald-700 border border-emerald-100" 
-                          : "bg-blue-50 text-blue-700 border border-blue-100"
-                      }`}>
-                        {m.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-right" onClick={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={() => { 
-                          setSelectedMeeting(m); 
-                          setMeetingNotesForAI(m.notes);
-                          setExtractedActionItems([]);
-                        }}
-                        className="p-1 text-slate-500 hover:text-emerald-600 font-semibold"
-                      >
-                        Inspect &rarr;
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* MEETING INSPECT DRAWER / SIDE BAR WITH ACTION ITEM EXTRACTOR */}
-          {selectedMeeting && (
-            <div className="bg-white border border-slate-200 p-6 rounded-xl space-y-6 relative animate-in slide-in-from-bottom">
-              <button onClick={() => setSelectedMeeting(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
-                <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">
-                  <Calendar className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">{selectedMeeting.title}</h3>
-                  <p className="text-[10px] text-slate-400 mt-0.5">Partner: <span className="font-semibold text-slate-600">{selectedMeeting.companyName}</span></p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Left: Raw Meeting Transcription */}
-                <div className="space-y-3">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Raw Transcribed Notes / Minutes</label>
-                  <textarea
-                    rows={6}
-                    value={meetingNotesForAI}
-                    onChange={(e) => setMeetingNotesForAI(e.target.value)}
-                    placeholder="Paste raw transcripts, bullet notes, or discussions here..."
-                    className="w-full p-3 border border-slate-200 rounded-lg text-xs font-sans focus:outline-hidden"
-                  />
-                  {!isReadOnly && (
-                    <button
-                      onClick={async () => {
-                        await onUpdateMeeting(selectedMeeting.id, { notes: meetingNotesForAI });
-                        alert("Raw notes saved successfully.");
-                      }}
-                      className="text-[10px] bg-slate-100 text-slate-600 hover:bg-slate-200 px-3 py-1.5 rounded-lg font-bold cursor-pointer transition-colors"
-                    >
-                      Save Raw Notes
-                    </button>
-                  )}
-                </div>
-
-                {/* Right: AI Summary Output */}
-                <div className="space-y-3">
-                  <div className="bg-slate-900 text-slate-300 p-5 rounded-xl space-y-4 shadow-md border border-slate-800">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <BrainCircuit className="w-4 h-4 text-emerald-400 animate-pulse" />
-                        <span className="text-[10px] font-bold text-white uppercase tracking-wider font-mono">Gemini Executive Summary</span>
-                      </div>
-                      <button
-                        id="trigger-ai-summary"
-                        onClick={handleGenerateAISummary}
-                        disabled={isSummarizing}
-                        className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-[9px] px-3 py-1.5 rounded-md cursor-pointer transition-all disabled:opacity-50"
-                      >
-                        {isSummarizing ? "Synthesizing..." : "Summarize"}
-                      </button>
-                    </div>
-
-                    <div className="bg-slate-800 border border-slate-700 rounded-lg p-3 text-[11px] leading-relaxed min-h-24">
-                      {selectedMeeting.summary ? (
-                        <div className="text-slate-200 font-sans">
-                          {selectedMeeting.summary}
-                        </div>
-                      ) : (
-                        <span className="text-slate-500 italic">No AI summary compiled yet. Paste raw notes and click "Summarize".</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Connected Component: AI Action Items Checklist Generator */}
-              <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl space-y-4">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <div>
-                    <h4 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                      <CheckSquare className="w-4 h-4 text-emerald-600" />
-                      <span>AI Action Checklist Extractor</span>
-                    </h4>
-                    <p className="text-[10px] text-slate-400 mt-0.5">Parse transcribed notes or summaries directly into active, trackable CRM system tasks.</p>
-                  </div>
-                  <button
-                    onClick={handleExtractActionItems}
-                    disabled={isExtractingActions}
-                    className="flex items-center gap-1.5 bg-slate-900 hover:bg-slate-800 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer disabled:opacity-50"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>{isExtractingActions ? "Extracting..." : "Extract Tasks via AI"}</span>
-                  </button>
-                </div>
-
-                {extractedActionItems.length > 0 && (
-                  <div className="space-y-2 pt-2 border-t border-slate-200">
-                    {extractedActionItems.map((item, idx) => {
-                      const isAdded = addedActionsIndex.includes(idx);
-                      return (
-                        <div key={idx} className="flex items-center justify-between bg-white p-3 rounded-lg border border-slate-200 shadow-3xs gap-3">
-                          <span className="text-xs text-slate-700 font-medium">{item}</span>
-                          <button
-                            disabled={isAdded || isReadOnly}
-                            onClick={() => handleAddExtractedTask(item, idx)}
-                            className={`flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap ${
-                              isAdded 
-                                ? "bg-emerald-50 text-emerald-700 cursor-default" 
-                                : "bg-slate-900 hover:bg-slate-800 text-white"
-                            }`}
-                          >
-                            {isAdded ? (
-                              <>
-                                <CheckCircle className="w-3 h-3 text-emerald-500" />
-                                <span>Task Created</span>
-                              </>
-                            ) : (
-                              <>
-                                <Plus className="w-3 h-3" />
-                                <span>Add Task</span>
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* 4. ACTIONS CHECKBOARD */}
-      {activeSubTab === "tasks" && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* TO DO COLUMN */}
-          <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">To Do</span>
-            <div className="space-y-2">
-              {tasks.filter(t => t.status === "TODO").length > 0 ? (
-                tasks.filter(t => t.status === "TODO").map(t => (
-                  <div key={t.id} className="bg-white border border-slate-200 p-3.5 rounded-lg flex flex-col justify-between h-28 hover:shadow-xs transition-all relative group">
-                    <span className="font-semibold text-slate-800 text-xs leading-snug">{t.title}</span>
-                    <div className="flex justify-between items-center text-[10px] border-t border-slate-100 pt-2.5 mt-2">
-                      <span className="font-mono text-slate-400">{t.dueDate}</span>
-                      {!isReadOnly && (
-                        <button
-                          onClick={() => onUpdateTask(t.id, { status: "IN_PROGRESS" })}
-                          className="text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-0.5 cursor-pointer"
-                        >
-                          Start Task &rarr;
-                        </button>
-                      )}
-                    </div>
-                    {!isReadOnly && (
-                      <button onClick={() => onDeleteTask(t.id)} className="absolute top-2 right-2 text-slate-300 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-all p-1">
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-8 text-[11px] text-slate-400 italic">No tasks listed here.</div>
-              )}
-            </div>
-          </div>
-
-          {/* IN PROGRESS */}
-          <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">In Progress</span>
-            <div className="space-y-2">
-              {tasks.filter(t => t.status === "IN_PROGRESS").length > 0 ? (
-                tasks.filter(t => t.status === "IN_PROGRESS").map(t => (
-                  <div key={t.id} className="bg-white border border-indigo-200 p-3.5 rounded-lg flex flex-col justify-between h-28 hover:shadow-xs transition-all relative group">
-                    <span className="font-semibold text-slate-800 text-xs leading-snug">{t.title}</span>
-                    <div className="flex justify-between items-center text-[10px] border-t border-slate-100 pt-2.5 mt-2">
-                      <span className="font-mono text-indigo-500 font-bold">{t.priority}</span>
-                      {!isReadOnly && (
-                        <button
-                          onClick={() => onUpdateTask(t.id, { status: "DONE" })}
-                          className="text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-0.5 cursor-pointer"
-                        >
-                          Finish &rarr;
-                        </button>
-                      )}
-                    </div>
-                    {!isReadOnly && (
-                      <button onClick={() => onDeleteTask(t.id)} className="absolute top-2 right-2 text-slate-300 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-all p-1">
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-8 text-[11px] text-slate-400 italic">No active tasks in progress.</div>
-              )}
-            </div>
-          </div>
-
-          {/* COMPLETED */}
-          <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Completed</span>
-            <div className="space-y-2">
-              {tasks.filter(t => t.status === "DONE").length > 0 ? (
-                tasks.filter(t => t.status === "DONE").map(t => (
-                  <div key={t.id} className="bg-emerald-50/20 border border-emerald-200 p-3.5 rounded-lg flex flex-col justify-between h-28 relative group">
-                    <span className="font-semibold text-slate-700 text-xs line-through">{t.title}</span>
-                    <div className="flex justify-between items-center text-[10px] border-t border-emerald-100 pt-2.5 mt-2">
-                      <span className="text-emerald-600 font-bold uppercase font-mono">Completed</span>
-                      <span className="text-slate-400 font-mono">{t.dueDate}</span>
-                    </div>
-                    {!isReadOnly && (
-                      <button onClick={() => onDeleteTask(t.id)} className="absolute top-2 right-2 text-slate-300 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition-all p-1">
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-8 text-[11px] text-slate-400 italic">No tasks completed yet.</div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* OUTREACH SPRINTS SUB-TAB (Day 2 training: short, intensive pushes into one segment) */}
-      {activeSubTab === "sprints" && (
-        <div className="space-y-4">
-          {campaigns.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-              {campaigns.map(sprint => {
-                const funnel = getSprintFunnel(sprint);
-                return (
-                  <div key={sprint.id} className="bg-white border border-slate-200 rounded-xl p-4 space-y-3 shadow-xs">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <h3 className="text-sm font-bold text-slate-800">{sprint.name}</h3>
-                        <span className="inline-block mt-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
-                          {sprint.segment || "No segment set"}
-                        </span>
-                      </div>
-                      {!isReadOnly && (
-                        <div className="flex items-center gap-1">
-                          <button onClick={() => handleOpenEditSprint(sprint)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all cursor-pointer" title="Edit Sprint">
-                            <Pencil className="w-3.5 h-3.5" />
-                          </button>
-                          <button onClick={() => handleRequestDelete("sprint", sprint.id, sprint.name)} className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all cursor-pointer" title="Delete Sprint">
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-[11px] text-slate-400 font-mono">
-                      {sprint.startDate || "?"} &rarr; {sprint.endDate || "?"}
-                    </p>
-                    <div className="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider pt-2 border-t border-slate-100">
-                      <span className="flex items-center gap-1"><Target className="w-3 h-3" /> Targeted</span>
-                      <span className="flex items-center gap-1">Contacted</span>
-                      <span className="flex items-center gap-1">Negotiation</span>
-                      <span className="flex items-center gap-1">Partner</span>
-                    </div>
-                    <div className="flex items-center justify-between font-mono font-bold text-slate-800 text-sm">
-                      <span>{funnel.targeted}</span>
-                      <span>{funnel.contacted}</span>
-                      <span>{funnel.negotiation}</span>
-                      <span className="text-emerald-600">{funnel.partner}</span>
-                    </div>
-                    {sprint.notes && <p className="text-[11px] text-slate-500 italic pt-1 border-t border-slate-100">{sprint.notes}</p>}
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="bg-white border border-dashed border-slate-200 rounded-xl p-10 text-center text-slate-400 italic text-xs">
-              No outreach sprints yet. Start a short, intensive push into one segment with "New Outreach Sprint".
-            </div>
-          )}
-        </div>
+      {/* COMPANY PANEL: meetings, tasks, contacts and the next step, in context */}
+      {openCompany && (
+        <CrmCompanyPanel
+          company={openCompany}
+          contacts={contacts}
+          meetings={meetings}
+          tasks={tasks}
+          isReadOnly={isReadOnly}
+          onClose={() => setOpenCompanyId(null)}
+          onChangeStage={handleChangeStage}
+          onSaveNextStep={handleSaveNextStep}
+          onAddMeeting={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
+          onAddTask={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
+          onEditCompany={(id) => { setEditingCompanyId(id); setEditingContactId(null); setShowAddModal(true); }}
+          onEditContact={(id) => { setEditingContactId(id); setEditingCompanyId(null); setShowAddModal(true); }}
+          onAddContact={() => { setEditingCompanyId(null); setEditingContactId(null); setShowAddModal(true); }}
+        />
       )}
 
       {/* OUTREACH SPRINT CREATE/EDIT MODAL */}

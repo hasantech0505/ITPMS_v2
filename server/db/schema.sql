@@ -449,3 +449,88 @@ ALTER TABLE talent ADD COLUMN IF NOT EXISTS "cvUrl" VARCHAR(1000);
 -- beyond English (each entry: {language, level}). Safe to run repeatedly.
 ALTER TABLE talent ADD COLUMN IF NOT EXISTS "languages" JSONB DEFAULT '[]'::jsonb;
 
+
+-- 25. Resident Vacancies Table (Job Board Module)
+-- Column names match the app's Vacancy TS interface (src/types.ts) 1:1, so
+-- getCollectionFromPostgres()'s generic `SELECT * FROM vacancies` needs no
+-- per-field mapping - see TYPED_TABLE_COLLECTIONS in server/postgres.ts.
+CREATE TABLE IF NOT EXISTS vacancies (
+  id VARCHAR(100) PRIMARY KEY,
+  "residentId" VARCHAR(100),
+  "residentName" VARCHAR(255),
+  title VARCHAR(255) NOT NULL,
+  department VARCHAR(255),
+  "employmentType" VARCHAR(50),
+  seniority VARCHAR(50),
+  location VARCHAR(255),
+  "requiredSkills" TEXT[],
+  "preferredSkills" TEXT[],
+  "englishLevel" VARCHAR(10),
+  "numberOfOpenings" INTEGER DEFAULT 1,
+  "salaryMin" NUMERIC,
+  "salaryMax" NUMERIC,
+  "salaryNegotiable" BOOLEAN DEFAULT false,
+  description TEXT,
+  responsibilities TEXT[],
+  requirements TEXT[],
+  benefits TEXT[],
+  status VARCHAR(50) DEFAULT 'OPEN',
+  "postedDate" VARCHAR(20),
+  "deadlineDate" VARCHAR(20),
+  "filledDate" VARCHAR(20),
+  "filledByTalentId" VARCHAR(100),
+  "contactPerson" VARCHAR(255),
+  "contactEmail" VARCHAR(255),
+  "contactPhone" VARCHAR(150),
+  notes TEXT,
+  "createdBy" VARCHAR(255),
+  "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_vacancies_resident ON vacancies ("residentId");
+CREATE INDEX IF NOT EXISTS idx_vacancies_status ON vacancies (status);
+
+-- 26. Vacancy Applications Table (links a Talent Pool candidate to a Vacancy;
+-- kept as its own table rather than an array on either side so one candidate
+-- can apply to several vacancies and one vacancy can have many applicants).
+CREATE TABLE IF NOT EXISTS vacancy_applications (
+  id VARCHAR(100) PRIMARY KEY,
+  "vacancyId" VARCHAR(100) NOT NULL,
+  "vacancyTitle" VARCHAR(255),
+  "residentId" VARCHAR(100),
+  "talentId" VARCHAR(100) NOT NULL,
+  "candidateName" VARCHAR(255),
+  stage VARCHAR(50) DEFAULT 'APPLIED',
+  "appliedDate" VARCHAR(20),
+  "matchScore" INTEGER,
+  notes TEXT,
+  history JSONB DEFAULT '[]'::jsonb,
+  "createdAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_vacancy_applications_vacancy ON vacancy_applications ("vacancyId");
+CREATE INDEX IF NOT EXISTS idx_vacancy_applications_talent ON vacancy_applications ("talentId");
+CREATE INDEX IF NOT EXISTS idx_vacancy_applications_resident ON vacancy_applications ("residentId");
+
+-- CRM: the companies table only ever stored 7 of the Company type's fields, so
+-- follow-up dates, lead source, segment and the rest were dropped on every sync
+-- (the UI showed "Not scheduled" for every lead as a result). CREATE TABLE IF NOT
+-- EXISTS cannot widen an existing table, so add them here; this file is replayed
+-- on every boot and these are all no-ops once applied.
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS "leadSource" VARCHAR(100);
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS segment VARCHAR(255);
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS "employeeCountBand" VARCHAR(50);
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS "nextFollowUpDate" VARCHAR(50);
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS "lastContactedDate" VARCHAR(50);
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS "nextStep" TEXT;
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS "isSuccessStory" BOOLEAN DEFAULT FALSE;
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS "successStoryText" TEXT;
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS "benefitsPitched" JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS "competingOptions" TEXT;
+
+-- CRM: tasks had no link to the company they belong to, so a company's panel had
+-- no way to list its own open work.
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS "companyId" VARCHAR(100);
+ALTER TABLE tasks ADD COLUMN IF NOT EXISTS "companyName" VARCHAR(255);

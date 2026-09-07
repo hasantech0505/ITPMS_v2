@@ -20,11 +20,12 @@ pg.types.setTypeParser(1700, (val: string | null) => (val === null ? null : pars
 export const TYPED_TABLE_COLLECTIONS = [
   "users", "startups", "residents", "activityLogs", "tasks", "meetings", "events",
   "offices", "talent", "companies", "contacts", "buildings", "assets", "maintenance",
-  "utilities", "reservations", "inspections", "contracts",
+  "utilities", "reservations", "inspections", "contracts", "vacancies", "vacancyApplications",
 ];
 const TABLE_NAME_MAP: Record<string, string> = {
   activityLogs: "activity_logs",
   events: '"ITEvent"',
+  vacancyApplications: "vacancy_applications",
 };
 
 // Newer/ad hoc collections with no dedicated table yet - stored as JSONB rows in the
@@ -836,6 +837,96 @@ export async function syncDataToPostgres(connectionString: string, currentData: 
       }
     }
 
+    // 19. Sync Vacancies
+    const vacanciesData = currentData.vacancies || [];
+    if (vacanciesData.length > 0) {
+      logs.push(`Streaming ${vacanciesData.length} vacancies...`);
+      for (const v of vacanciesData) {
+        await client.query(`
+          INSERT INTO vacancies (
+            id, "residentId", "residentName", title, department, "employmentType", seniority, location,
+            "requiredSkills", "preferredSkills", "englishLevel", "numberOfOpenings", "salaryMin", "salaryMax",
+            "salaryNegotiable", description, responsibilities, requirements, benefits, status, "postedDate",
+            "deadlineDate", "filledDate", "filledByTalentId", "contactPerson", "contactEmail", "contactPhone",
+            notes, "createdBy"
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29)
+          ON CONFLICT (id) DO UPDATE SET
+            "residentId" = EXCLUDED."residentId",
+            "residentName" = EXCLUDED."residentName",
+            title = EXCLUDED.title,
+            department = EXCLUDED.department,
+            "employmentType" = EXCLUDED."employmentType",
+            seniority = EXCLUDED.seniority,
+            location = EXCLUDED.location,
+            "requiredSkills" = EXCLUDED."requiredSkills",
+            "preferredSkills" = EXCLUDED."preferredSkills",
+            "englishLevel" = EXCLUDED."englishLevel",
+            "numberOfOpenings" = EXCLUDED."numberOfOpenings",
+            "salaryMin" = EXCLUDED."salaryMin",
+            "salaryMax" = EXCLUDED."salaryMax",
+            "salaryNegotiable" = EXCLUDED."salaryNegotiable",
+            description = EXCLUDED.description,
+            responsibilities = EXCLUDED.responsibilities,
+            requirements = EXCLUDED.requirements,
+            benefits = EXCLUDED.benefits,
+            status = EXCLUDED.status,
+            "postedDate" = EXCLUDED."postedDate",
+            "deadlineDate" = EXCLUDED."deadlineDate",
+            "filledDate" = EXCLUDED."filledDate",
+            "filledByTalentId" = EXCLUDED."filledByTalentId",
+            "contactPerson" = EXCLUDED."contactPerson",
+            "contactEmail" = EXCLUDED."contactEmail",
+            "contactPhone" = EXCLUDED."contactPhone",
+            notes = EXCLUDED.notes,
+            "createdBy" = EXCLUDED."createdBy",
+            "updatedAt" = CURRENT_TIMESTAMP
+        `, [
+          v.id, v.residentId || null, v.residentName || null, v.title || "", v.department || null,
+          v.employmentType || "Full-time", v.seniority || "Mid", v.location || "", v.requiredSkills || [],
+          v.preferredSkills || [], v.englishLevel || null, Number(v.numberOfOpenings) || 1,
+          v.salaryMin != null ? Number(v.salaryMin) : null, v.salaryMax != null ? Number(v.salaryMax) : null,
+          !!v.salaryNegotiable, v.description || "", v.responsibilities || [], v.requirements || [],
+          v.benefits || [], v.status || "OPEN", v.postedDate || null, v.deadlineDate || null,
+          v.filledDate || null, v.filledByTalentId || null, v.contactPerson || null, v.contactEmail || null,
+          v.contactPhone || null, v.notes || null, v.createdBy || null
+        ]);
+        totalRows++;
+      }
+    }
+
+    // 20. Sync Vacancy Applications
+    const vacancyApplicationsData = currentData.vacancyApplications || [];
+    if (vacancyApplicationsData.length > 0) {
+      logs.push(`Streaming ${vacancyApplicationsData.length} vacancy applications...`);
+      for (const a of vacancyApplicationsData) {
+        await client.query(`
+          INSERT INTO vacancy_applications (
+            id, "vacancyId", "vacancyTitle", "residentId", "talentId", "candidateName", stage,
+            "appliedDate", "matchScore", notes, history
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+          ON CONFLICT (id) DO UPDATE SET
+            "vacancyId" = EXCLUDED."vacancyId",
+            "vacancyTitle" = EXCLUDED."vacancyTitle",
+            "residentId" = EXCLUDED."residentId",
+            "talentId" = EXCLUDED."talentId",
+            "candidateName" = EXCLUDED."candidateName",
+            stage = EXCLUDED.stage,
+            "appliedDate" = EXCLUDED."appliedDate",
+            "matchScore" = EXCLUDED."matchScore",
+            notes = EXCLUDED.notes,
+            history = EXCLUDED.history,
+            "updatedAt" = CURRENT_TIMESTAMP
+        `, [
+          a.id, a.vacancyId, a.vacancyTitle || null, a.residentId || null, a.talentId, a.candidateName || null,
+          a.stage || "APPLIED", a.appliedDate || null, a.matchScore != null ? Number(a.matchScore) : null,
+          a.notes || null, JSON.stringify(a.history || [])
+        ]);
+        totalRows++;
+      }
+    }
+
     // Everything else (properties, planningItems, kpiTargets, comments, campaigns,
     // aiConversations, aiMessages, and any future ad hoc collection with no dedicated
     // typed table above) goes into the generic entity_store JSONB fallback instead of
@@ -843,7 +934,7 @@ export async function syncDataToPostgres(connectionString: string, currentData: 
     const handledCollections = new Set([
       "users", "startups", "residents", "activityLogs", "tasks", "meetings", "events",
       "offices", "talent", "companies", "contacts", "buildings", "assets", "maintenance",
-      "utilities", "reservations", "inspections", "contracts",
+      "utilities", "reservations", "inspections", "contracts", "vacancies", "vacancyApplications",
       // non-EntityRepository collections managed by their own repositories already:
       "refresh_tokens", "roles", "permissions", "role_permissions", "user_roles",
     ]);
@@ -1037,15 +1128,22 @@ export async function saveDocToPostgres(collection: string, docId: string, field
       `, [docId, fields.userId || "u-system", fields.userName || null, fields.userRole || null, fields.action || "", fields.entity || null, fields.entityId || null, fields.timestamp || ""]);
     } else if (collection === "tasks") {
       await activePool.query(`
-        INSERT INTO tasks (id, title, "assignedTo", "dueDate", priority, status)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO tasks (id, title, "assignedTo", "dueDate", priority, status, "companyId", "companyName")
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         ON CONFLICT (id) DO UPDATE SET
           title = EXCLUDED.title,
           "assignedTo" = EXCLUDED."assignedTo",
           "dueDate" = EXCLUDED."dueDate",
           priority = EXCLUDED.priority,
-          status = EXCLUDED.status
-      `, [docId, fields.title || "", fields.assignedTo || null, fields.dueDate || null, fields.priority || "MEDIUM", fields.status || "TODO"]);
+          status = EXCLUDED.status,
+          "companyId" = EXCLUDED."companyId",
+          "companyName" = EXCLUDED."companyName",
+          "updatedAt" = CURRENT_TIMESTAMP
+      `, [
+        docId, fields.title || "", fields.assignedTo || null, fields.dueDate || null,
+        fields.priority || "MEDIUM", fields.status || "TODO",
+        fields.companyId || null, fields.companyName || null
+      ]);
     } else if (collection === "meetings") {
       await activePool.query(`
         INSERT INTO meetings (id, title, "companyId", "companyName", attendees, "dateTime", notes, summary, status)
@@ -1140,20 +1238,118 @@ export async function saveDocToPostgres(collection: string, docId: string, field
         fields.testScores ? Number(fields.testScores.english) || 0 : 0,
         fields.testScores ? Number(fields.testScores.softSkills) || 0 : 0
       ]);
-    } else if (collection === "companies") {
+    } else if (collection === "vacancies") {
       await activePool.query(`
-        INSERT INTO companies (id, name, country, industry, website, "leadScore", status)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO vacancies (
+          id, "residentId", "residentName", title, department, "employmentType", seniority, location,
+          "requiredSkills", "preferredSkills", "englishLevel", "numberOfOpenings", "salaryMin", "salaryMax",
+          "salaryNegotiable", description, responsibilities, requirements, benefits, status, "postedDate",
+          "deadlineDate", "filledDate", "filledByTalentId", "contactPerson", "contactEmail", "contactPhone",
+          notes, "createdBy"
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29)
+        ON CONFLICT (id) DO UPDATE SET
+          "residentId" = EXCLUDED."residentId",
+          "residentName" = EXCLUDED."residentName",
+          title = EXCLUDED.title,
+          department = EXCLUDED.department,
+          "employmentType" = EXCLUDED."employmentType",
+          seniority = EXCLUDED.seniority,
+          location = EXCLUDED.location,
+          "requiredSkills" = EXCLUDED."requiredSkills",
+          "preferredSkills" = EXCLUDED."preferredSkills",
+          "englishLevel" = EXCLUDED."englishLevel",
+          "numberOfOpenings" = EXCLUDED."numberOfOpenings",
+          "salaryMin" = EXCLUDED."salaryMin",
+          "salaryMax" = EXCLUDED."salaryMax",
+          "salaryNegotiable" = EXCLUDED."salaryNegotiable",
+          description = EXCLUDED.description,
+          responsibilities = EXCLUDED.responsibilities,
+          requirements = EXCLUDED.requirements,
+          benefits = EXCLUDED.benefits,
+          status = EXCLUDED.status,
+          "postedDate" = EXCLUDED."postedDate",
+          "deadlineDate" = EXCLUDED."deadlineDate",
+          "filledDate" = EXCLUDED."filledDate",
+          "filledByTalentId" = EXCLUDED."filledByTalentId",
+          "contactPerson" = EXCLUDED."contactPerson",
+          "contactEmail" = EXCLUDED."contactEmail",
+          "contactPhone" = EXCLUDED."contactPhone",
+          notes = EXCLUDED.notes,
+          "createdBy" = EXCLUDED."createdBy",
+          "updatedAt" = CURRENT_TIMESTAMP
+      `, [
+        docId, fields.residentId || null, fields.residentName || null, fields.title || "", fields.department || null,
+        fields.employmentType || "Full-time", fields.seniority || "Mid", fields.location || "", fields.requiredSkills || [],
+        fields.preferredSkills || [], fields.englishLevel || null, Number(fields.numberOfOpenings) || 1,
+        fields.salaryMin != null ? Number(fields.salaryMin) : null, fields.salaryMax != null ? Number(fields.salaryMax) : null,
+        !!fields.salaryNegotiable, fields.description || "", fields.responsibilities || [], fields.requirements || [],
+        fields.benefits || [], fields.status || "OPEN", fields.postedDate || null, fields.deadlineDate || null,
+        fields.filledDate || null, fields.filledByTalentId || null, fields.contactPerson || null, fields.contactEmail || null,
+        fields.contactPhone || null, fields.notes || null, fields.createdBy || null
+      ]);
+    } else if (collection === "vacancyApplications") {
+      await activePool.query(`
+        INSERT INTO vacancy_applications (
+          id, "vacancyId", "vacancyTitle", "residentId", "talentId", "candidateName", stage,
+          "appliedDate", "matchScore", notes, history
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        ON CONFLICT (id) DO UPDATE SET
+          "vacancyId" = EXCLUDED."vacancyId",
+          "vacancyTitle" = EXCLUDED."vacancyTitle",
+          "residentId" = EXCLUDED."residentId",
+          "talentId" = EXCLUDED."talentId",
+          "candidateName" = EXCLUDED."candidateName",
+          stage = EXCLUDED.stage,
+          "appliedDate" = EXCLUDED."appliedDate",
+          "matchScore" = EXCLUDED."matchScore",
+          notes = EXCLUDED.notes,
+          history = EXCLUDED.history,
+          "updatedAt" = CURRENT_TIMESTAMP
+      `, [
+        docId, fields.vacancyId, fields.vacancyTitle || null, fields.residentId || null, fields.talentId,
+        fields.candidateName || null, fields.stage || "APPLIED", fields.appliedDate || null,
+        fields.matchScore != null ? Number(fields.matchScore) : null, fields.notes || null,
+        JSON.stringify(fields.history || [])
+      ]);
+    } else if (collection === "companies") {
+      // Every field on the Company type is persisted here. It used to write only the
+      // first seven, so follow-up dates, lead source, segment and the CRM notes were
+      // silently discarded on each sync and the UI could never show a next step.
+      await activePool.query(`
+        INSERT INTO companies (
+          id, name, country, industry, website, "leadScore", status,
+          "leadSource", segment, "employeeCountBand", "nextFollowUpDate", "lastContactedDate",
+          "nextStep", "isSuccessStory", "successStoryText", "benefitsPitched", "competingOptions"
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
         ON CONFLICT (id) DO UPDATE SET
           name = EXCLUDED.name,
           country = EXCLUDED.country,
           industry = EXCLUDED.industry,
           website = EXCLUDED.website,
           "leadScore" = EXCLUDED."leadScore",
-          status = EXCLUDED.status
+          status = EXCLUDED.status,
+          "leadSource" = EXCLUDED."leadSource",
+          segment = EXCLUDED.segment,
+          "employeeCountBand" = EXCLUDED."employeeCountBand",
+          "nextFollowUpDate" = EXCLUDED."nextFollowUpDate",
+          "lastContactedDate" = EXCLUDED."lastContactedDate",
+          "nextStep" = EXCLUDED."nextStep",
+          "isSuccessStory" = EXCLUDED."isSuccessStory",
+          "successStoryText" = EXCLUDED."successStoryText",
+          "benefitsPitched" = EXCLUDED."benefitsPitched",
+          "competingOptions" = EXCLUDED."competingOptions",
+          "updatedAt" = CURRENT_TIMESTAMP
       `, [
         docId, fields.name || "", fields.country || null, fields.industry || null, fields.website || "",
-        Number(fields.leadScore) || 0, fields.status || "LEAD"
+        Number(fields.leadScore) || 0, fields.status || "LEAD",
+        fields.leadSource || null, fields.segment || null, fields.employeeCountBand || null,
+        fields.nextFollowUpDate || null, fields.lastContactedDate || null,
+        fields.nextStep || null, fields.isSuccessStory === true,
+        fields.successStoryText || null, JSON.stringify(fields.benefitsPitched || []),
+        fields.competingOptions || null
       ]);
     } else if (collection === "contacts") {
       await activePool.query(`
@@ -1381,11 +1577,12 @@ export async function deleteDocFromPostgres(collection: string, docId: string) {
     let tableName = collection;
     if (collection === "activityLogs") tableName = "activity_logs";
     else if (collection === "events") tableName = '"ITEvent"';
+    else if (collection === "vacancyApplications") tableName = "vacancy_applications";
 
     const allowedTables = [
       "users", "startups", "residents", "activity_logs", "tasks", "meetings", '"ITEvent"',
       "offices", "talent", "companies", "contacts", "buildings", "assets", "maintenance",
-      "utilities", "reservations", "inspections", "contracts"
+      "utilities", "reservations", "inspections", "contracts", "vacancies", "vacancy_applications"
     ];
 
     if (allowedTables.includes(tableName)) {
