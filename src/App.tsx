@@ -28,6 +28,7 @@ const CommentsModule = React.lazy(() => import("./features/comments/CommentsModu
 const UserManagementModule = React.lazy(() => import("./features/auth/UserManagementModule"));
 const PlanningModule = React.lazy(() => import("./features/planning/PlanningModule"));
 const EdoReportModule = React.lazy(() => import("./features/edoReport/EdoReportModule"));
+const VacanciesModule = React.lazy(() => import("./features/vacancies/VacanciesModule"));
 import ITParkBrandBackground, { BrandBackgroundVariant } from "./components/ITParkBrandBackground";
 import { Property } from "./features/infrastructure/propertyTypes";
 
@@ -61,7 +62,9 @@ import {
   ProjectComment,
   PlanningItem,
   OutreachCampaign,
-  EdoReport
+  EdoReport,
+  Vacancy,
+  VacancyApplication
 } from "./types";
 
 function ModuleLoadingFallback() {
@@ -97,7 +100,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>(() => {
     const rawHash = window.location.hash.replace("#", "");
     const tabName = rawHash.split("?")[0];
-    if (tabName && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
+    if (tabName && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "vacancies", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
       return tabName;
     }
     return "dashboard";
@@ -108,7 +111,7 @@ export default function App() {
     const handleSyncHash = () => {
       const rawHash = window.location.hash.replace("#", "");
       const tabName = rawHash.split("?")[0];
-      if (tabName && tabName !== activeTab && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
+      if (tabName && tabName !== activeTab && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "vacancies", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
         setActiveTab(tabName);
       }
     };
@@ -195,6 +198,8 @@ export default function App() {
   const [planningItems, setPlanningItems] = useState<PlanningItem[]>([]);
   const [campaigns, setCampaigns] = useState<OutreachCampaign[]>([]);
   const [edoReports, setEdoReports] = useState<EdoReport[]>([]);
+  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
+  const [vacancyApplications, setVacancyApplications] = useState<VacancyApplication[]>([]);
 
   // AI Chat States
   const [chatInput, setChatInput] = useState("");
@@ -321,6 +326,8 @@ export default function App() {
         setPlanningItems(data.planningItems || []);
         setCampaigns(data.campaigns || []);
         setEdoReports(data.edoReports || []);
+        setVacancies(data.vacancies || []);
+        setVacancyApplications(data.vacancyApplications || []);
       }
     } catch (e) {
       console.error("Failed to sync database state:", e);
@@ -633,6 +640,8 @@ export default function App() {
               meetings={meetings}
               activityLogs={activityLogs} 
               kpiTargetOverrides={kpiTargets}
+              vacancies={vacancies}
+              vacancyApplications={vacancyApplications}
               onUpdateKpiTarget={handleUpdateKpiTarget}
               setActiveTab={handleNavigateTab} 
             />
@@ -671,6 +680,8 @@ export default function App() {
               activeSubTab={activeTab}
               setActiveSubTab={setActiveTab}
               residents={residents}
+              vacancies={vacancies}
+              vacancyApplications={vacancyApplications}
               onAdd={(payload) => handleAddItem("residents", payload, setResidents)}
               onUpdate={(id, payload) => handleUpdateItem("residents", id, payload, setResidents)}
               onDelete={(id) => handleDeleteItem("residents", id, setResidents)}
@@ -700,6 +711,23 @@ export default function App() {
               onUpdate={(id, payload) => handleUpdateItem("talent", id, payload, setTalent)}
               onDelete={(id) => handleDeleteItem("talent", id, setTalent)}
               userRole={userRole} 
+              onSyncState={syncState}
+            />
+          )}
+
+          {activeTab === "vacancies" && (
+            <VacanciesModule
+              vacancies={vacancies}
+              vacancyApplications={vacancyApplications}
+              talent={talent}
+              residents={residents}
+              onAddVacancy={(payload) => handleAddItem("vacancies", payload, setVacancies)}
+              onUpdateVacancy={(id, payload) => handleUpdateItem("vacancies", id, payload, setVacancies)}
+              onDeleteVacancy={(id) => handleDeleteItem("vacancies", id, setVacancies)}
+              onAddApplication={(payload) => handleAddItem("vacancyApplications", payload, setVacancyApplications)}
+              onUpdateApplication={(id, payload) => handleUpdateItem("vacancyApplications", id, payload, setVacancyApplications)}
+              onDeleteApplication={(id) => handleDeleteItem("vacancyApplications", id, setVacancyApplications)}
+              userRole={userRole}
               onSyncState={syncState}
             />
           )}

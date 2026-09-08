@@ -4,6 +4,7 @@
  */
 
 import express from "express";
+import http from "http";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { testAndMigratePostgres, syncDataToPostgres, isPlaceholderDbUrl, closePool } from "./server/postgres";
@@ -26,6 +27,17 @@ import { errorHandler } from "./server/middleware/errorHandler";
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
+
+  // Real Node http.Server, created up front instead of relying on
+  // app.listen()'s implicit one. Vite's dev-middleware needs a live
+  // reference to this so it can attach its HMR websocket upgrade handler to
+  // the SAME server Express is listening on -- without this, `hmr: false`
+  // in vite.config.ts / createViteServer() only stops Vite's own HMR logic,
+  // it does NOT stop the browser-side @vite/client from trying to open a
+  // websocket, so the connection was always failing (ws://localhost:24678
+  // "WebSocket closed without opened"). Passing this instance via
+  // `hmr: { server: httpServer }` below is the actual fix.
+  const httpServer = http.createServer(app);
 
   // Seed RBAC roles and permissions
   RbacRepository.seedRbacData().catch((err) => console.warn("RBAC seed error:", err));
@@ -88,7 +100,7 @@ async function startServer() {
   // --- VITE MIDDLEWARE (DEV) & STATIC SERVING (PROD) ---
   if (config.nodeEnv !== "production") {
     const vite = await createViteServer({
-      server: { middlewareMode: true, hmr: false },
+      server: { middlewareMode: true, hmr: { server: httpServer } },
       appType: "spa",
     });
     app.use(vite.middlewares);
@@ -148,7 +160,7 @@ async function startServer() {
     console.log("ℹ️ Running in default local storage mode (db_store.json). Set DATABASE_URL to enable PostgreSQL.");
   }
 
-  const server = app.listen(PORT, "0.0.0.0", () => {
+  const server = httpServer.listen(PORT, "0.0.0.0", () => {
     console.log(`🚀 ITPMS Backend Engine running on http://0.0.0.0:${PORT}`);
   });
 

@@ -10,6 +10,7 @@ import TargetTrajectoryCard from "./components/TargetTrajectoryCard";
 import PerformanceForecast from "./components/PerformanceForecast";
 import ExecutiveAttention from "./components/ExecutiveAttention";
 import ResidentPortfolioHealth from "./components/ResidentPortfolioHealth";
+import HiringActivityCard from "./components/HiringActivityCard";
 import InternationalPipeline from "./components/InternationalPipeline";
 import RegionalPerformance from "./components/RegionalPerformance";
 import UpcomingActions from "./components/UpcomingActions";
@@ -29,9 +30,10 @@ import {
   buildLiveRegionalPerformance,
   buildLiveUpcomingActions,
   buildLiveExecutiveAlerts,
-  buildLiveExecutiveBrief
+  buildLiveExecutiveBrief,
+  buildLiveHiringActivity
 } from "./utils/liveDashboardData";
-import { Resident, Startup, Office, Event, Company, Contact, Meeting, ActivityLog } from "../../types";
+import { Resident, Startup, Office, Event, Company, Contact, Meeting, ActivityLog, Vacancy, VacancyApplication } from "../../types";
 
 interface ExecutiveControlCenterProps {
   selectedYear?: string;
@@ -48,6 +50,8 @@ interface ExecutiveControlCenterProps {
   meetings: Meeting[];
   activityLogs: ActivityLog[];
   kpiTargetOverrides: KpiTargetOverride[];
+  vacancies?: Vacancy[];
+  vacancyApplications?: VacancyApplication[];
   onUpdateKpiTarget: (id: string, annualTarget: number, quarterlyTargets: { q1: number; q2: number; q3: number; q4: number }) => void;
   t: (key: string, fallback?: string) => string;
 }
@@ -67,6 +71,8 @@ export default function ExecutiveControlCenter({
   meetings,
   activityLogs,
   kpiTargetOverrides,
+  vacancies = [],
+  vacancyApplications = [],
   onUpdateKpiTarget,
   t
 }: ExecutiveControlCenterProps) {
@@ -91,6 +97,10 @@ export default function ExecutiveControlCenter({
   const residentHealthData = useMemo(() => buildLiveResidentHealth(residents), [residents]);
   const internationalPipelineData = useMemo(() => buildLiveInternationalPipeline(companies), [companies]);
   const regionalPerformanceData = useMemo(() => buildLiveRegionalPerformance(residents), [residents]);
+  const hiringActivityData = useMemo(
+    () => buildLiveHiringActivity(vacancies, vacancyApplications),
+    [vacancies, vacancyApplications]
+  );
   const upcomingActionsData = useMemo(() => buildLiveUpcomingActions(events), [events]);
   const executiveAlerts = useMemo(
     () => buildLiveExecutiveAlerts(residents, companies, residentHealthData),
@@ -189,6 +199,13 @@ export default function ExecutiveControlCenter({
           />
         </div>
       </div>
+
+      {/* 7b. HIRING ACTIVITY (RESIDENT VACANCIES JOB BOARD) */}
+      <HiringActivityCard
+        summary={hiringActivityData}
+        onNavigateToVacancies={() => setActiveTab("vacancies")}
+        t={t}
+      />
 
       {/* 8. GEOGRAPHIC DISTRIBUTION (DISTRICT PERFORMANCE) */}
       <RegionalPerformance

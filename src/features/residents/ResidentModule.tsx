@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 import { X, Plus, AlertTriangle } from "lucide-react";
-import { Resident, ResidentStatus, KASHKADARYA_DISTRICTS } from "../../types";
+import { Resident, ResidentStatus, KASHKADARYA_DISTRICTS, Vacancy, VacancyApplication } from "../../types";
 import { useLanguage } from "../../lib/LanguageContext";
 
 // Modular sub-components
@@ -27,6 +27,8 @@ interface ResidentModuleProps {
   activeSubTab: string;
   setActiveSubTab: (tab: string) => void;
   residents: Resident[];
+  vacancies?: Vacancy[];
+  vacancyApplications?: VacancyApplication[];
   // Return boolean so handleRegister below can tell whether the submission
   // actually succeeded before closing the modal / resetting the form - see
   // the NOTE on handleAddItem in src/App.tsx for why this matters.
@@ -41,6 +43,8 @@ export default function ResidentModule({
   activeSubTab, 
   setActiveSubTab, 
   residents, 
+  vacancies = [],
+  vacancyApplications = [],
   onAdd, 
   onUpdate, 
   onDelete, 
@@ -173,6 +177,8 @@ export default function ResidentModule({
         onClose={() => setSelectedResident(null)}
         onUpdate={onUpdate}
         userRole={userRole}
+        vacancies={vacancies}
+        vacancyApplications={vacancyApplications}
       />
     );
   }

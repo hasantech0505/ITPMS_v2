@@ -57,4 +57,7 @@ router.post("/edo/polish", AIController.edoPolishNarrative);
 router.post("/edo/summarize-stats", AIController.edoSummarizeStats);
 router.post("/edo/compare-periods", AIController.edoComparePeriods);
 
+// Resident Vacancies — AI match explanation
+router.post("/vacancies/explain-match", AIController.vacancyExplainMatch);
+
 export default router;

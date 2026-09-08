@@ -5,6 +5,8 @@
 
 import { config } from "../config/env";
 import { EntityRepository } from "../repositories/entity.repository";
+import { scoreCandidateForVacancy } from "../../src/features/vacancies/vacancyMatching";
+import type { Talent, Vacancy } from "../../src/types";
 
 // Groq (https://console.groq.com) issues genuinely free API keys - no
 // credit card required - and speaks an OpenAI-compatible chat completions
@@ -1271,5 +1273,67 @@ Provide a crisp, actionable Deal Conversion Strategy tailored to IT Park Kashkad
     db.feedback = [feedbackItem, ...(db.feedback || [])];
     await EntityRepository.saveFullState(db);
     return feedbackItem;
+  }
+
+  // Resident Vacancies — "Explain this match" for the matching-candidates
+  // panel. The score and every fact it rests on (missing skills, English
+  // gap, seniority shortfall) are computed deterministically by
+  // vacancyMatching.ts BEFORE this call - the model's only job is to phrase
+  // those facts into 2-3 plain sentences a manager can read at a glance. It
+  // is never allowed to invent a skill, adjust the score, or introduce a
+  // fact not in the breakdown below.
+  static async explainVacancyMatch(params: { talent: Talent; vacancy: Vacancy }) {
+    const { talent, vacancy } = params;
+    const breakdown = scoreCandidateForVacancy(talent, vacancy);
+
+    const facts: string[] = [];
+    facts.push(`Overall match score: ${breakdown.score}/100`);
+    if (breakdown.matchedRequiredSkills.length > 0) {
+      facts.push(`Has these required skills: ${breakdown.matchedRequiredSkills.join(", ")}`);
+    }
+    if (breakdown.missingRequiredSkills.length > 0) {
+      facts.push(`Missing these required skills: ${breakdown.missingRequiredSkills.join(", ")}`);
+    }
+    if (breakdown.matchedPreferredSkills.length > 0) {
+      facts.push(`Has these preferred (nice-to-have) skills: ${breakdown.matchedPreferredSkills.join(", ")}`);
+    }
+    if (breakdown.requiredEnglishLevel) {
+      facts.push(
+        breakdown.englishMeetsRequirement
+          ? `English level ${breakdown.candidateEnglishLevel} meets the required ${breakdown.requiredEnglishLevel}`
+          : `English level ${breakdown.candidateEnglishLevel} is below the required ${breakdown.requiredEnglishLevel}`
+      );
+    }
+    facts.push(
+      breakdown.seniorityMeetsRequirement
+        ? `Estimated experience (~${breakdown.estimatedExperienceYears} yrs since graduation) meets the ${breakdown.requiredSeniority} level requirement`
+        : `Estimated experience (~${breakdown.estimatedExperienceYears} yrs since graduation) is below what the ${breakdown.requiredSeniority} level typically requires`
+    );
+    facts.push(`Coding test score: ${breakdown.codingScore}/100`);
+
+    const fallback = `${talent.fullName} scores ${breakdown.score}/100 for "${vacancy.title}". ` +
+      (breakdown.missingRequiredSkills.length > 0
+        ? `Missing required skills: ${breakdown.missingRequiredSkills.join(", ")}. `
+        : "Meets all required skills. ") +
+      (breakdown.englishMeetsRequirement ? "" : `English level is below the required ${breakdown.requiredEnglishLevel}. `) +
+      (breakdown.seniorityMeetsRequirement ? "" : `Estimated experience is below the typical ${breakdown.requiredSeniority} bar. `);
+
+    try {
+      const prompt =
+        `You are explaining, to an HR manager at a regional IT Park, why a job candidate got a particular match ` +
+        `score for an open vacancy. Using ONLY the facts listed below, write 2-3 short plain sentences explaining ` +
+        `the score - what helps the candidate and what hurts them. Do not invent any skill, number, or fact not ` +
+        `listed below, and do not change the score. Reply with ONLY the explanation, no preamble, no bullet points.\n\n` +
+        `Candidate: ${talent.fullName}\nVacancy: ${vacancy.title} at ${vacancy.residentName}\n\nFacts:\n` +
+        facts.map((f) => `- ${f}`).join("\n");
+
+      const result = await callGemini({ prompt, maxTokens: 300 });
+      if (result && result.trim()) {
+        return { explanation: result.trim(), score: breakdown.score, breakdown, usedAI: true };
+      }
+    } catch (err: any) {
+      console.error("AI call failed:", err?.message || err);
+    }
+    return { explanation: fallback.trim(), score: breakdown.score, breakdown, usedAI: false };
   }
 }

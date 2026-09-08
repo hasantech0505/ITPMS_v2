@@ -15,7 +15,7 @@
  * Hub for startups missing financial telemetry.
  */
 
-import { Resident, Startup, Event, Company, ResidentStatus, KASHKADARYA_DISTRICTS } from "../../../types";
+import { Resident, Startup, Event, Company, ResidentStatus, KASHKADARYA_DISTRICTS, Vacancy, VacancyApplication } from "../../../types";
 import {
   StrategicKPI,
   ResidentHealthSummary,
@@ -548,5 +548,32 @@ export function buildLiveExecutiveBrief(
     bulletPoints,
     primaryActionPriority:
       "Collect the outstanding resident financial and quarterly-report data, then follow up on uncontacted CRM leads."
+  };
+}
+
+
+// ---------------------------------------------------------------------------
+// Hiring Activity (Resident Vacancies job board) - a lightweight, real-data
+// dashboard tile. Deliberately kept outside the STRATEGIC_KPIS_2026
+// target/trajectory system (buildLiveStrategicKpis above): vacancies aren't
+// part of the official 2026 strategic plan baseline, so there's no annual
+// target to score them against - this is a current-state snapshot only.
+// ---------------------------------------------------------------------------
+export interface HiringActivitySummary {
+  openVacancies: number;
+  totalVacancies: number;
+  totalApplicants: number;
+  positionsFilled: number;
+}
+
+export function buildLiveHiringActivity(
+  vacancies: Vacancy[],
+  vacancyApplications: VacancyApplication[]
+): HiringActivitySummary {
+  return {
+    openVacancies: vacancies.filter((v) => v.status === "OPEN").length,
+    totalVacancies: vacancies.length,
+    totalApplicants: vacancyApplications.length,
+    positionsFilled: vacancies.filter((v) => v.status === "FILLED").length
   };
 }

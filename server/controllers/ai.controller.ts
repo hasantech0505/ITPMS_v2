@@ -270,4 +270,18 @@ export class AIController {
       next(error);
     }
   }
+
+  // Resident Vacancies — "Explain this match" for the matching-candidates panel
+  static async vacancyExplainMatch(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { talent, vacancy } = req.body;
+      if (!talent || !vacancy) {
+        return res.status(400).json({ success: false, error: "Both 'talent' and 'vacancy' are required" });
+      }
+      const result = await AIService.explainVacancyMatch({ talent, vacancy });
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

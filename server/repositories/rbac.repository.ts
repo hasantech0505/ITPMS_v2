@@ -98,6 +98,10 @@ export const SYSTEM_PERMISSIONS = [
   { id: "p-edoreports-read", name: "edoReports.read", module: "edoReports", description: "View Edo Ijro Tizim quarterly reports" },
   { id: "p-edoreports-manage", name: "edoReports.manage", module: "edoReports", description: "Create, edit, and export Edo Ijro Tizim quarterly reports" },
 
+  // Resident Vacancies — Job Board Module
+  { id: "p-vacancies-read", name: "vacancies.read", module: "vacancies", description: "View resident job vacancies and candidate applications" },
+  { id: "p-vacancies-manage", name: "vacancies.manage", module: "vacancies", description: "Post, edit, and manage vacancies and their candidate pipeline" },
+
   // System Settings & RBAC
   { id: "p-settings-manage", name: "settings.manage", module: "settings", description: "Manage RBAC roles, permission assignments, and system config" },
 ];
@@ -115,6 +119,7 @@ export const DEFAULT_ROLE_PERMISSIONS: Record<string, string[]> = {
     "planning.read", "planning.manage",
     "infrastructure.read", "infrastructure.manage",
     "edoReports.read", "edoReports.manage",
+    "vacancies.read", "vacancies.manage",
     "audit.read",
   ],
 };

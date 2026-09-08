@@ -141,6 +141,10 @@ export function checkEntityPermission(action: "read" | "create" | "update" | "de
       case "edoreports":
         requiredPerm = action === "read" ? "edoReports.read" : "edoReports.manage";
         break;
+      case "vacancies":
+      case "vacancyapplications":
+        requiredPerm = action === "read" ? "vacancies.read" : "vacancies.manage";
+        break;
       default:
         requiredPerm = action === "read" ? "infrastructure.read" : "infrastructure.manage";
         break;

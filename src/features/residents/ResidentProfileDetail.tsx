@@ -45,7 +45,9 @@ import {
   ResidentMeeting, 
   ResidentTask, 
   ResidentHistoryLog,
-  KASHKADARYA_DISTRICTS
+  KASHKADARYA_DISTRICTS,
+  Vacancy,
+  VacancyApplication
 } from "../../types";
 import { useLanguage } from "../../lib/LanguageContext";
 import PhotoUploader from "../../components/PhotoUploader";
@@ -58,6 +60,11 @@ interface ResidentProfileDetailProps {
   // handleAddItem in src/App.tsx for the full story.
   onUpdate: (id: string, payload: Partial<Resident>) => Promise<boolean>;
   userRole: string;
+  // Optional - only passed when the caller (ResidentModule) has the
+  // Vacancies collections loaded. Powers the "Hiring Activity" indicator
+  // below; the panel just doesn't render without them.
+  vacancies?: Vacancy[];
+  vacancyApplications?: VacancyApplication[];
 }
 
 type TabType = 
@@ -74,9 +81,26 @@ export default function ResidentProfileDetail({
   resident, 
   onClose, 
   onUpdate, 
-  userRole 
+  userRole,
+  vacancies = [],
+  vacancyApplications = []
 }: ResidentProfileDetailProps) {
   const { t } = useLanguage();
+
+  // Hiring Activity - a lightweight cross-module signal from the Resident
+  // Vacancies job board (src/features/vacancies). Deliberately read-only
+  // here: editing/posting vacancies happens in that module, not this one.
+  const residentVacancies = vacancies.filter((v) => v.residentId === resident.id);
+  const openResidentVacancies = residentVacancies.filter((v) => v.status === "OPEN");
+  const oldestOpenVacancy = openResidentVacancies.reduce<typeof openResidentVacancies[number] | null>((oldest, v) => {
+    if (!oldest) return v;
+    return new Date(v.postedDate).getTime() < new Date(oldest.postedDate).getTime() ? v : oldest;
+  }, null);
+  const oldestOpenVacancyDays = oldestOpenVacancy
+    ? Math.max(0, Math.floor((Date.now() - new Date(oldestOpenVacancy.postedDate).getTime()) / 86400000))
+    : null;
+  const residentVacancyIds = new Set(residentVacancies.map((v) => v.id));
+  const residentApplicantCount = vacancyApplications.filter((a) => residentVacancyIds.has(a.vacancyId)).length;
   const [activeTab, setActiveTab] = useState<TabType>("overview");
 
   // Local state forms
@@ -467,6 +491,32 @@ export default function ResidentProfileDetail({
                   <span className="text-slate-700 font-mono font-bold block mt-0.5">{resident.employeesCount || 5} employees</span>
                 </div>
               </div>
+
+              {/* Hiring Activity - from the Resident Vacancies job board */}
+              {residentVacancies.length > 0 && (
+                <div className="pt-4 border-t border-slate-100 space-y-2">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <Briefcase className="w-3.5 h-3.5 text-violet-500" />
+                    Hiring Activity
+                  </span>
+                  <div className="grid grid-cols-3 gap-3 bg-slate-50 border border-slate-100 rounded-lg p-3 text-xs">
+                    <div>
+                      <span className="text-[9px] uppercase font-bold text-slate-400 block">Open Vacancies</span>
+                      <span className="font-bold text-slate-800 font-mono">{openResidentVacancies.length} / {residentVacancies.length}</span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] uppercase font-bold text-slate-400 block">Applicants</span>
+                      <span className="font-bold text-slate-800 font-mono">{residentApplicantCount}</span>
+                    </div>
+                    <div>
+                      <span className="text-[9px] uppercase font-bold text-slate-400 block">Oldest Open</span>
+                      <span className="font-bold text-slate-800 font-mono">
+                        {oldestOpenVacancyDays !== null ? `${oldestOpenVacancyDays}d` : "—"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Photos Panel */}
               <div className="space-y-3 pt-4 border-t border-slate-100">

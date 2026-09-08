@@ -8,7 +8,7 @@ import {
   Clock, 
   MapPin
 } from "lucide-react";
-import { Startup, Resident, Office, Talent, Event, ActivityLog, Company, Contact, Meeting } from "../../types";
+import { Startup, Resident, Office, Talent, Event, ActivityLog, Company, Contact, Meeting, Vacancy, VacancyApplication } from "../../types";
 import { KpiTargetOverride } from "./types/kpiTypes";
 import ExecutiveHeader from "./components/ExecutiveHeader";
 import ExecutiveControlCenter from "./ExecutiveControlCenter";
@@ -28,6 +28,8 @@ interface DashboardProps {
   meetings: Meeting[];
   activityLogs: ActivityLog[];
   kpiTargetOverrides: KpiTargetOverride[];
+  vacancies?: Vacancy[];
+  vacancyApplications?: VacancyApplication[];
   onUpdateKpiTarget: (id: string, annualTarget: number, quarterlyTargets: { q1: number; q2: number; q3: number; q4: number }) => void;
   setActiveTab: (tab: string) => void;
 }
@@ -43,6 +45,8 @@ export default function Dashboard({
   meetings,
   activityLogs, 
   kpiTargetOverrides,
+  vacancies = [],
+  vacancyApplications = [],
   onUpdateKpiTarget,
   setActiveTab 
 }: DashboardProps) {
@@ -132,6 +136,8 @@ export default function Dashboard({
           meetings={meetings}
           activityLogs={activityLogs}
           kpiTargetOverrides={kpiTargetOverrides}
+          vacancies={vacancies}
+          vacancyApplications={vacancyApplications}
           onUpdateKpiTarget={onUpdateKpiTarget}
           t={t}
         />
