@@ -507,10 +507,6 @@ export enum TalentStatus {
   STUDENT = "STUDENT",
   GRADUATE = "GRADUATE",
   CANDIDATE = "CANDIDATE",
-  // Set automatically when the candidate has a live application on a resident
-  // vacancy (APPLIED / SCREENING / INTERVIEWING / OFFER). See
-  // src/features/vacancies/VacanciesModule.tsx - syncTalentStatus().
-  IN_PROCESS = "IN_PROCESS",
   EMPLOYED = "EMPLOYED"
 }
 

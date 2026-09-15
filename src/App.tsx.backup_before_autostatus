@@ -753,7 +753,6 @@ export default function App() {
               onAddApplication={(payload) => handleAddItem("vacancyApplications", payload, setVacancyApplications)}
               onUpdateApplication={(id, payload) => handleUpdateItem("vacancyApplications", id, payload, setVacancyApplications)}
               onDeleteApplication={(id) => handleDeleteItem("vacancyApplications", id, setVacancyApplications)}
-              onUpdateTalent={(id, payload) => handleUpdateItem("talent", id, payload, setTalent)}
               userRole={userRole}
               onSyncState={syncState}
             />

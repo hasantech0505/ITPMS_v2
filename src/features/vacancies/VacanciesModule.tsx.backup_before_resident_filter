@@ -32,7 +32,6 @@ import {
   Talent,
   TalentStatus,
   Resident,
-  ResidentStatus,
   LanguageProficiencyLevel
 } from "../../types";
 import ExportImportManager from "../../components/ExportImportManager";
@@ -146,11 +145,6 @@ export default function VacanciesModule({
   const [showPostModal, setShowPostModal] = useState(false);
   const [editingVacancyId, setEditingVacancyId] = useState<string | null>(null);
   const [formData, setFormData] = useState(DEFAULT_FORM);
-  // Off by default: a vacancy should normally belong to a company that actually
-  // IS a resident. The residents list also holds 400+ POTENTIAL prospects and
-  // former residents, and those have no business in this dropdown unless the
-  // user deliberately asks for them.
-  const [showAllCompanies, setShowAllCompanies] = useState(false);
 
   const [explainTarget, setExplainTarget] = useState<{ talent: Talent; vacancy: Vacancy } | null>(null);
   const [explainResult, setExplainResult] = useState<{ explanation: string; usedAI: boolean } | null>(null);
@@ -182,17 +176,10 @@ export default function VacanciesModule({
   const openPostModal = () => {
     setEditingVacancyId(null);
     setFormData(DEFAULT_FORM);
-    setShowAllCompanies(false); // a new vacancy starts from active residents only
     setShowPostModal(true);
   };
 
   const openEditModal = (v: Vacancy) => {
-    // An older vacancy may belong to a company that has since been removed or is
-    // only a prospect. Reveal the full list so its own company stays selected
-    // instead of the dropdown silently resetting to blank.
-    const owner = residents.find((r) => r.id === v.residentId);
-    setShowAllCompanies(!owner || owner.status !== ResidentStatus.ACTIVE);
-
     setFormData({
       residentId: v.residentId,
       title: v.title,
@@ -221,20 +208,6 @@ export default function VacanciesModule({
     setEditingVacancyId(v.id);
     setShowPostModal(true);
   };
-
-  // ---------------------------------------------------------------------
-  // Which companies can a vacancy be posted for
-  // ---------------------------------------------------------------------
-  const byCompanyName = (a: Resident, b: Resident) =>
-    (a.companyName || "").localeCompare(b.companyName || "");
-
-  const activeResidents = residents
-    .filter((r) => r.status === ResidentStatus.ACTIVE)
-    .sort(byCompanyName);
-
-  const nonActiveResidents = residents
-    .filter((r) => r.status !== ResidentStatus.ACTIVE)
-    .sort(byCompanyName);
 
   const handleSaveVacancy = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -876,33 +849,10 @@ export default function VacanciesModule({
                     className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs bg-white cursor-pointer"
                   >
                     <option value="">{t("Select resident...")}</option>
-                    <optgroup label={`${t("Active Residents")} (${activeResidents.length})`}>
-                      {activeResidents.map((r) => (
-                        <option key={r.id} value={r.id}>{r.companyName}</option>
-                      ))}
-                    </optgroup>
-                    {showAllCompanies && (
-                      <optgroup label={`${t("Other Companies")} (${nonActiveResidents.length})`}>
-                        {nonActiveResidents.map((r) => (
-                          <option key={r.id} value={r.id}>
-                            {r.companyName} - {r.status}
-                          </option>
-                        ))}
-                      </optgroup>
-                    )}
+                    {residents.map((r) => (
+                      <option key={r.id} value={r.id}>{r.companyName}</option>
+                    ))}
                   </select>
-
-                  <label className="flex items-center gap-2 mt-1.5 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={showAllCompanies}
-                      onChange={(e) => setShowAllCompanies(e.target.checked)}
-                      className="w-3.5 h-3.5 rounded border-slate-300 cursor-pointer"
-                    />
-                    <span className="text-[10px] text-slate-500">
-                      {t("Show all companies, including non-residents")}
-                    </span>
-                  </label>
                 </div>
                 <div className="space-y-1 sm:col-span-2">
                   <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{t("Job Title *")}</label>

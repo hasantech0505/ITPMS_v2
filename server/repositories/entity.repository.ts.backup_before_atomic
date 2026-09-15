@@ -20,71 +20,21 @@ const dbPath = path.join(process.cwd(), "server", "db_store.json");
 // When PostgreSQL is reachable, every read below goes to Postgres first; the JSON
 // file is only consulted when the pool is unavailable or a query fails outright
 // (never for a legitimately-empty Postgres result).
-// ---------------------------------------------------------------------------
-// db_store.json access.
-//
-// These two used to be a plain readFile/writeFile pair, and that combination
-// silently lost data:
-//
-//   fs.writeFile truncates the file and then fills it, so for a few
-//   milliseconds db_store.json is not valid JSON. Any readDB() landing in that
-//   window threw on JSON.parse and the catch below returned {} - an EMPTY
-//   database. Callers could not tell that apart from a genuinely empty store,
-//   so updateItem() reported "record not found" for rows that were sitting in
-//   the file the whole time, and writeDB() could then persist that empty object
-//   back over the real data.
-//
-//   It is easy to hit: any two writes close together (adding a vacancy
-//   applicant and then updating that candidate's talent status, say), or the
-//   unawaited cache-warming writeDB() in getFullState() below racing anything.
-//
-// Fixed in two ways:
-//   1. writes are atomic - write a temp file, then rename() over the target.
-//      rename is atomic on the same filesystem, so a reader sees either the
-//      complete old file or the complete new one, never a half-written one.
-//   2. writes are serialised through a promise chain, so two concurrent writers
-//      cannot interleave and lose each other's changes.
-// ---------------------------------------------------------------------------
-
 async function readDB() {
   try {
     const content = await fs.readFile(dbPath, "utf-8");
     return JSON.parse(content);
-  } catch (error: any) {
-    // A missing file is normal on first run. A parse error is NOT - it means we
-    // read a torn file (or it is corrupt), and silently returning {} here is how
-    // data used to disappear. Retry once, then say so loudly.
-    if (error?.code !== "ENOENT") {
-      console.warn("readDB: could not read db_store.json, retrying once -", error?.message || error);
-      await new Promise((r) => setTimeout(r, 50));
-      try {
-        return JSON.parse(await fs.readFile(dbPath, "utf-8"));
-      } catch (retryError: any) {
-        console.error("readDB: db_store.json still unreadable, treating as empty -", retryError?.message || retryError);
-      }
-    }
+  } catch (error) {
     return {};
   }
 }
 
-// Serialises writes: each call waits for the previous one to finish.
-let writeChain: Promise<void> = Promise.resolve();
-let tmpCounter = 0;
-
 async function writeDB(data: any) {
-  const run = async () => {
-    const tmpPath = `${dbPath}.tmp-${process.pid}-${++tmpCounter}`;
-    try {
-      await fs.writeFile(tmpPath, JSON.stringify(data, null, 2), "utf-8");
-      await fs.rename(tmpPath, dbPath); // atomic swap
-    } catch (error) {
-      console.error("Error writing db_store.json:", error);
-      try { await fs.unlink(tmpPath); } catch { /* temp file may not exist */ }
-    }
-  };
-
-  writeChain = writeChain.then(run, run);
-  return writeChain;
+  try {
+    await fs.writeFile(dbPath, JSON.stringify(data, null, 2), "utf-8");
+  } catch (error) {
+    console.error("Error writing db_store.json:", error);
+  }
 }
 
 export class EntityRepository {
