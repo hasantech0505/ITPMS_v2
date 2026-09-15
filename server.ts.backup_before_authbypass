@@ -39,11 +39,8 @@ async function startServer() {
   // `hmr: { server: httpServer }` below is the actual fix.
   const httpServer = http.createServer(app);
 
-  // NOTE (2026-09-15): the RBAC seed used to run HERE, unawaited, before the
-  // Postgres handshake below had created any tables - which is why a fresh boot
-  // logged: relation "roles" does not exist. Same race as the resident
-  // corrections described just below. It now runs inside the sequential
-  // post-migration chain, once the schema is guaranteed to exist.
+  // Seed RBAC roles and permissions
+  RbacRepository.seedRbacData().catch((err) => console.warn("RBAC seed error:", err));
 
   // NOTE (2026-09-01, later): the two resident-correction backfills used to
   // fire here, unawaited, at the very top of startup - racing against the
@@ -123,10 +120,6 @@ async function startServer() {
       .then(async (res) => {
         if (res.success) {
           console.log("✅ Startup PostgreSQL migration finished successfully.");
-
-          // Schema now exists - safe to seed RBAC roles and permissions.
-          await RbacRepository.seedRbacData();
-          console.log("✅ RBAC roles and permissions seeded.");
 
           // Pull Postgres into db_store.json as a consistent baseline FIRST,
           // so the corrections' own readDB()/writeDB() calls below aren't

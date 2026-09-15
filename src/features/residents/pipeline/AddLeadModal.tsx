@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 import { X, Plus, Building2 } from "lucide-react";
-import { Resident, ResidentStatus, KASHKADARYA_DISTRICTS } from "../../../types";
+import { Resident, ResidentStatus, KASHKADARYA_DISTRICTS, RESIDENT_ACTIVITY_TYPES } from "../../../types";
 import { DEFAULT_PROBABILITIES, PipelineStage } from "./pipelineTypes";
 import { useLanguage } from "../../../lib/LanguageContext";
 
@@ -20,7 +20,7 @@ export default function AddLeadModal({ onClose, onAdd, onSyncState }: AddLeadMod
   const [formData, setFormData] = useState({
     companyName: "",
     founder: "",
-    industry: "Software Development",
+    industry: "DTni ishlab chiqish",
     district: "Qarshi",
     exportVolume: 120000,
     domesticVolume: 50000,
@@ -142,13 +142,9 @@ export default function AddLeadModal({ onClose, onAdd, onSyncState }: AddLeadMod
                 onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
                 className="w-full p-2 border border-slate-200 rounded-lg text-xs bg-white"
               >
-                <option value="Software Development">{t("Software Development")}</option>
-                <option value="FinTech">{t("FinTech")}</option>
-                <option value="BPO & IT Outsourcing">{t("BPO & IT Outsourcing")}</option>
-                <option value="GameDev & Animation">{t("GameDev & Animation")}</option>
-                <option value="EdTech">{t("EdTech")}</option>
-                <option value="E-Commerce & AI">{t("E-Commerce & AI")}</option>
-                <option value="Cybersecurity">{t("Cybersecurity")}</option>
+                {RESIDENT_ACTIVITY_TYPES.map((type) => (
+                  <option key={type} value={type}>{t(type)}</option>
+                ))}
               </select>
             </div>
 

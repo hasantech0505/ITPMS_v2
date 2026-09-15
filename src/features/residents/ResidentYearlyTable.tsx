@@ -20,7 +20,7 @@ import {
   FileSpreadsheet,
   ChevronDown
 } from "lucide-react";
-import { Resident, ResidentStatus } from "../../types";
+import { Resident, ResidentStatus, RESIDENT_ACTIVITY_TYPES } from "../../types";
 import { useLanguage } from "../../lib/LanguageContext";
 
 interface ResidentYearlyTableProps {
@@ -304,11 +304,9 @@ export default function ResidentYearlyTable({
               className="bg-transparent font-semibold text-slate-700 outline-none cursor-pointer"
             >
               <option value="ALL">All Industries</option>
-              <option value="Software Development">Software Development</option>
-              <option value="FinTech">FinTech</option>
-              <option value="EdTech">EdTech</option>
-              <option value="BPO & IT Services">BPO & IT Services</option>
-              <option value="GameDev">GameDev</option>
+              {RESIDENT_ACTIVITY_TYPES.map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
             </select>
           </div>
         </div>

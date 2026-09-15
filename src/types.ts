@@ -24,6 +24,34 @@ export const KASHKADARYA_DISTRICTS = [
 
 export type KashkadaryaDistrict = typeof KASHKADARYA_DISTRICTS[number];
 
+// Official IT Park Uzbekistan resident business-activity directions
+// ("Faoliyat turlari"), used across the Residents module (All / Potential /
+// Upcoming / Removed) for the Industry / Activity Type fields. Added
+// 2026-09-08 in response to: those fields were previously free text or a
+// short partial dropdown - this is the full official list.
+export const RESIDENT_ACTIVITY_TYPES = [
+  "OAV",
+  "DTni ishlab chiqish",
+  "Qo'llab-quvvatlash",
+  "Litsenziyalarni sotish",
+  "Marketpleyslar",
+  "Ma'lumotlarni qayta ishlash",
+  "Fintex",
+  "IT konsalting",
+  "IT ta'lim",
+  "Xosting",
+  "DAKni sotish",
+  "Gamedev",
+  "DTda reklama maydoni",
+  "BPO",
+  "Kreativ iqtisodiyot",
+  "Venchur fond",
+  "Kibersport",
+  "Akseleratsiya dasturi"
+] as const;
+
+export type ResidentActivityType = typeof RESIDENT_ACTIVITY_TYPES[number];
+
 // User & Role-Based Access Control (RBAC) Types
 export enum UserRole {
   SUPER_ADMIN = "SUPER_ADMIN",

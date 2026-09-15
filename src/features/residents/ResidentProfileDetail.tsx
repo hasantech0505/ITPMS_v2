@@ -46,6 +46,7 @@ import {
   ResidentTask, 
   ResidentHistoryLog,
   KASHKADARYA_DISTRICTS,
+  RESIDENT_ACTIVITY_TYPES,
   Vacancy,
   VacancyApplication
 } from "../../types";
@@ -1144,12 +1145,19 @@ export default function ResidentProfileDetail({
                   </div>
                   <div className="space-y-1">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Activity Type</label>
-                    <input
-                      type="text"
+                    <select
                       value={editForm.activityType}
                       onChange={(e) => setEditForm({ ...editForm, activityType: e.target.value })}
-                      className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs outline-none focus:border-emerald-500"
-                    />
+                      className="w-full px-3 py-1.5 border border-slate-200 rounded-lg text-xs bg-white cursor-pointer outline-none focus:border-emerald-500"
+                    >
+                      <option value="">{t("-- Select Activity Type --", "-- Select Activity Type --")}</option>
+                      {editForm.activityType && !(RESIDENT_ACTIVITY_TYPES as readonly string[]).includes(editForm.activityType) && (
+                        <option value={editForm.activityType}>{editForm.activityType}</option>
+                      )}
+                      {RESIDENT_ACTIVITY_TYPES.map((type) => (
+                        <option key={type} value={type}>{t(type)}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>

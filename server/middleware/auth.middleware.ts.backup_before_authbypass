@@ -1,36 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyAccessToken, TokenPayload } from "../utils/jwt";
 import { RbacRepository } from "../repositories/rbac.repository";
-import { config } from "../config/env";
 
 export interface AuthenticatedRequest extends Request {
   user?: TokenPayload;
 }
 
 export function authenticateJWT(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  // ---------------------------------------------------------------------
-  // DEVELOPMENT ONLY - temporary auth bypass.
-  //
-  // With AUTH_DISABLED=true in .env, every request is treated as SUPER_ADMIN,
-  // so the app can be used without logging in. No auth code has been deleted:
-  // remove that line (or set it to false) and real authentication is back.
-  //
-  // SUPER_ADMIN already short-circuits requireRole(), requirePermission() and
-  // checkEntityPermission() below, so this one switch covers every route.
-  //
-  // Deliberately ignored when NODE_ENV=production, so this can never be
-  // switched on by accident in a deployed environment.
-  // ---------------------------------------------------------------------
-  if (config.authDisabled && config.nodeEnv !== "production") {
-    req.user = {
-      userId: "dev-bypass",
-      email: "dev@localhost",
-      role: "SUPER_ADMIN",
-      name: "Development User",
-    };
-    return next();
-  }
-
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {

@@ -21,7 +21,7 @@ import {
   XCircle,
   Plus
 } from "lucide-react";
-import { Resident, ResidentStatus } from "../../types";
+import { Resident, ResidentStatus, RESIDENT_ACTIVITY_TYPES } from "../../types";
 import { useLanguage } from "../../lib/LanguageContext";
 
 interface ResidentDeclinedYearlyProps {
@@ -51,6 +51,7 @@ export default function ResidentDeclinedYearly({
   const [customCompanyName, setCustomCompanyName] = useState("");
   const [customDirector, setCustomDirector] = useState("");
   const [customInn, setCustomInn] = useState("");
+  const [customActivityType, setCustomActivityType] = useState("DTni ishlab chiqish");
   const [revokeReason, setRevokeReason] = useState("");
   const [revokeDebt, setRevokeDebt] = useState<number>(0);
   const [revokeInspection, setRevokeInspection] = useState("");
@@ -145,7 +146,7 @@ export default function ResidentDeclinedYearly({
         removedInspection: revokeInspection || "Documentation failed validation checks",
         removedCanReapply: canReapply,
         district: "Tashkent City",
-        activityType: "IT Services & Software Development",
+        activityType: customActivityType || "DTni ishlab chiqish",
         exportVolume: 0,
         employeesCount: 0,
         notes: [`Created directly as ${revokeStatus} record on ${today}.`]
@@ -527,6 +528,18 @@ export default function ResidentDeclinedYearly({
                       onChange={(e) => setCustomInn(e.target.value)}
                       className="w-full p-2 border border-slate-200 rounded bg-white font-mono"
                     />
+                  </div>
+                  <div className="space-y-1 sm:col-span-2">
+                    <label className="font-bold text-slate-600 text-[10px] uppercase">Activity Type</label>
+                    <select
+                      value={customActivityType}
+                      onChange={(e) => setCustomActivityType(e.target.value)}
+                      className="w-full p-2 border border-slate-200 rounded bg-white"
+                    >
+                      {RESIDENT_ACTIVITY_TYPES.map((type) => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}

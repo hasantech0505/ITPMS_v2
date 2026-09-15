@@ -17,6 +17,38 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const TRANSLATIONS: Record<Language, Record<string, string>> = {
   en: {
+    // Executive Dashboard - collapsible detail sections (2026-09-08 simplification)
+    "Targets & Forecast": "Targets & Forecast",
+    "Progress vs. 2026 targets, year-end projections, and the full KPI scorecard.": "Progress vs. 2026 targets, year-end projections, and the full KPI scorecard.",
+    "Portfolio & Pipeline": "Portfolio & Pipeline",
+    "Resident risk health, the international outreach pipeline, and hiring activity.": "Resident risk health, the international outreach pipeline, and hiring activity.",
+    "Regions & Schedule": "Regions & Schedule",
+    "District-by-district performance and the next 30 days' schedule.": "District-by-district performance and the next 30 days' schedule.",
+    "KPIs": "KPIs",
+    "at risk": "at risk",
+    "districts": "districts",
+
+    // Resident activity types / "Faoliyat turlari" (official IT Park
+    // categories, added 2026-09-08)
+    "OAV": "Mass Media",
+    "DTni ishlab chiqish": "Software Development",
+    "Qo'llab-quvvatlash": "Support & Maintenance",
+    "Litsenziyalarni sotish": "License Sales",
+    "Marketpleyslar": "Marketplaces",
+    "Ma'lumotlarni qayta ishlash": "Data Processing",
+    "Fintex": "FinTech",
+    "IT konsalting": "IT Consulting",
+    "IT ta'lim": "IT Education",
+    "Xosting": "Hosting",
+    "DAKni sotish": "Hardware-Software Complex Sales",
+    "Gamedev": "GameDev",
+    "DTda reklama maydoni": "In-Software Advertising",
+    "BPO": "BPO",
+    "Kreativ iqtisodiyot": "Creative Economy",
+    "Venchur fond": "Venture Fund",
+    "Kibersport": "Esports",
+    "Akseleratsiya dasturi": "Acceleration Program",
+    "-- Select Activity Type --": "-- Select Activity Type --",
     // Sidebar
     "Executive Dashboard": "Executive Dashboard",
     "Executive BI & Analytics": "Executive BI & Analytics",
@@ -1120,6 +1152,38 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     // --- Startups module additions ---
   },
   uz: {
+    // Executive Dashboard - collapsible detail sections (2026-09-08 simplification)
+    "Targets & Forecast": "Maqsadlar va prognoz",
+    "Progress vs. 2026 targets, year-end projections, and the full KPI scorecard.": "2026-yil maqsadlariga erishish darajasi, yil oxiri prognozlari va to‘liq KPI ko‘rsatkichlari.",
+    "Portfolio & Pipeline": "Portfel va aloqalar bazasi",
+    "Resident risk health, the international outreach pipeline, and hiring activity.": "Rezidentlar xavf holati, xalqaro aloqalar bazasi va ish o‘rinlari faoliyati.",
+    "Regions & Schedule": "Hududlar va jadval",
+    "District-by-district performance and the next 30 days' schedule.": "Tumanlar bo‘yicha ko‘rsatkichlar va keyingi 30 kunlik jadval.",
+    "KPIs": "KPI",
+    "at risk": "xavf ostida",
+    "districts": "tuman",
+
+    // Rezidentlarning faoliyat turlari (rasmiy IT Park kategoriyalari,
+    // 2026-09-08 qo'shildi)
+    "OAV": "OAV",
+    "DTni ishlab chiqish": "DTni ishlab chiqish",
+    "Qo'llab-quvvatlash": "Qo'llab-quvvatlash",
+    "Litsenziyalarni sotish": "Litsenziyalarni sotish",
+    "Marketpleyslar": "Marketpleyslar",
+    "Ma'lumotlarni qayta ishlash": "Ma'lumotlarni qayta ishlash",
+    "Fintex": "Fintex",
+    "IT konsalting": "IT konsalting",
+    "IT ta'lim": "IT ta'lim",
+    "Xosting": "Xosting",
+    "DAKni sotish": "DAKni sotish",
+    "Gamedev": "Gamedev",
+    "DTda reklama maydoni": "DTda reklama maydoni",
+    "BPO": "BPO",
+    "Kreativ iqtisodiyot": "Kreativ iqtisodiyot",
+    "Venchur fond": "Venchur fond",
+    "Kibersport": "Kibersport",
+    "Akseleratsiya dasturi": "Akseleratsiya dasturi",
+    "-- Select Activity Type --": "-- Faoliyat turini tanlang --",
     // Sidebar
     "Executive Dashboard": "Ijroiya boshqaruv paneli",
     "Executive BI & Analytics": "Biznes tahlili (BI) va analitika",
@@ -2315,6 +2379,38 @@ const TRANSLATIONS: Record<Language, Record<string, string>> = {
     // --- Startups module additions ---
   },
   ru: {
+    // Executive Dashboard - collapsible detail sections (2026-09-08 simplification)
+    "Targets & Forecast": "Цели и прогноз",
+    "Progress vs. 2026 targets, year-end projections, and the full KPI scorecard.": "Прогресс по целям 2026 года, прогноз на конец года и полная система показателей KPI.",
+    "Portfolio & Pipeline": "Портфель и воронка",
+    "Resident risk health, the international outreach pipeline, and hiring activity.": "Состояние рисков резидентов, международная воронка и активность найма.",
+    "Regions & Schedule": "Регионы и график",
+    "District-by-district performance and the next 30 days' schedule.": "Показатели по районам и график на ближайшие 30 дней.",
+    "KPIs": "KPI",
+    "at risk": "в риске",
+    "districts": "районов",
+
+    // Виды деятельности резидентов (официальные категории IT Park,
+    // добавлено 2026-09-08)
+    "OAV": "СМИ",
+    "DTni ishlab chiqish": "Разработка ПО",
+    "Qo'llab-quvvatlash": "Поддержка и сопровождение",
+    "Litsenziyalarni sotish": "Продажа лицензий",
+    "Marketpleyslar": "Маркетплейсы",
+    "Ma'lumotlarni qayta ishlash": "Обработка данных",
+    "Fintex": "Финтех",
+    "IT konsalting": "IT-консалтинг",
+    "IT ta'lim": "IT-образование",
+    "Xosting": "Хостинг",
+    "DAKni sotish": "Продажа программно-аппаратных комплексов",
+    "Gamedev": "Геймдев",
+    "DTda reklama maydoni": "Реклама в ПО",
+    "BPO": "BPO",
+    "Kreativ iqtisodiyot": "Креативная экономика",
+    "Venchur fond": "Венчурный фонд",
+    "Kibersport": "Киберспорт",
+    "Akseleratsiya dasturi": "Программа акселерации",
+    "-- Select Activity Type --": "-- Выберите вид деятельности --",
     // Sidebar
     "Executive Dashboard": "Панель управления",
     "Executive BI & Analytics": "Бизнес-аналитика (BI)",

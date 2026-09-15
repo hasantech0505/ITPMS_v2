@@ -76,22 +76,6 @@ function ModuleLoadingFallback() {
   );
 }
 
-// ---------------------------------------------------------------------------
-// DEVELOPMENT ONLY - skips the login screen when VITE_AUTH_DISABLED=true in .env.
-// Pair it with AUTH_DISABLED=true so the backend skips its JWT check too.
-// Set both to false (or delete the lines) to bring the login screen back.
-// ---------------------------------------------------------------------------
-const AUTH_DISABLED =
-  (import.meta as any).env?.VITE_AUTH_DISABLED === "true";
-
-const DEV_USER = {
-  id: "dev-bypass",
-  name: "Development User",
-  email: "dev@localhost",
-  role: UserRole.SUPER_ADMIN,
-  department: "Development",
-};
-
 export default function App() {
   // Authentication & Session Persistence
   const [currentUser, setCurrentUser] = useState<{
@@ -102,7 +86,6 @@ export default function App() {
     department: string;
     avatarUrl?: string;
   } | null>(() => {
-    if (AUTH_DISABLED) return DEV_USER;
     const saved = localStorage.getItem("itpms_user");
     if (saved) {
       try {
@@ -150,7 +133,6 @@ export default function App() {
 
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState<boolean>(false);
   const [userRole, setUserRole] = useState<UserRole>(() => {
-    if (AUTH_DISABLED) return DEV_USER.role;
     const saved = localStorage.getItem("itpms_user");
     if (saved) {
       try {
@@ -268,10 +250,6 @@ export default function App() {
   // Validate authentication session on app load
   useEffect(() => {
     const validateSession = async () => {
-      // Auth bypass on: there is no session to validate, and running this would
-      // clear the dev user set above.
-      if (AUTH_DISABLED) return;
-
       const accessToken = localStorage.getItem("itpms_access_token");
       if (!accessToken) {
         if (currentUser) {
@@ -320,18 +298,14 @@ export default function App() {
   // Fetch full DB on mount
   const syncState = async () => {
     const token = localStorage.getItem("itpms_access_token");
-    if (!token && !AUTH_DISABLED) {
+    if (!token) {
       // No session yet (still validating, or logged out) - /api/db always requires
       // auth, so skip the guaranteed-401 request instead of spamming the console.
-      //
-      // With the dev auth bypass on there is no token at all and there never will
-      // be, but the backend is not asking for one either - so carry on and fetch.
       return;
     }
     setIsSyncing(true);
     try {
-      const headers: Record<string, string> = {};
-      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const headers: Record<string, string> = { "Authorization": `Bearer ${token}` };
       const response = await authFetch("/api/db", { headers });
       if (response.ok) {
         const data = await response.json();

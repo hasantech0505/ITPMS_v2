@@ -15,7 +15,7 @@ import InternationalPipeline from "./components/InternationalPipeline";
 import RegionalPerformance from "./components/RegionalPerformance";
 import UpcomingActions from "./components/UpcomingActions";
 import ExecutiveAiBrief from "./components/ExecutiveAiBrief";
-import AiInsightsCard from "../ai/AiInsightsCard";
+import CollapsibleSection from "./components/CollapsibleSection";
 
 import { CalculatedKPI, KpiTargetOverride } from "./types/kpiTypes";
 import { 
@@ -121,8 +121,10 @@ export default function ExecutiveControlCenter({
 
   return (
     <div id="executive-control-center" className="space-y-6">
-      
-      {/* 2. EXECUTIVE KPI STRIP (6 HIGH-VALUE STRATEGIC CARDS) */}
+
+      {/* OVERVIEW - always visible: headline KPIs, the AI brief, and anything
+          needing attention right now. Everything else is grouped into the
+          collapsible sections below so the page isn't a wall of cards. */}
       <ExecutiveKpiStrip
         calculatedKpis={calculatedKpis}
         strategyHealthScore={healthScoreResult.overallScorePct}
@@ -137,16 +139,6 @@ export default function ExecutiveControlCenter({
         t={t}
       />
 
-      <AiInsightsCard module="executive" />
-
-      {/* 3. PERFORMANCE VS TARGET (4 STRATEGIC CORE METRICS IN RESPONSIVE GRID) */}
-      <TargetTrajectoryCard
-        calculatedKpis={calculatedKpis}
-        selectedPeriod={selectedPeriod}
-        t={t}
-      />
-
-      {/* 4. EXECUTIVE AI BRIEF & IMMEDIATE ATTENTION ALERTS */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div className="lg:col-span-4">
           <ExecutiveAiBrief
@@ -165,61 +157,89 @@ export default function ExecutiveControlCenter({
         </div>
       </div>
 
-      {/* 5. PERFORMANCE FORECAST & YEAR-END PROJECTION */}
-      <PerformanceForecast
-        calculatedKpis={calculatedKpis}
-        t={t}
-      />
+      {/* DETAILS - grouped and collapsed by default. Click a header to open it. */}
+      <CollapsibleSection
+        title={t("Targets & Forecast")}
+        description={t(
+          "Progress vs. 2026 targets, year-end projections, and the full KPI scorecard.",
+          "Progress vs. 2026 targets, year-end projections, and the full KPI scorecard."
+        )}
+        meta={`${calculatedKpis.length} ${t("KPIs", "KPIs")}`}
+      >
+        <TargetTrajectoryCard
+          calculatedKpis={calculatedKpis}
+          selectedPeriod={selectedPeriod}
+          t={t}
+        />
 
-      {/* 6. 2026 STRATEGIC SCORECARD */}
-      <StrategicScorecard
-        calculatedKpis={calculatedKpis}
-        selectedCategory={selectedScorecardCategory}
-        setSelectedCategory={setSelectedScorecardCategory}
-        onNavigateToModule={setActiveTab}
-        onUpdateKpiTarget={onUpdateKpiTarget}
-        t={t}
-      />
+        <PerformanceForecast
+          calculatedKpis={calculatedKpis}
+          t={t}
+        />
 
-      {/* 7. RESIDENT PORTFOLIO HEALTH & INTERNATIONAL PIPELINE */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-6">
-          <ResidentPortfolioHealth
-            healthSummary={residentHealthData}
-            onNavigateToResidents={() => setActiveTab("residents")}
-            t={t}
-          />
+        <StrategicScorecard
+          calculatedKpis={calculatedKpis}
+          selectedCategory={selectedScorecardCategory}
+          setSelectedCategory={setSelectedScorecardCategory}
+          onNavigateToModule={setActiveTab}
+          onUpdateKpiTarget={onUpdateKpiTarget}
+          t={t}
+        />
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        title={t("Portfolio & Pipeline")}
+        description={t(
+          "Resident risk health, the international outreach pipeline, and hiring activity.",
+          "Resident risk health, the international outreach pipeline, and hiring activity."
+        )}
+        meta={`${residentHealthData.atRiskCount} ${t("at risk", "at risk")}`}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-6">
+            <ResidentPortfolioHealth
+              healthSummary={residentHealthData}
+              onNavigateToResidents={() => setActiveTab("residents")}
+              t={t}
+            />
+          </div>
+
+          <div className="lg:col-span-6">
+            <InternationalPipeline
+              pipelineData={internationalPipelineData}
+              onNavigateToCrm={() => setActiveTab("crm")}
+              t={t}
+            />
+          </div>
         </div>
 
-        <div className="lg:col-span-6">
-          <InternationalPipeline
-            pipelineData={internationalPipelineData}
-            onNavigateToCrm={() => setActiveTab("crm")}
-            t={t}
-          />
-        </div>
-      </div>
+        <HiringActivityCard
+          summary={hiringActivityData}
+          onNavigateToVacancies={() => setActiveTab("vacancies")}
+          t={t}
+        />
+      </CollapsibleSection>
 
-      {/* 7b. HIRING ACTIVITY (RESIDENT VACANCIES JOB BOARD) */}
-      <HiringActivityCard
-        summary={hiringActivityData}
-        onNavigateToVacancies={() => setActiveTab("vacancies")}
-        t={t}
-      />
+      <CollapsibleSection
+        title={t("Regions & Schedule")}
+        description={t(
+          "District-by-district performance and the next 30 days' schedule.",
+          "District-by-district performance and the next 30 days' schedule."
+        )}
+        meta={`${filteredDistrictData.length} ${t("districts", "districts")}`}
+      >
+        <RegionalPerformance
+          districtData={filteredDistrictData}
+          onNavigateToDistrict={() => setActiveTab("analytics")}
+          t={t}
+        />
 
-      {/* 8. GEOGRAPHIC DISTRIBUTION (DISTRICT PERFORMANCE) */}
-      <RegionalPerformance
-        districtData={filteredDistrictData}
-        onNavigateToDistrict={() => setActiveTab("analytics")}
-        t={t}
-      />
-
-      {/* 9. NEXT 30 DAYS EXECUTIVE SCHEDULE */}
-      <UpcomingActions
-        actionItems={upcomingActionsData}
-        onNavigateToModule={setActiveTab}
-        t={t}
-      />
+        <UpcomingActions
+          actionItems={upcomingActionsData}
+          onNavigateToModule={setActiveTab}
+          t={t}
+        />
+      </CollapsibleSection>
 
     </div>
   );

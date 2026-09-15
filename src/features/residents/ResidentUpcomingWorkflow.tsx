@@ -29,7 +29,7 @@ import {
   RotateCcw,
   Trash2
 } from "lucide-react";
-import { Resident, ResidentStatus } from "../../types";
+import { Resident, ResidentStatus, RESIDENT_ACTIVITY_TYPES } from "../../types";
 import { useLanguage } from "../../lib/LanguageContext";
 
 interface ResidentUpcomingWorkflowProps {
@@ -79,7 +79,7 @@ export default function ResidentUpcomingWorkflow({
   const [newDirector, setNewDirector] = useState("");
   const [newInn, setNewInn] = useState("");
   const [newDistrict, setNewDistrict] = useState("Tashkent City");
-  const [newActivity, setNewActivity] = useState("IT Services & Software Development");
+  const [newActivity, setNewActivity] = useState("DTni ishlab chiqish");
   const [newProjExports, setNewProjExports] = useState<number>(150000);
   const [newProjJobs, setNewProjJobs] = useState<number>(15);
 
@@ -555,14 +555,16 @@ export default function ResidentUpcomingWorkflow({
 
               <div className="space-y-1">
                 <label className="font-bold text-slate-700 uppercase text-[10px]">Primary IT Activity Type</label>
-                <input
-                  type="text"
+                <select
                   required
-                  placeholder="e.g. Software Engineering & Cloud Solutions"
                   value={newActivity}
                   onChange={(e) => setNewActivity(e.target.value)}
-                  className="w-full p-2.5 border border-slate-200 rounded-lg font-medium text-slate-800"
-                />
+                  className="w-full p-2.5 border border-slate-200 rounded-lg font-medium text-slate-800 bg-white"
+                >
+                  {RESIDENT_ACTIVITY_TYPES.map((type) => (
+                    <option key={type} value={type}>{type}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
