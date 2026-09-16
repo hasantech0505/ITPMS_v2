@@ -19,11 +19,7 @@ const StartupModule = React.lazy(() => import("./features/startups/StartupModule
 const ResidentModule = React.lazy(() => import("./features/residents/ResidentModule"));
 const InfrastructureModule = React.lazy(() => import("./features/infrastructure/InfrastructureModule"));
 const TalentModule = React.lazy(() => import("./features/talent/TalentModule"));
-// Buildings Infrastructure was removed from the UI (2026-09-16): it duplicated
-// Property Marketplace, which holds the same physical objects with a richer
-// model. The buildings table and its 11 rows are untouched in the database, and
-// src/features/buildings/BuildingsModule.tsx is still on disk, so this is a
-// one-line change to undo if it is ever wanted back.
+const BuildingsModule = React.lazy(() => import("./features/buildings/BuildingsModule"));
 const EventModule = React.lazy(() => import("./features/events/EventModule"));
 const CRMModule = React.lazy(() => import("./features/crm/CRMModule"));
 const AnalyticsModule = React.lazy(() => import("./features/analytics/AnalyticsModule"));
@@ -121,7 +117,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>(() => {
     const rawHash = window.location.hash.replace("#", "");
     const tabName = rawHash.split("?")[0];
-    if (tabName && ["dashboard", "analytics", "startups", "residents", "infrastructure", "talent", "vacancies", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
+    if (tabName && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "vacancies", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
       return tabName;
     }
     return "dashboard";
@@ -132,7 +128,7 @@ export default function App() {
     const handleSyncHash = () => {
       const rawHash = window.location.hash.replace("#", "");
       const tabName = rawHash.split("?")[0];
-      if (tabName && tabName !== activeTab && ["dashboard", "analytics", "startups", "residents", "infrastructure", "talent", "vacancies", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
+      if (tabName && tabName !== activeTab && ["dashboard", "analytics", "startups", "residents", "infrastructure", "buildings", "talent", "vacancies", "events", "comments", "crm", "ai", "reports", "edoReport", "planning", "users", "settings"].some(t => tabName.startsWith(t))) {
         setActiveTab(tabName);
       }
     };
@@ -760,6 +756,16 @@ export default function App() {
               onUpdateTalent={(id, payload) => handleUpdateItem("talent", id, payload, setTalent)}
               userRole={userRole}
               onSyncState={syncState}
+            />
+          )}
+
+          {activeTab === "buildings" && (
+            <BuildingsModule
+              buildings={buildings}
+              onAdd={(payload) => handleAddItem("buildings", payload, setBuildings)}
+              onUpdate={(id, payload) => handleUpdateItem("buildings", id, payload, setBuildings)}
+              onDelete={(id) => handleDeleteItem("buildings", id, setBuildings)}
+              userRole={userRole}
             />
           )}
 

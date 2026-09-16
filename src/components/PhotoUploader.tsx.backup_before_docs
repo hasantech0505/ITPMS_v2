@@ -14,30 +14,12 @@ interface PhotoUploaderProps {
   folder: string;
   /** Allow selecting/dropping more than one file at once. */
   multiple?: boolean;
-  /**
-   * Called with the server-relative URL(s) of the newly uploaded file(s).
-   * The second argument carries each file's original name and byte size, which
-   * the document vault needs to label rows without a second round-trip.
-   */
-  onUploaded: (urls: string[], files?: { name: string; size: number }[]) => void;
+  /** Called with the server-relative URL(s) of the newly uploaded image(s). */
+  onUploaded: (urls: string[]) => void;
   className?: string;
-  /** Override the file picker's accept list (defaults to images only). */
-  accept?: string;
-  /** Replaces the "PNG, JPG, WEBP..." hint under the drop zone. */
-  hint?: string;
 }
 
-const IMAGE_ACCEPT = "image/png,image/jpeg,image/webp,image/gif,image/avif,image/svg+xml";
-
-export default function PhotoUploader({
-  category,
-  folder,
-  multiple = false,
-  onUploaded,
-  className,
-  accept = IMAGE_ACCEPT,
-  hint,
-}: PhotoUploaderProps) {
+export default function PhotoUploader({ category, folder, multiple = false, onUploaded, className }: PhotoUploaderProps) {
   const { t } = useLanguage();
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -73,11 +55,7 @@ export default function PhotoUploader({
       }
 
       const data = await res.json();
-      const sent = multiple ? files : [files[0]];
-      onUploaded(
-        data.urls || (data.url ? [data.url] : []),
-        sent.map((f) => ({ name: f.name, size: f.size }))
-      );
+      onUploaded(data.urls || (data.url ? [data.url] : []));
     } catch (err: any) {
       setError(err.message || "Upload failed.");
     } finally {
@@ -103,7 +81,7 @@ export default function PhotoUploader({
         <input
           ref={inputRef}
           type="file"
-          accept={accept}
+          accept="image/png,image/jpeg,image/webp,image/gif,image/avif,image/svg+xml"
           multiple={multiple}
           className="hidden"
           onChange={(e) => {
@@ -120,7 +98,7 @@ export default function PhotoUploader({
           <>
             <Upload className="w-5 h-5 text-slate-400 mb-1" />
             <span className="text-[10px] font-black text-slate-700">{t("Drag & Drop or Click to Upload")}</span>
-            <span className="text-[9px] text-slate-400 mt-0.5">{hint || t("PNG, JPG, WEBP, GIF up to 10MB")}</span>
+            <span className="text-[9px] text-slate-400 mt-0.5">{t("PNG, JPG, WEBP, GIF up to 10MB")}</span>
           </>
         )}
       </div>

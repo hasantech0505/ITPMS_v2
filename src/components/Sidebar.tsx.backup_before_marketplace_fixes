@@ -77,6 +77,7 @@ export default function Sidebar({
     { id: "startups", label: "Startups Hub", icon: Rocket },
     { id: "residents", label: "Residents", icon: Building2 },
     { id: "infrastructure", label: "🏢 Property Marketplace", icon: Building },
+    { id: "buildings", label: "Buildings Infrastructure", icon: Warehouse },
     { id: "talent", label: "Talent Pool", icon: Users2 },
     { id: "vacancies", label: "Resident Vacancies", icon: UserSearch },
     { id: "events", label: "Events & Hackathons", icon: CalendarDays },

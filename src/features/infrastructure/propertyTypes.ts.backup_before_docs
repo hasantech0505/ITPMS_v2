@@ -20,17 +20,9 @@ export interface PropertyTimelineItem {
 
 export interface PropertyDocument {
   name: string;
-  /** What the document IS - cadastre extract, ownership certificate, permit... */
   type: string;
   size: string;
   uploadedAt: string;
-  /**
-   * Server-relative path of the stored file, e.g. "/property-docs/prop-123/deed.pdf".
-   * Optional because records created before real uploads existed have no file
-   * behind them - those show as unavailable rather than a broken download.
-   */
-  url?: string;
-  uploadedBy?: string;
 }
 
 export interface PropertyUtilities {

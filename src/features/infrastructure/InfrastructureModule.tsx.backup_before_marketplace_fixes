@@ -125,42 +125,6 @@ const DEFAULT_NEW_PROP: Partial<Property> = {
   images: []
 };
 
-/**
- * The paperwork a commercial or construction property in Qashqadaryo actually
- * carries. Kept as a fixed list so the vault can be filtered and reported on -
- * free-text document types make that impossible.
- */
-const PROPERTY_DOCUMENT_TYPES = [
-  "Kadastr hujjati",
-  "Mulkchilik guvohnomasi",
-  "Yer uchastkasi hujjati",
-  "Texnik pasport",
-  "Qurilishga ruxsatnoma",
-  "Loyiha hujjatlari",
-  "Foydalanishga qabul dalolatnomasi",
-  "Ijara shartnomasi",
-  "Oldi-sotdi shartnomasi",
-  "Baholash hisoboti",
-  "Tekshiruv dalolatnomasi",
-  "Yong'in xavfsizligi xulosasi",
-  "Sanitariya-epidemiologik xulosa",
-  "Elektr quvvati texnik shartlari",
-  "Boshqa hujjat",
-];
-
-const DOC_ACCEPT =
-  ".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,application/pdf," +
-  "application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document," +
-  "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet," +
-  "text/plain,image/png,image/jpeg";
-
-const formatFileSize = (bytes: number) => {
-  if (!bytes) return "-";
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-};
-
 type ActiveTab = "dashboard" | "marketplace" | "matcher" | "pipeline" | "vault" | "import-export";
 
 export default function InfrastructureModule({ 
@@ -185,17 +149,7 @@ export default function InfrastructureModule({
   const [filterCity, setFilterCity] = useState("ALL");
   const [filterType, setFilterType] = useState("ALL");
   const [filterStatus, setFilterStatus] = useState("ALL");
-  // null means NO maximum. It used to default to 5000, which quietly hid every
-  // property priced in so'm: the "Total listings" card counts properties.length
-  // (unfiltered) while the grid renders filteredProperties, so adding a property
-  // made the number go up while the card itself never appeared.
-  const [filterPriceRange, setFilterPriceRange] = useState<number | null>(null);
-  // Price per m2 helper for the create/edit form (see the calculator below).
-  const [pricePerSqM, setPricePerSqM] = useState<number>(0);
-  // Document vault: which property the next upload attaches to, and what it is.
-  const [docTargetPropertyId, setDocTargetPropertyId] = useState<string>("");
-  const [docType, setDocType] = useState<string>(PROPERTY_DOCUMENT_TYPES[0]);
-  const [docFilterType, setDocFilterType] = useState<string>("ALL");
+  const [filterPriceRange, setFilterPriceRange] = useState(5000);
   const [filterMinArea, setFilterMinArea] = useState(0);
   const [filterAC, setFilterAC] = useState(false);
   const [filterMeetingRooms, setFilterMeetingRooms] = useState(false);
@@ -269,12 +223,6 @@ export default function InfrastructureModule({
   const COLORS = ["#4f46e5", "#06b6d4", "#10b981", "#f59e0b", "#ec4899", "#8b5cf6"];
 
   // Filtering properties
-  // The slider's ceiling follows the actual data, so it works whether prices are
-  // recorded in dollars or so'm. Sitting at the ceiling (null) means "no maximum".
-  const maxRentInData = properties.reduce((m, p) => Math.max(m, p.monthlyRent || 0), 0);
-  const priceSliderMax = Math.max(10000, Math.ceil(maxRentInData / 500) * 500);
-  const priceCap = filterPriceRange ?? Number.POSITIVE_INFINITY;
-
   const filteredProperties = properties.filter(p => {
     const q = searchQuery.toLowerCase().trim();
     const matchesSearch = (p.name || "").toLowerCase().includes(q) || 
@@ -283,7 +231,7 @@ export default function InfrastructureModule({
     const matchesCity = filterCity === "ALL" || p.city === filterCity;
     const matchesType = filterType === "ALL" || p.type === filterType;
     const matchesStatus = filterStatus === "ALL" || p.status === filterStatus;
-    const matchesPrice = (p.monthlyRent || 0) <= priceCap || (p.purchasePrice || 0) <= priceCap * 100;
+    const matchesPrice = (p.monthlyRent || 0) <= filterPriceRange || (p.purchasePrice || 0) <= filterPriceRange * 100;
     const matchesArea = p.areaSqM >= filterMinArea;
     const matchesAC = !filterAC || p.hasAC;
     const matchesMeeting = !filterMeetingRooms || p.hasMeetingRooms;
@@ -721,13 +669,6 @@ export default function InfrastructureModule({
       coverImage: property.coverImage,
       images: property.images
     });
-    // Derive price/m² from what is already stored, so opening an existing
-    // property shows a consistent figure instead of a stale one.
-    setPricePerSqM(
-      property.purchasePrice && property.areaSqM
-        ? Math.round(property.purchasePrice / property.areaSqM)
-        : 0
-    );
     setEditingPropertyId(property.id);
     setShowCreateModal(true);
   };
@@ -835,7 +776,6 @@ export default function InfrastructureModule({
           <button
             onClick={() => {
               setNewProp(DEFAULT_NEW_PROP);
-              setPricePerSqM(0);
               setEditingPropertyId(null);
               setShowCreateModal(true);
             }}
@@ -1018,7 +958,7 @@ export default function InfrastructureModule({
                       setFilterCity("ALL");
                       setFilterType("ALL");
                       setFilterStatus("ALL");
-                      setFilterPriceRange(null);
+                      setFilterPriceRange(5000);
                       setFilterMinArea(0);
                       setFilterAC(false);
                       setFilterMeetingRooms(false);
@@ -1101,20 +1041,14 @@ export default function InfrastructureModule({
 
                   {/* Max monthly rent */}
                   <div>
-                    <label className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider mb-1">
-                      {t("Max Rent")} ({filterPriceRange === null ? t("No limit") : filterPriceRange.toLocaleString()})
-                    </label>
+                    <label className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider mb-1">{t("Max Rent")} (${filterPriceRange}/mo)</label>
                     <input
                       type="range"
-                      min="0"
-                      max={priceSliderMax}
-                      step={Math.max(1, Math.round(priceSliderMax / 40))}
-                      value={filterPriceRange ?? priceSliderMax}
-                      onChange={(e) => {
-                        const v = Number(e.target.value);
-                        // At the far right there is no maximum at all.
-                        setFilterPriceRange(v >= priceSliderMax ? null : v);
-                      }}
+                      min="1000"
+                      max="10000"
+                      step="500"
+                      value={filterPriceRange}
+                      onChange={(e) => setFilterPriceRange(Number(e.target.value))}
                       className="w-full accent-emerald-600 mt-2.5"
                     />
                   </div>
@@ -1156,32 +1090,6 @@ export default function InfrastructureModule({
                       {t("Open Comparison Matrix")}
                     </button>
                   </div>
-                </div>
-              )}
-
-              {/* If filters are hiding properties, say so plainly - the total card
-                  counts everything, so a silent mismatch is very confusing. */}
-              {filteredProperties.length !== properties.length && (
-                <div className="flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200">
-                  <span className="text-[11px] font-bold text-amber-800">
-                    {filteredProperties.length} / {properties.length} {t("shown - filters are hiding the rest")}
-                  </span>
-                  <button
-                    onClick={() => {
-                      setSearchQuery("");
-                      setFilterCity("ALL");
-                      setFilterType("ALL");
-                      setFilterStatus("ALL");
-                      setFilterPriceRange(null);
-                      setFilterMinArea(0);
-                      setFilterAC(false);
-                      setFilterMeetingRooms(false);
-                      setFilterVerifiedOnly(false);
-                    }}
-                    className="text-[10px] font-extrabold text-amber-800 hover:underline shrink-0"
-                  >
-                    {t("Clear filters")}
-                  </button>
                 </div>
               )}
 
@@ -1540,104 +1448,15 @@ export default function InfrastructureModule({
                   </h3>
                   <p className="text-[11px] text-slate-400 mt-0.5">Secure, legal cloud storage for ownership documents, inspection reports, and digital lease agreements.</p>
                 </div>
-                {/* The button that used to sit here only popped up "Redirecting to
-                    Gov.uz cadastre auth integration..." - there was no integration
-                    behind it. Removed rather than left pretending. */}
-              </div>
-
-              {/* Upload panel */}
-              <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
-                <h4 className="font-bold text-slate-800 text-[11px] uppercase tracking-wider mb-3">
-                  {t("Upload a document")}
-                </h4>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider mb-1">
-                      {t("Property")}
-                    </label>
-                    <select
-                      value={docTargetPropertyId}
-                      onChange={(e) => setDocTargetPropertyId(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs bg-white cursor-pointer"
-                    >
-                      <option value="">{t("Select a property...")}</option>
-                      {[...properties]
-                        .sort((a, b) => (a.name || "").localeCompare(b.name || ""))
-                        .map((p) => (
-                          <option key={p.id} value={p.id}>{p.name}</option>
-                        ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="text-[9px] font-bold text-slate-400 block uppercase tracking-wider mb-1">
-                      {t("Document type")}
-                    </label>
-                    <select
-                      value={docType}
-                      onChange={(e) => setDocType(e.target.value)}
-                      className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs bg-white cursor-pointer"
-                    >
-                      {PROPERTY_DOCUMENT_TYPES.map((dt) => (
-                        <option key={dt} value={dt}>{dt}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mt-3">
-                  {docTargetPropertyId ? (
-                    <PhotoUploader
-                      category="property-docs"
-                      folder={docTargetPropertyId}
-                      multiple
-                      accept={DOC_ACCEPT}
-                      hint={t("PDF, Word, Excel or a scan - up to 25MB")}
-                      onUploaded={(urls, files) => {
-                        const target = properties.find((p) => p.id === docTargetPropertyId);
-                        if (!target || !urls || urls.length === 0) return;
-                        const today = new Date().toISOString().split("T")[0];
-                        const added = urls.map((url, i) => ({
-                          name: files?.[i]?.name || url.split("/").pop() || "document",
-                          type: docType,
-                          size: formatFileSize(files?.[i]?.size || 0),
-                          uploadedAt: today,
-                          url,
-                        }));
-                        const nextDocs = [...(target.documents || []), ...added];
-                        onUpdateProperty(target.id, { documents: nextDocs });
-                        setSelectedProperty((prev) =>
-                          prev && prev.id === target.id ? { ...prev, documents: nextDocs } : prev
-                        );
-                        if (onSyncState) onSyncState();
-                      }}
-                    />
-                  ) : (
-                    <div className="border-2 border-dashed border-slate-200 rounded-2xl p-6 text-center">
-                      <span className="text-[10px] font-bold text-slate-400">
-                        {t("Choose a property above to attach a document to it.")}
-                      </span>
-                    </div>
-                  )}
-                </div>
+                <button
+                  onClick={() => alert("Redirecting to Gov.uz cadastre auth integration...")}
+                  className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all"
+                >
+                  Gov.uz Integration
+                </button>
               </div>
 
               {/* Document items list table */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">{t("Document type")}</span>
-                <select
-                  value={docFilterType}
-                  onChange={(e) => setDocFilterType(e.target.value)}
-                  className="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 bg-white cursor-pointer"
-                >
-                  <option value="ALL">{t("All types")}</option>
-                  {PROPERTY_DOCUMENT_TYPES.map((dt) => (
-                    <option key={dt} value={dt}>{dt}</option>
-                  ))}
-                </select>
-              </div>
-
               <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
@@ -1651,10 +1470,7 @@ export default function InfrastructureModule({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-medium">
-                    {properties
-                      .flatMap(p => (p.documents || []).map((doc, idx) => ({ ...doc, propName: p.name, uniqueId: `${p.id}-${idx}` })))
-                      .filter(doc => docFilterType === "ALL" || doc.type === docFilterType)
-                      .map(doc => (
+                    {properties.flatMap(p => p.documents.map((doc, idx) => ({ ...doc, propName: p.name, uniqueId: `${p.id}-${idx}` }))).map(doc => (
                       <tr key={doc.uniqueId} className="hover:bg-slate-50/50">
                         <td className="py-3 px-4 text-slate-800 font-bold flex items-center gap-1.5">
                           <FileText className="w-4 h-4 text-indigo-500" />
@@ -1669,41 +1485,17 @@ export default function InfrastructureModule({
                         <td className="py-3 px-4 font-mono text-slate-500">{doc.size}</td>
                         <td className="py-3 px-4 font-mono text-slate-400">{doc.uploadedAt}</td>
                         <td className="py-3 px-4 text-right">
-                          {doc.url ? (
-                            <a
-                              href={doc.url}
-                              download={doc.name}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[10px] text-emerald-600 font-bold hover:underline"
-                            >
-                              {t("Download")}
-                            </a>
-                          ) : (
-                            // Records that predate real uploads have no file behind
-                            // them - saying so beats a button that does nothing.
-                            <span className="text-[10px] text-slate-300 font-bold" title={t("No file stored for this record")}>
-                              {t("No file")}
-                            </span>
-                          )}
+                          <button
+                            onClick={() => handleExportFile(doc.name)}
+                            className="text-[10px] text-emerald-600 font-bold hover:underline"
+                          >
+                            Download
+                          </button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-
-                {properties
-                  .flatMap(p => (p.documents || []))
-                  .filter(doc => docFilterType === "ALL" || doc.type === docFilterType)
-                  .length === 0 && (
-                  <div className="p-10 text-center">
-                    <FileText className="w-8 h-8 text-slate-200 mx-auto mb-2" />
-                    <span className="text-[11px] font-bold text-slate-400 block">{t("No documents yet")}</span>
-                    <span className="text-[10px] text-slate-400 block mt-1">
-                      {t("Pick a property above and upload the first one.")}
-                    </span>
-                  </div>
-                )}
               </div>
 
             </motion.div>
@@ -1930,30 +1722,33 @@ export default function InfrastructureModule({
                       </select>
                     </div>
 
-                    {/* Real upload. This used to be a "Simulate photo upload" box that
-                        appended a hardcoded stock photo URL - which is why uploading a
-                        photo never actually did anything. PhotoUploader posts the file
-                        to /api/uploads/:category and returns the stored URL. */}
-                    <PhotoUploader
-                      category="property-photos"
-                      folder={selectedProperty.id}
-                      multiple
-                      onUploaded={(urls) => {
-                        if (!urls || urls.length === 0) return;
-                        const nextImages = [...(selectedProperty.images || []), ...urls];
-                        const patch: Partial<Property> = { images: nextImages };
-                        // First real photo also becomes the cover, replacing the stock placeholder.
-                        if (!selectedProperty.coverImage || selectedProperty.coverImage.includes("unsplash.com")) {
-                          patch.coverImage = urls[0];
-                        }
-                        onUpdateProperty(selectedProperty.id, patch);
-                        setSelectedProperty(prev => (prev ? { ...prev, ...patch } : null));
-                        if (onSyncState) onSyncState();
-                      }}
-                    />
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDropImage}
+                      className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center ${
+                        dragOverActive ? "border-emerald-500 bg-emerald-50" : "border-slate-200 hover:border-slate-300"
+                      }`}
+                      onClick={() => simulateImageUpload("photo.jpg")}
+                    >
+                      <Upload className="w-8 h-8 text-slate-400 mb-2" />
+                      <span className="text-[10px] font-bold text-slate-600">Simulate photo upload</span>
+                    </div>
+
+                    {uploadProgress !== null && (
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-[8px] font-bold text-slate-400">
+                          <span>Compressing Image...</span>
+                          <span>{uploadProgress}%</span>
+                        </div>
+                        <div className="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
+                          <div className="bg-emerald-500 h-full rounded-full transition-all duration-150" style={{ width: `${uploadProgress}%` }}></div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  <span className="text-[9px] text-slate-400 text-center block mt-3">{t("JPG or PNG. Saved with this property.")}</span>
+                  <span className="text-[9px] text-slate-400 text-center block mt-3">Supports JPG, PNG with auto-image compression validation.</span>
                 </div>
 
               </div>
@@ -2439,62 +2234,10 @@ export default function InfrastructureModule({
                   <input
                     type="number"
                     value={newProp.areaSqM}
-                    onChange={(e) => {
-                      const area = Number(e.target.value);
-                      setNewProp(prev => ({
-                        ...prev,
-                        areaSqM: area,
-                        // Keep the total in step when the area changes.
-                        ...(pricePerSqM > 0 ? { purchasePrice: Math.round(pricePerSqM * area) } : {})
-                      }));
-                    }}
+                    onChange={(e) => setNewProp(prev => ({ ...prev, areaSqM: Number(e.target.value) }))}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-700 font-mono"
                   />
                 </div>
-              </div>
-
-              {/* Price-per-square-metre calculator.
-                  Enter the price of 1 m² and the total is worked out from the area
-                  above and written straight into the purchase price - no arithmetic
-                  by hand, and no chance of the two disagreeing. */}
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
-                  <div>
-                    <label className="text-[9px] font-bold text-emerald-700 block uppercase mb-1">
-                      {t("Price per 1 m²")}
-                    </label>
-                    <input
-                      type="number"
-                      min="0"
-                      value={pricePerSqM || ""}
-                      placeholder="0"
-                      onChange={(e) => {
-                        const perSqM = Number(e.target.value);
-                        setPricePerSqM(perSqM);
-                        const area = Number(newProp.areaSqM) || 0;
-                        if (perSqM > 0 && area > 0) {
-                          setNewProp(prev => ({ ...prev, purchasePrice: Math.round(perSqM * area) }));
-                        }
-                      }}
-                      className="w-full bg-white border border-emerald-200 rounded-xl p-2.5 font-bold text-slate-700 font-mono"
-                    />
-                  </div>
-                  <div className="text-center">
-                    <span className="text-[9px] font-bold text-emerald-700 block uppercase mb-1">{t("Area")}</span>
-                    <span className="text-sm font-mono font-bold text-slate-600">
-                      × {(Number(newProp.areaSqM) || 0).toLocaleString()} m²
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[9px] font-bold text-emerald-700 block uppercase mb-1">{t("Total")}</span>
-                    <span className="text-lg font-mono font-black text-emerald-700 block">
-                      {(Math.round((pricePerSqM || 0) * (Number(newProp.areaSqM) || 0))).toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-                <span className="text-[9px] text-emerald-700/70 block mt-2">
-                  {t("The total is written into the purchase price automatically.")}
-                </span>
               </div>
 
               {/* Hardware specifications */}
