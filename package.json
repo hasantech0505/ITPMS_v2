@@ -10,7 +10,9 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "import:excel": "node scripts/import-excel.mjs",
-    "import:excel:apply": "node scripts/import-excel.mjs --apply"
+    "import:excel:apply": "node scripts/import-excel.mjs --apply",
+    "export:excel": "node scripts/export-excel.mjs",
+    "export:excel:apply": "node scripts/export-excel.mjs --apply"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",

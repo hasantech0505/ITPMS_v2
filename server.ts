@@ -22,6 +22,7 @@ import { EntityService } from "./server/services/entity.service";
 import { RbacRepository } from "./server/repositories/rbac.repository";
 import { applyPendingResidentCorrections, applyPendingResidentCorrectionsV2, cleanupLeftoverTestResident } from "./server/startup/applyResidentCorrections";
 import { importQashqadaryoPropertiesV2 } from "./server/startup/importQashqadaryoProperties";
+import { startExcelAutoSync } from "./server/startup/excelAutoSync";
 import { errorHandler } from "./server/middleware/errorHandler";
 
 async function startServer() {
@@ -169,6 +170,7 @@ async function startServer() {
 
   const server = httpServer.listen(PORT, "0.0.0.0", () => {
     console.log(`🚀 ITPMS Backend Engine running on http://0.0.0.0:${PORT}`);
+    startExcelAutoSync();
   });
 
   const gracefulShutdown = async (signal: string) => {

@@ -110,3 +110,12 @@ it only adds new rows and fills updated fields; notes, meetings, reports and pho
 2. Stop the server, then preview: `npm run import:excel` (dry-run, writes nothing, report in `server/import-report.txt`).
 3. If the report looks right: `npm run import:excel:apply` (backs up the database to `server/backups/` first).
 4. Residents whose Excel status disagrees with the website (e.g. REMOVED vs Rezident) are only listed; add `--allow-status-changes` to apply them.
+
+## Website -> Excel (automatic)
+
+While the server runs, anything added in the website (residents, startups, events, talents) is appended to the
+original Excel workbooks a few seconds after saving (`server/startup/excelAutoSync.ts`). Existing Excel rows are never
+changed or deleted, and each workbook is backed up to `server/backups/excel/` first. If a workbook is open in Excel the
+server waits and retries every 2 minutes, so close Excel to let it write. Turn off with `EXCEL_AUTO_SYNC=false`.
+Manual run: `npm run export:excel` (preview) / `npm run export:excel:apply`. Edits to values of rows that already exist
+in Excel are not pushed back (only new rows), so change those in Excel and re-run the import.

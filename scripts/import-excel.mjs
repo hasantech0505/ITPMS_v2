@@ -348,7 +348,16 @@ function importEvents(db, wb) {
 
 function importTalent(db, wb) {
   log(`\n=== TALENTS (Talent Pool.xlsx > Talent Tracking) ===`);
-  const byName = new Map(db.talent.map((t) => [tokenKey(t.fullName), t]));
+  // Same person if the name tokens are equal, or one name (2+ words) is contained in the other
+  // ("Shojalilova Sevinch" vs "Shojalilova Sevinch Oybek qizi").
+  const byName = {
+    list: db.talent.map((t) => [tokenKey(t.fullName).split(" "), t]),
+    get(k) {
+      const a = k.split(" ");
+      return this.list.find(([b]) => { const [sm, bg] = a.length <= b.length ? [a, b] : [b, a]; return sm.length >= 2 && sm.every((x) => bg.includes(x)); })?.[1];
+    },
+    set(k, t) { this.list.push([k.split(" "), t]); },
+  };
   for (const o of readTable(wb.getWorksheet("Talent Tracking"), "Talent")) {
     const name = text(pick(o, "F.I.O"));
     if (!name) continue;
