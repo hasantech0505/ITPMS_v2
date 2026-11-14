@@ -20,8 +20,9 @@ The backend is built with **Node.js (Express + TypeScript)** and is designed for
 npm install
 ```
 
-### 3. Start Local Development Server
+### 3. Add test logins (once) and start the server
 ```bash
+node seed_users.cjs
 npm run dev
 ```
 > The unified server will boot on `http://localhost:3000` (serving both the Express API routes at `/api/*` and the React frontend via Vite middleware).
@@ -42,36 +43,50 @@ npm start
 
 ---
 
-## 🔑 Default Login Credentials
+## 🔑 Logging In
 
-The system comes pre-seeded with sample role-based access accounts:
+1. Run `node seed_users.cjs` **once**. It adds these known test accounts to `server/db_store.json`:
 
 | Role | Email | Password |
 | :--- | :--- | :--- |
-| **Super Admin** | `admin@itpark.uz` | `admin123` |
-| **Regional Director** | `director@itpark.uz` | `director123` |
-| **Operations Manager** | `manager@itpark.uz` | `manager123` |
-| **Resident Founder** | `resident@itpark.uz` | `resident123` |
-| **Talent / Mentor** | `talent@itpark.uz` | `talent123` |
+| **Admin** | `hasan@itpark.uz` | `admin123` |
+| **Manager** | `sarvar@itpark.uz` | `manager123` |
+| **Agent** | `feruza@itpark.uz` | `agent123` |
+| **Resident** | `olim@uzpay.uz` | `resident123` |
+| **Viewer** | `jamshid@digital.uz` | `guest123` |
+
+2. On the login page, type the email and password. The "Quick Access Profiles" cards only fill in the email (for the real staff accounts) - passwords are never stored in the frontend, so you always type your own.
+
+> These are **test passwords for local use only**. Change them before putting the system on a shared server.
 
 ---
 
 ## ⚙️ Environment Variables (Optional)
 
-Copy `.env.example` to `.env` if you want to customize secrets or connect an external PostgreSQL database:
+Copy `.env.example` to `.env` to customize settings:
 
 ```bash
-cp .env.example .env
+cp .env.example .env      # Windows PowerShell: copy .env.example .env
 ```
 
 | Variable | Description | Default |
 | :--- | :--- | :--- |
 | `PORT` | Server listening port | `3000` |
-| `DATABASE_URL` | Optional PostgreSQL URI (e.g., Supabase / Neon / Local PG) | *None (uses embedded local store)* |
-| `GEMINI_API_KEY` | Optional API key for live AI executive copilot | *None (has built-in mock fallback)* |
-| `JWT_SECRET` | Secret key for JWT access token signing | Built-in fallback |
-| `JWT_REFRESH_SECRET` | Secret key for refresh token signing | Built-in fallback |
+| `GROQ_API_KEY` | Free key from console.groq.com for the live AI features | *None (offline template fallback)* |
+| `DATABASE_URL` | Optional PostgreSQL URI (Neon / Supabase / local) | *None (uses `server/db_store.json`)* |
+| `JWT_SECRET` / `JWT_REFRESH_SECRET` | Token signing secrets | Built-in fallback (change for real use) |
+| `GOOGLE_MAPS_PLATFORM_KEY` | Google Maps key for the property map | *None* |
+| `UPLOAD_DIR` | Folder for uploaded files | Built-in default |
 | `CORS_ORIGIN` | Allowed CORS origins for external API clients | `*` |
+| `AUTH_DISABLED` | **Dev only** - skip login (ignored in production) | `false` |
+
+After editing `.env`, fully stop and restart the server.
+
+---
+
+## 📥 Importing Data
+
+Some dashboard figures (IT export / services revenue, office floor space, new jobs) show "No data reported" until the real source data is imported. Older one-off import and fix scripts are kept in `archive/`. Provide the resident financial reports and property/infrastructure files to complete these KPIs.
 
 ---
 

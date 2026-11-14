@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { 
   Shield, 
   Lock, 
@@ -113,7 +113,7 @@ export default function LoginModule({ onLoginSuccess }: LoginModuleProps) {
         "Authenticating...": "Tizimga kirilmoqda...",
         "Sign In": "Tizimga kirish",
         "Quick Access Profiles": "Tezkor kirish profillari",
-        "Select a system profile to log in instantly with appropriate permissions.": "Tegishli ruxsatnomalar bilan tezda tizimga kirish uchun profilni tanlang.",
+        "Select your profile to fill in your email, then enter your password to sign in.": "Elektron pochtani to'ldirish uchun profilingizni tanlang, so'ng parolni kiriting.",
         "Secure Platform Session": "Xavfsiz tizim sessiyasi",
         "This platform is protected by end-to-end sandbox policies. Administrative activities are tracked.": "Ushbu tizim to'liq xavfsizlik protokollari bilan himoyalangan. Barcha harakatlar nazorat qilinadi.",
         "System Administrator": "Tizim administratori",
@@ -134,7 +134,7 @@ export default function LoginModule({ onLoginSuccess }: LoginModuleProps) {
         "Authenticating...": "Авторизация...",
         "Sign In": "Войти в систему",
         "Quick Access Profiles": "Профили быстрого доступа",
-        "Select a system profile to log in instantly with appropriate permissions.": "Выберите системный профиль для мгновенного входа с соответствующими правами.",
+        "Select your profile to fill in your email, then enter your password to sign in.": "Выберите свой профиль, чтобы подставить email, затем введите пароль для входа.",
         "Secure Platform Session": "Безопасная сессия платформы",
         "This platform is protected by end-to-end sandbox policies. Administrative activities are tracked.": "Эта платформа защищена сквозными политиками безопасности. Все действия записываются.",
         "System Administrator": "Системный администратор",
@@ -152,6 +152,8 @@ export default function LoginModule({ onLoginSuccess }: LoginModuleProps) {
     return localDict[language]?.[key] || key;
   };
 
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+
   const handlePresetSelect = (preset: typeof PRESET_USERS[0]) => {
     // Fills the email only — never the password. Each person still has to
     // type their own password to sign in.
@@ -159,6 +161,8 @@ export default function LoginModule({ onLoginSuccess }: LoginModuleProps) {
     setEmail(preset.email);
     setPassword("");
     setErrorMsg("");
+    // Move the cursor straight to the password box.
+    setTimeout(() => passwordInputRef.current?.focus(), 0);
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -285,7 +289,7 @@ export default function LoginModule({ onLoginSuccess }: LoginModuleProps) {
                 <span>{getLocalTranslation("Quick Access Profiles")}</span>
               </h2>
               <p className="text-[10px] text-slate-400 mt-1">
-                {getLocalTranslation("Select a system profile to log in instantly with appropriate permissions.")}
+                {getLocalTranslation("Select your profile to fill in your email, then enter your password to sign in.")}
               </p>
             </div>
 
@@ -391,6 +395,7 @@ export default function LoginModule({ onLoginSuccess }: LoginModuleProps) {
                 <div className="relative">
                   <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-3.5" />
                   <input
+                    ref={passwordInputRef}
                     type={showPassword ? "text" : "password"}
                     required
                     value={password}
