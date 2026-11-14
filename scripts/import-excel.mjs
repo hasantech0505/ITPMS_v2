@@ -46,11 +46,16 @@ if (!SOURCE_DIR) {
   console.error('Missing the Excel folder. Put EXCEL_SOURCE_DIR=<path to the "Metadata_" folder> in .env, or pass --dir "<path>".');
   process.exit(1);
 }
+// The workbook may sit directly in the folder or in a sub-folder; use whichever exists.
+const findFile = (...candidates) => {
+  const full = candidates.map((c) => path.join(SOURCE_DIR, ...c));
+  return full.find((f) => fs.existsSync(f)) || full[0];
+};
 const FILES = {
-  residents: path.join(SOURCE_DIR, "Residents.xlsx"),
-  startups: path.join(SOURCE_DIR, "Startups", "Startups.xlsx"),
-  events: path.join(SOURCE_DIR, "Events.xlsx"),
-  talent: path.join(SOURCE_DIR, "TalentPool", "Talent Pool.xlsx"),
+  residents: findFile(["Residents.xlsx"]),
+  startups: findFile(["Startups.xlsx"], ["Startups", "Startups.xlsx"]),
+  events: findFile(["Events.xlsx"]),
+  talent: findFile(["Talent Pool.xlsx"], ["TalentPool", "Talent Pool.xlsx"]),
 };
 
 // ---------- cell helpers ----------
