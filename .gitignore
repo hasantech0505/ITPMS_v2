@@ -7,3 +7,5 @@ coverage/
 .env*
 !.env.example
 server/db_store.json.tmp-*
+server/backups/
+server/import-report.txt

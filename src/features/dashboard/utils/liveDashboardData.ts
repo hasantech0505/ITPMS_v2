@@ -73,7 +73,7 @@ export function normalizeDistrict(raw?: string | null): string | null {
     .toLowerCase();
   if (!cleaned || cleaned === "-") return null;
 
-  const isCityForm = /shahr|sh\.$|sh$/.test(cleaned);
+  const isCityForm = /shahar|shahr|sh\.$|sh$/.test(cleaned);
   const base = cleaned
     .replace(/\btumani\b|\btuman\b|\bt\.$|\bshahri\b|\bshahar\b|\bshahar\b|\bsh\.$/g, "")
     .trim();

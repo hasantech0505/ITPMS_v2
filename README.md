@@ -99,3 +99,14 @@ npm run lint
 # Clean build artifacts
 npm run clean
 ```
+
+
+## Importing the Excel sheets (Residents, Startups, Events, Talents)
+
+The Excel workbooks in the OneDrive `Metadata_` folder feed the website's database. The import is safe to re-run:
+it only adds new rows and fills updated fields; notes, meetings, reports and photos added in the website are never deleted.
+
+1. Set `EXCEL_SOURCE_DIR` in `.env` to the `Metadata_` folder (or pass `--dir "<folder>"`).
+2. Stop the server, then preview: `npm run import:excel` (dry-run, writes nothing, report in `server/import-report.txt`).
+3. If the report looks right: `npm run import:excel:apply` (backs up the database to `server/backups/` first).
+4. Residents whose Excel status disagrees with the website (e.g. REMOVED vs Rezident) are only listed; add `--allow-status-changes` to apply them.
