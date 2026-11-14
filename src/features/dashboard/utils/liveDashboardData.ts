@@ -27,6 +27,7 @@ import {
   ExecutiveBrief,
   KpiTargetOverride
 } from "../types/kpiTypes";
+import { OFFICIAL_ACTUALS_2026 } from "../data/officialActuals2026";
 import { STRATEGIC_KPIS_2026, REGIONAL_PERFORMANCE_DATA } from "../data/kpiData";
 
 const TODAY = new Date("2026-08-28T00:00:00Z");
@@ -171,14 +172,17 @@ function computeCounters(residents: Resident[], startups: Startup[], events: Eve
 
 // KPI ids where the real underlying financial data has not been imported
 // yet (resident export/domestic revenue, office/business floor space).
+// Figures that DO have an imported source (see data/officialActuals2026.ts)
+// are handled separately below and are not listed here.
 const NO_DATA_KPI_IDS = new Set([
   "export_companies",
-  "export_volume",
   "services_volume",
   "incubation_outcomes",
-  "office_space",
   "business_space"
 ]);
+
+/** Number of strategic KPIs still waiting for source data. */
+export const PENDING_IMPORT_KPI_COUNT = NO_DATA_KPI_IDS.size;
 
 export function buildLiveStrategicKpis(
   residents: Resident[],
@@ -217,14 +221,37 @@ export function buildLiveStrategicKpis(
           dataAvailable: true,
           actionNote: `${c.newResidents2026} residents onboarded in 2026 (approved/applied this year).`
         };
-      case "new_jobs":
+      case "new_jobs": {
+        const official = OFFICIAL_ACTUALS_2026.new_jobs;
         return {
           ...template,
-          actual: c.jobsAtNewResidents2026,
-          previousActual: c.jobsAtNewResidentsPrevCheckpoint,
+          actual: official.value,
+          // No earlier official checkpoint on file, so no trend is shown.
+          previousActual: official.value,
           dataAvailable: true,
-          actionNote: `Headcount reported by residents onboarded in 2026 (${c.newResidents2026} companies). Portfolio-wide headcount change over time isn't tracked yet.`
+          actionNote: `Official figure: ${official.value} jobs created by residents (${official.asOf}). Source: Residents.xlsx.`
         };
+      }
+      case "export_volume": {
+        const official = OFFICIAL_ACTUALS_2026.export_volume;
+        return {
+          ...template,
+          actual: official.value,
+          previousActual: official.value,
+          dataAvailable: true,
+          actionNote: `FORECAST, not reported actuals: residents project ${official.note} for 2026 (${official.asOf}). Replace with actual export revenue once reported.`
+        };
+      }
+      case "office_space": {
+        const official = OFFICIAL_ACTUALS_2026.office_space;
+        return {
+          ...template,
+          actual: official.value,
+          previousActual: official.value,
+          dataAvailable: true,
+          actionNote: `Total floor area of regional IT centers: ${official.value.toLocaleString("en-US")} m². ${official.note}.`
+        };
+      }
       case "startups_count":
         return {
           ...template,
@@ -497,10 +524,10 @@ export function buildLiveExecutiveAlerts(
     id: "alert-financial-data",
     severity: "INFO",
     titleKey: "executiveDashboard.alertFinancialDataTitle",
-    defaultTitle: "Export & Domestic Revenue Data Not Yet Imported",
-    explanation: "Resident export/domestic revenue and office floor-space figures aren't in the system yet, so IT Export Volume, IT Services Volume, and Infrastructure KPIs show as “No data reported.”",
-    metric: "5 KPIs pending import",
-    recommendedAction: "Provide the resident financial reporting and property/infrastructure source files to complete these figures.",
+    defaultTitle: "Some Revenue Data Not Yet Imported",
+    explanation: "Reported IT services revenue, export-company counts, incubation outcomes and business-space figures aren't in the system yet, so those KPIs show as “No data reported.” IT Export Volume is currently a resident forecast, not reported actuals.",
+    metric: `${PENDING_IMPORT_KPI_COUNT} KPIs pending import`,
+    recommendedAction: "Provide the resident financial reporting (actual export and services revenue) to complete these figures.",
     targetModule: "residents",
     linkText: "View Residents",
     timestamp: "Live"
@@ -527,7 +554,7 @@ export function buildLiveExecutiveBrief(
 
   bulletPoints.push({
     type: "INFO",
-    text: "IT export volume and domestic services revenue are not yet available — the resident financial reporting data hasn't been imported."
+    text: "IT export volume shown is a resident forecast (not reported actuals), and domestic services revenue is not yet available — the resident financial reporting data hasn't been imported."
   });
 
   if (residentHealth.atRiskCount > 0) {
